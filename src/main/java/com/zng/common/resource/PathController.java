@@ -12,7 +12,7 @@ public class PathController {
 
     @GetMapping({"","login"})
     public String getLoginPath(){
-       return SysPagePath_.LOGIN;
+        return SysPagePath_.LOGIN;
     }
 
 }
