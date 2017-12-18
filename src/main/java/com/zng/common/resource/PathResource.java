@@ -10,14 +10,11 @@ import javax.ws.rs.core.MediaType;
 /**
  * Created by John.Zhang on 2017/12/14.
  */
-@Path("")
+@Path("test")
 public class PathResource {
 
     @GET
-    @Path("say")
-    @Produces(MediaType.APPLICATION_JSON)
     public String test(){
-        return SysPagePath_.LOGIN;
+        return "test";
     }
-
 }
