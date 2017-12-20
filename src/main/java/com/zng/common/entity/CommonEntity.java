@@ -18,7 +18,7 @@ import java.util.Date;
 public class CommonEntity {
 
     @Column(name = "is_deleted",nullable = false,length = 1)
-    private Integer isDeleted = 0;
+    private Boolean isDeleted = false;
 
     @Column(name = "create_date")
     @Temporal(TemporalType.TIMESTAMP)
@@ -38,12 +38,12 @@ public class CommonEntity {
     @LastModifiedBy
     private String updateBy;
 
-    public Integer getIsDeleted() {
+    public Boolean getDeleted() {
         return isDeleted;
     }
 
-    public void setIsDeleted(Integer isDeleted) {
-        this.isDeleted = isDeleted;
+    public void setDeleted(Boolean deleted) {
+        isDeleted = deleted;
     }
 
     public Date getCreateDate() {

@@ -6,6 +6,8 @@ import com.zng.system.user.service.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * Created by John.Zhang on 2017/12/19.
  */
@@ -18,5 +20,16 @@ public class SysUserServiceImpl implements SysUserService {
     @Override
     public SysUser findByUserCode(String userCode) {
         return sysUserRepository.findByUserCode(userCode);
+    }
+
+    @Override
+    public List<SysUser> findAllUsersSoftly() {
+        return sysUserRepository.findAllSoftly();
+    }
+
+    @Override
+    public Integer deleteUserById(Long id) {
+        sysUserRepository.deleteById(id);
+        return 1;
     }
 }
