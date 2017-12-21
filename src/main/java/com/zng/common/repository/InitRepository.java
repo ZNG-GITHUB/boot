@@ -15,6 +15,7 @@ import java.util.List;
 public interface InitRepository<T,ID extends Serializable>
         extends JpaRepository<T,ID>,JpaSpecificationExecutor<T> {
 
+    @Query("select en from #{#entityName} en where en.isDeleted = 0")
     List<T> findAllSoftly();
 
 }
