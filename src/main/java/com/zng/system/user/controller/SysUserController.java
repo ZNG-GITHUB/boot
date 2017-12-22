@@ -1,5 +1,7 @@
 package com.zng.system.user.controller;
 
+import com.zng.common.entity.ResponseCode;
+import com.zng.common.entity.ResponseModel;
 import com.zng.system.user.dto.SysUserDTO;
 import com.zng.system.user.entity.SysUser;
 import com.zng.system.user.service.SysUserService;
@@ -24,13 +26,13 @@ public class SysUserController {
     private SysUserService sysUserService;
 
     @GetMapping("getUser/{userCode}")
-    public SysUserDTO getUserByUserCode(@PathVariable String userCode){
+    public ResponseModel getUserByUserCode(@PathVariable String userCode){
         SysUser user = sysUserService.findByUserCode(userCode);
-        return SysUserDTO.toDTO(user);
+        return new ResponseModel(SysUserDTO.toDTO(user));
     }
 
     @GetMapping("getUsers")
-    public List<SysUserDTO> getAllUsersSoftly(){
+    public ResponseModel getAllUsersSoftly(){
         List<SysUser> users = sysUserService.findAllUsersSoftly();
         List<SysUserDTO> userDTOs = new ArrayList<>();
         if(!CollectionUtils.isEmpty(users)){
@@ -41,13 +43,13 @@ public class SysUserController {
                 }
             }
         }
-        return userDTOs;
+        return new ResponseModel(userDTOs);
     }
 
     @GetMapping("deleteUser/{id}")
-    public Integer deleteUser(@PathVariable Long id){
+    public ResponseModel deleteUser(@PathVariable Long id){
         Integer result = sysUserService.deleteUserById(id);
-        return result;
+        return new ResponseModel(ResponseCode.Sucess,"删除成功！");
     }
 
 }
