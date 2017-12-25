@@ -1,6 +1,7 @@
 package com.zng.system.user.service.impl;
 
 import com.zng.system.user.entity.SysUser;
+import com.zng.system.user.mapper.SysUserMapper;
 import com.zng.system.user.repository.SysUserRepository;
 import com.zng.system.user.service.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +18,13 @@ public class SysUserServiceImpl implements SysUserService {
 
     @Autowired
     private SysUserRepository sysUserRepository;
+    @Autowired
+    private SysUserMapper sysUserMapper;
 
     @Override
     public SysUser findByUserCode(String userCode) {
-        return sysUserRepository.findByUserCode(userCode);
+        return sysUserMapper.findByUserCode(userCode);
+//        return sysUserRepository.findByUserCode(userCode);
     }
 
     @Override
