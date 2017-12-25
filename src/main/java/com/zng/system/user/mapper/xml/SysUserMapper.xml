@@ -25,7 +25,7 @@
 
 
     <select id="findByUserCode" resultMap="SysUser" parameterType="java.lang.String">
-        SELECT * FROM tab_sys_user WHERE user_code = #{userCode}
+      SELECT * FROM tab_sys_user WHERE user_code = #{userCode}
     </select>
 
 </mapper>
