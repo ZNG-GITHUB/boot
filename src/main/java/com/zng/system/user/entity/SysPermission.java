@@ -5,6 +5,8 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 
+import java.util.Set;
+
 import static javax.persistence.GenerationType.TABLE;
 
 /**
@@ -25,6 +27,13 @@ public class SysPermission extends CommonEntity{
                     @org.hibernate.annotations.Parameter(name = "optimizer", value = "pooled")
             })
     private Long id;
+
+    /**
+     * 上级权限
+     */
+    @ManyToOne
+    @JoinColumn(name = "p_id")
+    private SysPermission parentPermission;
 
     /**
      * 权限名称
@@ -48,12 +57,73 @@ public class SysPermission extends CommonEntity{
      */
     private String urlType;
 
+    /**
+     * 是否隐藏
+     */
+    private Boolean isHided;
+
 
     public static enum PermissionType {
         /**
          * 目录，菜单，方法，其他
          */
         MenuGroup,Menu,Method,Other
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public SysPermission getParentPermission() {
+        return parentPermission;
+    }
+
+    public void setParentPermission(SysPermission parentPermission) {
+        this.parentPermission = parentPermission;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public PermissionType getPerType() {
+        return perType;
+    }
+
+    public void setPerType(PermissionType perType) {
+        this.perType = perType;
+    }
+
+    public String getUrlType() {
+        return urlType;
+    }
+
+    public void setUrlType(String urlType) {
+        this.urlType = urlType;
+    }
+
+    public Boolean getHided() {
+        return isHided;
+    }
+
+    public void setHided(Boolean hided) {
+        isHided = hided;
     }
 
 }

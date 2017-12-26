@@ -5,6 +5,8 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 
+import java.util.Set;
+
 import static javax.persistence.GenerationType.TABLE;
 
 /**
@@ -39,6 +41,9 @@ public class SysRole extends CommonEntity{
     @Column(name = "role_type",nullable = false,length = 1)
     private RoleType type = RoleType.Other;
 
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "tab_sys_role_permission",joinColumns = @JoinColumn(name = "role_id"),inverseJoinColumns = @JoinColumn(name = "perssion_id"))
+    private Set<SysPermission> permissions;
 
     public static enum RoleType {
 
@@ -52,4 +57,35 @@ public class SysRole extends CommonEntity{
 
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public RoleType getType() {
+        return type;
+    }
+
+    public void setType(RoleType type) {
+        this.type = type;
+    }
+
+    public Set<SysPermission> getPermissions() {
+        return permissions;
+    }
+
+    public void setPermissions(Set<SysPermission> permissions) {
+        this.permissions = permissions;
+    }
 }

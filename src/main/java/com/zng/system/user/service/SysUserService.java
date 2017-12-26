@@ -14,4 +14,6 @@ public interface SysUserService {
     List<SysUser> findAllUsersSoftly();
 
     Integer deleteUserById(Long id);
+
+    SysUser saveUser();
 }

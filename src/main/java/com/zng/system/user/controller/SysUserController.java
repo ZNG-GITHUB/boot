@@ -3,6 +3,7 @@ package com.zng.system.user.controller;
 import com.zng.common.entity.ResponseCode;
 import com.zng.common.entity.ResponseModel;
 import com.zng.system.user.dto.SysUserDTO;
+import com.zng.system.user.entity.SysPermission;
 import com.zng.system.user.entity.SysUser;
 import com.zng.system.user.service.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +51,12 @@ public class SysUserController {
     public ResponseModel deleteUser(@PathVariable Long id){
         Integer result = sysUserService.deleteUserById(id);
         return new ResponseModel(ResponseCode.Sucess,"删除成功！");
+    }
+
+    @GetMapping("saveUser")
+    public ResponseModel saveUser(){
+        SysUser sysUser = sysUserService.saveUser();
+        return new ResponseModel(ResponseCode.Sucess,"创建成功！");
     }
 
 }

@@ -3,6 +3,8 @@ package com.zng.system.user.entity;
 import com.zng.common.entity.CommonEntity;
 import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
+import java.util.Set;
+
 import static javax.persistence.GenerationType.TABLE;
 
 /**
@@ -98,6 +100,9 @@ public class SysUser extends CommonEntity{
     @Column(name = "is_locked",nullable = false,length = 1)
     private Integer isLocked = 0;
 
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "tab_sys_user_role",joinColumns = @JoinColumn(name = "user_id"),inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<SysRole> roles;
 
     public Long getId() {
         return id;
@@ -201,5 +206,13 @@ public class SysUser extends CommonEntity{
 
     public void setIsLocked(Integer isLocked) {
         this.isLocked = isLocked;
+    }
+
+    public Set<SysRole> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<SysRole> roles) {
+        this.roles = roles;
     }
 }
