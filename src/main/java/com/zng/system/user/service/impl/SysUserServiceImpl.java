@@ -9,9 +9,17 @@ import com.zng.system.user.repository.SysRoleRepository;
 import com.zng.system.user.repository.SysUserRepository;
 import com.zng.system.user.service.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -40,6 +48,27 @@ public class SysUserServiceImpl implements SysUserService {
     @Transactional(readOnly = true)
     public List<SysUser> findAllUsersSoftly() {
         return sysUserRepository.findAllSoftly();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<SysUser> findAllUsers() {
+        List<SysUser> users = sysUserRepository.findAll(new Specification<SysUser>() {
+            @Override
+            public Predicate toPredicate(Root<SysUser> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
+
+                List<Predicate> predicateList = new ArrayList<>();
+                predicateList.add(criteriaBuilder.isFalse(root.get("isDeleted")));
+                query.distinct(true);
+                query.where(predicateList.toArray(new Predicate[predicateList.size()]));
+
+                query.orderBy(criteriaBuilder.desc(criteriaBuilder.selectCase().when(criteriaBuilder.equal(root.get("address"),"112"),1).otherwise(0)));
+
+//                query.orderBy(criteriaBuilder.desc(root.get("createDate")));
+                return query.getRestriction();
+            }
+        });
+        return users;
     }
 
     @Override

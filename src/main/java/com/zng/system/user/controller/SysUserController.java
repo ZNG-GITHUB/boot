@@ -34,7 +34,8 @@ public class SysUserController {
 
     @GetMapping("getUsers")
     public ResponseModel getAllUsersSoftly(){
-        List<SysUser> users = sysUserService.findAllUsersSoftly();
+//        List<SysUser> users = sysUserService.findAllUsersSoftly();
+        List<SysUser> users = sysUserService.findAllUsers();
         List<SysUserDTO> userDTOs = new ArrayList<>();
         if(!CollectionUtils.isEmpty(users)){
             for(SysUser user : users){
