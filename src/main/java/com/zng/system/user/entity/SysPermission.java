@@ -17,9 +17,9 @@ import static javax.persistence.GenerationType.TABLE;
 public class SysPermission extends CommonEntity{
     @Id
     @Column(name = "permission_id")
-    @GeneratedValue(strategy = TABLE, generator = "sequence_generator")
+    @GeneratedValue(strategy = TABLE, generator = "sequence_generator_permission")
     @GenericGenerator(
-            name = "sequence_generator",
+            name = "sequence_generator_permission",
             strategy = "org.hibernate.id.enhanced.TableGenerator",
             parameters = {
                     @org.hibernate.annotations.Parameter(name = "segment_value", value = "permission"),

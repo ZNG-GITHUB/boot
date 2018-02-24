@@ -16,9 +16,9 @@ public class SysUser extends CommonEntity{
 
     @Id
     @Column(name = "user_id")
-    @GeneratedValue(strategy = TABLE, generator = "sequence_generator")
+    @GeneratedValue(strategy = TABLE, generator = "sequence_generator_user")
     @GenericGenerator(
-            name = "sequence_generator",
+            name = "sequence_generator_user",
             strategy = "org.hibernate.id.enhanced.TableGenerator",
             parameters = {
                     @org.hibernate.annotations.Parameter(name = "segment_value", value = "user"),

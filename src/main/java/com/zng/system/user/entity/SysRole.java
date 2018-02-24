@@ -18,9 +18,9 @@ public class SysRole extends CommonEntity{
 
     @Id
     @Column(name = "role_id")
-    @GeneratedValue(strategy = TABLE, generator = "sequence_generator")
+    @GeneratedValue(strategy = TABLE, generator = "sequence_generator_role")
     @GenericGenerator(
-            name = "sequence_generator",
+            name = "sequence_generator_role",
             strategy = "org.hibernate.id.enhanced.TableGenerator",
             parameters = {
                     @org.hibernate.annotations.Parameter(name = "segment_value", value = "role"),
