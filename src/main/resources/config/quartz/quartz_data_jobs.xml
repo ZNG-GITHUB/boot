@@ -11,11 +11,11 @@
             <name>FirstJob</name>
             <group>DummyGroup</group>
             <description>This is FirstJob</description>
-            <job-class>com.zng.system.job.TestJob</job-class>
+            <job-class>com.zng.system.job.TestJob_2</job-class>
         </job>
         <trigger>
             <cron>
-                <name>dummyTrigger</name>
+                <name>FirstTrigger</name>
                 <job-name>FirstJob</job-name>
                 <job-group>DummyGroup</job-group>
                 <!-- It will run every 2 seconds -->

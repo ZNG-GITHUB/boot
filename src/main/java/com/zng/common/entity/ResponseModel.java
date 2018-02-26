@@ -31,6 +31,10 @@ public class ResponseModel{
     private String exceptionName;
 
 
+    public ResponseModel (){
+        this(ResponseCode.Sucess,null,null,null);
+    }
+
     public ResponseModel (Object data){
         this(ResponseCode.Sucess,null,data,null);
     }
