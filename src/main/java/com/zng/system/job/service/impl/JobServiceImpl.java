@@ -69,8 +69,8 @@ public class JobServiceImpl implements JobService{
             //按新的cronExpression表达式构建一个新的trigger
             CronTrigger trigger = TriggerBuilder.newTrigger().withIdentity(triggerName, triggerGroupName).withSchedule(scheduleBuilder).build();
             cronTriggers.add(trigger);
-
         }
+        System.out.println("测试提交");
         try {
             sched.scheduleJob(jobDetail, cronTriggers,true);
         } catch (SchedulerException e) {
