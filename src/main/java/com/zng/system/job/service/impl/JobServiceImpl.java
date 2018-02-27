@@ -60,11 +60,16 @@ public class JobServiceImpl implements JobService{
 
         Set<CronTrigger> cronTriggers = new HashSet<>();
         for(JobDto.TriggerDTO triggerDTO : triggers){
+
+            String triggerName = triggerDTO.getTriggerName();
+            String triggerGroupName = triggerDTO.getTriggerGroupName();
+
             //表达式调度构建器(即任务执行的时间)
             CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule(triggerDTO.getCronExpression());
             //按新的cronExpression表达式构建一个新的trigger
-            CronTrigger trigger = TriggerBuilder.newTrigger().withIdentity(jobClassName, jobGroupName).withSchedule(scheduleBuilder).build();
+            CronTrigger trigger = TriggerBuilder.newTrigger().withIdentity(triggerName, triggerGroupName).withSchedule(scheduleBuilder).build();
             cronTriggers.add(trigger);
+
         }
         try {
             sched.scheduleJob(jobDetail, cronTriggers,true);
@@ -115,24 +120,32 @@ public class JobServiceImpl implements JobService{
         String jobClassName = jobDto.getJobClassName();
         String jobGroupName = jobDto.getJobGroupName();
         List<JobDto.TriggerDTO> triggers = jobDto.getTriggers();
-
         try {
             Scheduler scheduler = sf.getScheduler();
-            TriggerKey triggerKey = TriggerKey.triggerKey(jobClassName, jobGroupName);
-
+            List<TriggerKey> triggerKeys = new ArrayList<>();
             for(JobDto.TriggerDTO triggerDTO : triggers){
+                String triggerName = triggerDTO.getTriggerName();
+                String triggerGroupName = triggerDTO.getTriggerGroupName();
+                TriggerKey triggerKey = TriggerKey.triggerKey(triggerName, triggerGroupName);
+                triggerKeys.add(triggerKey);
                 // 表达式调度构建器
                 CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule(triggerDTO.getCronExpression());
-
                 CronTrigger trigger = (CronTrigger) scheduler.getTrigger(triggerKey);
-
                 // 按新的cronExpression表达式重新构建trigger
                 trigger = trigger.getTriggerBuilder().withIdentity(triggerKey).withSchedule(scheduleBuilder).build();
-
                 // 按新的trigger重新设置job执行
                 scheduler.rescheduleJob(triggerKey, trigger);
             }
 
+            //获得已有的调度器信息
+            List<Trigger> oldTriggers = (List<Trigger>) scheduler.getTriggersOfJob(JobKey.jobKey(jobClassName,jobGroupName));
+            for(Trigger trigger : oldTriggers){
+                TriggerKey key = trigger.getKey();
+                if(!triggerKeys.contains(key)){
+                    scheduler.pauseTrigger(key);
+                    scheduler.unscheduleJob(key);
+                }
+            }
         } catch (SchedulerException e) {
             log.debug(e.toString());
             return new ResponseModel(ResponseCode.Error,"更新失败",e);
@@ -180,10 +193,16 @@ public class JobServiceImpl implements JobService{
                             CronTrigger cronTrigger = (CronTrigger)trigger;
                             triggerDTO.setCronExpression(cronTrigger.getCronExpression());
                             triggerDTO.setDescription(cronTrigger.getDescription());
-                            triggerDTO.setNextFireTime(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(cronTrigger.getNextFireTime()));
-                            triggerDTO.setPreviousFireTime(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(cronTrigger.getPreviousFireTime()));
+                            if(cronTrigger.getNextFireTime() != null){
+                                triggerDTO.setNextFireTime(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(cronTrigger.getNextFireTime()));
+                            }
+                            if(cronTrigger.getPreviousFireTime() != null){
+                                triggerDTO.setPreviousFireTime(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(cronTrigger.getPreviousFireTime()));
+                            }
                             triggerDTO.setPriority(cronTrigger.getPriority());
                             triggerDTO.setTriggerState(scheduler.getTriggerState(cronTrigger.getKey()).name());
+                            triggerDTO.setTriggerName(cronTrigger.getKey().getName());
+                            triggerDTO.setTriggerGroupName(cronTrigger.getKey().getGroup());
                         }
                         triggerDTOs.add(triggerDTO);
                     }

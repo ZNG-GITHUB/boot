@@ -34,6 +34,8 @@ public class JobDto {
         private String previousFireTime;
         private String nextFireTime;
         private String cronExpression;
+        private String triggerName;
+        private String triggerGroupName;
 
         public String getTriggerState() {
             return triggerState;
@@ -80,6 +82,22 @@ public class JobDto {
 
         public void setCronExpression(String cronExpression) {
             this.cronExpression = cronExpression;
+        }
+
+        public String getTriggerName() {
+            return triggerName;
+        }
+
+        public void setTriggerName(String triggerName) {
+            this.triggerName = triggerName;
+        }
+
+        public String getTriggerGroupName() {
+            return triggerGroupName;
+        }
+
+        public void setTriggerGroupName(String triggerGroupName) {
+            this.triggerGroupName = triggerGroupName;
         }
     }
 
