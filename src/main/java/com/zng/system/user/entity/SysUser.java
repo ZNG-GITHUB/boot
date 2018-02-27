@@ -4,6 +4,7 @@ import com.zng.common.entity.CommonEntity;
 import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import java.util.Set;
+import java.util.UUID;
 
 import static javax.persistence.GenerationType.TABLE;
 
@@ -98,7 +99,13 @@ public class SysUser extends CommonEntity{
      * 锁定状态
      */
     @Column(name = "is_locked",nullable = false,length = 1)
-    private Integer isLocked = 0;
+    private IsLocked isLocked = IsLocked.UNLOCKED;
+
+    /**
+     * 盐加密
+     */
+    @Column(name = "user_salt",nullable = false)
+    private String salt = UUID.randomUUID().toString();
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "tab_sys_user_role",joinColumns = @JoinColumn(name = "user_id"),inverseJoinColumns = @JoinColumn(name = "role_id"))
@@ -200,11 +207,11 @@ public class SysUser extends CommonEntity{
         this.isHided = isHided;
     }
 
-    public Integer getIsLocked() {
+    public IsLocked getIsLocked() {
         return isLocked;
     }
 
-    public void setIsLocked(Integer isLocked) {
+    public void setIsLocked(IsLocked isLocked) {
         this.isLocked = isLocked;
     }
 
@@ -214,5 +221,42 @@ public class SysUser extends CommonEntity{
 
     public void setRoles(Set<SysRole> roles) {
         this.roles = roles;
+    }
+
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
+    }
+
+    public static enum IsLocked{
+        LOCKED("锁定"),UNLOCKED("正常");
+
+        IsLocked(String type){
+            this.type = type;
+        }
+
+        private String type;
+
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
+        }
+
+        public static IsLocked getValue(Integer i){
+            switch (i){
+                case 0:
+                    return LOCKED;
+                case 1:
+                    return UNLOCKED;
+                default:
+                    return null;
+            }
+        }
     }
 }

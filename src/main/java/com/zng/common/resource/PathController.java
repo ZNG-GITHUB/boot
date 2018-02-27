@@ -3,6 +3,7 @@ package com.zng.common.resource;
 import com.zng.common.entity.SysPagePath_;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * Created by John.Zhang on 2017/12/18.

@@ -17,7 +17,7 @@ public class SysUserDTO {
     private String sign;
     private String descrbe;
     private Integer isActive;
-    private Integer isLocked;
+    private SysUser.IsLocked isLocked;
 
     public SysUserDTO() {
     }
@@ -102,11 +102,11 @@ public class SysUserDTO {
         this.isActive = isActive;
     }
 
-    public Integer getIsLocked() {
+    public SysUser.IsLocked getIsLocked() {
         return isLocked;
     }
 
-    public void setIsLocked(Integer isLocked) {
+    public void setIsLocked(SysUser.IsLocked isLocked) {
         this.isLocked = isLocked;
     }
 

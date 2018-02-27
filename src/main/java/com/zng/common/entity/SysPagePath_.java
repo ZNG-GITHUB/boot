@@ -7,4 +7,6 @@ public class SysPagePath_ {
 
     public static String LOGIN = "login";
 
+    public static String INDEX = "page/index";
+
 }

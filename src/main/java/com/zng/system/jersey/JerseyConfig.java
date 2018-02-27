@@ -10,8 +10,8 @@ import javax.ws.rs.ApplicationPath;
 /**
  * Created by John.Zhang on 2017/12/14.
  */
-@Configuration
-@ApplicationPath("rest")
+//@Configuration
+//@ApplicationPath("rest")
 public class JerseyConfig extends ResourceConfig{
     public JerseyConfig(){
         packages("com.zng");

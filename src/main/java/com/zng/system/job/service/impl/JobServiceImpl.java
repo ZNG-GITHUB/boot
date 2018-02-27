@@ -70,7 +70,6 @@ public class JobServiceImpl implements JobService{
             CronTrigger trigger = TriggerBuilder.newTrigger().withIdentity(triggerName, triggerGroupName).withSchedule(scheduleBuilder).build();
             cronTriggers.add(trigger);
         }
-        System.out.println("测试提交");
         try {
             sched.scheduleJob(jobDetail, cronTriggers,true);
         } catch (SchedulerException e) {

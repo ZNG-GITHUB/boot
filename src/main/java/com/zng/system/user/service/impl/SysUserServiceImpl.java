@@ -83,7 +83,7 @@ public class SysUserServiceImpl implements SysUserService {
     @Transactional
     public SysUser saveUser() {
 
-        SysPermission permission = new SysPermission();
+        /*SysPermission permission = new SysPermission();
         permission.setName("一级菜单");
         permission.setPerType(SysPermission.PermissionType.MenuGroup);
         permission.setUrl("/001");
@@ -128,9 +128,16 @@ public class SysUserServiceImpl implements SysUserService {
         roles = new HashSet<>();
         roles.add(role2);
         roles.add(role);
-        SysUser user2 = sysUserRepository.findByUserCode("admin");
+        SysUser user2 = sysUserRepository.findByUserCode("zng");
         user2.setRoles(roles);
-        sysUserRepository.save(user2);
+        sysUserRepository.save(user2);*/
+
+        SysUser user = new SysUser();
+        user.setUserCode("zng1");
+        user.setUserName("测试二号");
+        user.setPassword("123");
+        sysUserRepository.save(user);
+
 
         return null;
     }
