@@ -5,8 +5,8 @@ package com.zng.common.entity;
  */
 public class SysPagePath_ {
 
-    public static String LOGIN = "login";
+    public static String LOGIN = "Login";
 
-    public static String INDEX = "page/index";
+    public static String INDEX = "page/Index";
 
 }

@@ -1,0 +1,53 @@
+Manifest-Version: 1.0
+Class-Path: jersey-media-json-jackson-2.26.jar spring-boot-autoconfigu
+ re-2.0.0.BUILD-20180226.192852-609.jar javax.inject-1.jar thymeleaf-3
+ .0.9.RELEASE.jar mybatis-spring-1.3.1.jar hk2-api-2.5.0-b42.jar hk2-r
+ unlevel-2.5.0-b42.jar spring-boot-starter-tomcat-2.0.0.BUILD-20180226
+ .192938-608.jar mybatis-3.4.5.jar spring-aop-5.0.4.RELEASE.jar common
+ s-beanutils-1.8.3.jar spring-data-commons-2.0.4.RELEASE.jar hibernate
+ -commons-annotations-5.0.1.Final.jar spring-bridge-2.5.0-b42.jar antl
+ r-2.7.7.jar logback-classic-1.2.3.jar aopalliance-repackaged-2.5.0-b4
+ 2.jar unbescape-1.1.5.RELEASE.jar c3p0-0.9.1.1.jar tomcat-embed-core-
+ 8.5.28.jar spring-tx-5.0.4.RELEASE.jar aspectjweaver-1.8.13.jar shiro
+ -core-1.3.2.jar javassist-3.22.0-GA.jar jackson-module-jaxb-annotatio
+ ns-2.9.4.jar spring-boot-starter-web-2.0.0.BUILD-20180226.192940-608.
+ jar spring-boot-starter-jdbc-2.0.0.BUILD-20180226.192927-608.jar tomc
+ at-embed-websocket-8.5.28.jar hk2-utils-2.5.0-b42.jar jandex-2.0.3.Fi
+ nal.jar log4j-to-slf4j-2.10.0.jar spring-boot-devtools-2.0.0.BUILD-20
+ 180226.192901-609.jar quartz-jobs-2.2.1.jar hk2-config-2.5.0-b42.jar 
+ hk2-2.5.0-b42.jar jackson-annotations-2.9.0.jar mybatis-spring-boot-s
+ tarter-1.3.1.jar shiro-spring-1.3.2.jar spring-boot-starter-data-jpa-
+ 2.0.0.BUILD-20180226.192919-608.jar log4j-api-2.10.0.jar spring-jcl-5
+ .0.4.RELEASE.jar spring-boot-starter-validation-2.0.0.BUILD-20180226.
+ 192939-608.jar spring-context-support-4.1.6.RELEASE.jar mysql-connect
+ or-java-5.1.45.jar spring-boot-starter-logging-2.0.0.BUILD-20180226.1
+ 92932-608.jar HikariCP-2.7.7.jar hibernate-core-5.2.13.Final.jar myba
+ tis-spring-boot-autoconfigure-1.3.1.jar jackson-module-parameter-name
+ s-2.9.4.jar aspectjrt-1.8.13.jar jersey-container-servlet-2.26.jar do
+ m4j-1.6.1.jar tomcat-embed-el-8.5.28.jar javax.annotation-api-1.3.1.j
+ ar classmate-1.3.4.jar jul-to-slf4j-1.7.25.jar spring-orm-5.0.4.RELEA
+ SE.jar snakeyaml-1.19.jar validation-api-2.0.1.Final.jar jackson-data
+ type-jdk8-2.9.4.jar hk2-core-2.5.0-b42.jar jackson-datatype-jsr310-2.
+ 9.4.jar spring-boot-starter-aop-2.0.0.BUILD-20180226.192913-609.jar s
+ pring-web-5.0.4.RELEASE.jar spring-aspects-5.0.4.RELEASE.jar spring-c
+ ore-5.0.4.RELEASE.jar jboss-logging-3.3.2.Final.jar spring-boot-2.0.0
+ .BUILD-20180226.192946-607.jar jersey-entity-filtering-2.26.jar jerse
+ y-common-2.26.jar spring-context-5.0.4.RELEASE.jar class-model-2.5.0-
+ b42.jar spring-jdbc-5.0.4.RELEASE.jar spring-webmvc-5.0.4.RELEASE.jar
+  thymeleaf-spring5-3.0.9.RELEASE.jar javax.transaction-api-1.2.jar co
+ nfig-types-2.5.0-b42.jar spring-beans-5.0.4.RELEASE.jar jersey-media-
+ jaxb-2.26.jar spring-boot-starter-thymeleaf-2.0.0.BUILD-20180226.1929
+ 37-608.jar spring-expression-5.0.4.RELEASE.jar jackson-databind-2.9.4
+ .jar jackson-core-2.9.4.jar slf4j-api-1.7.25.jar hibernate-jpa-2.1-ap
+ i-1.0.0.Final.jar hibernate-validator-6.0.7.Final.jar jersey-bean-val
+ idation-2.26.jar shiro-web-1.3.2.jar logback-core-1.2.3.jar spring-bo
+ ot-starter-jersey-2.0.0.BUILD-20180226.192927-608.jar jersey-client-2
+ .26.jar jersey-spring4-2.26.jar spring-boot-starter-json-2.0.0.BUILD-
+ 20180226.192929-608.jar javax.ws.rs-api-2.1.jar osgi-resource-locator
+ -1.0.1.jar spring-data-jpa-2.0.4.RELEASE.jar thymeleaf-extras-java8ti
+ me-3.0.1.RELEASE.jar hk2-locator-2.5.0-b42.jar jersey-container-servl
+ et-core-2.26.jar asm-all-repackaged-2.5.0-b42.jar jersey-server-2.26.
+ jar jersey-hk2-2.26.jar spring-boot-starter-2.0.0.BUILD-20180226.1929
+ 42-607.jar attoparser-2.0.4.RELEASE.jar quartz-2.2.1.jar
+Main-Class: com.zng.BootApplication
+

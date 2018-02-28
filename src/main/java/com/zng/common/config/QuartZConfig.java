@@ -24,6 +24,11 @@ public class QuartZConfig {
      */
     private String propertiesPath;
 
+    /**
+     * 是否启动
+     */
+    private Boolean start;
+
     @Bean //将一个方法产生为Bean并交给Spring容器管理(@Bean只能用在方法上)
     public SchedulerFactoryBean schedulerFactoryBean(DataSource dataSource) throws IOException {
         //Spring提供SchedulerFactoryBean为Scheduler提供配置信息,并被Spring容器管理其生命周期
@@ -37,6 +42,7 @@ public class QuartZConfig {
         factory.setQuartzProperties(QuartzPropertie);
         //设置数据源(使用系统的主数据源，覆盖propertis文件的dataSource配置)
         factory.setDataSource(dataSource);
+        factory.setAutoStartup(start);
         return factory;
     }
 
@@ -56,5 +62,13 @@ public class QuartZConfig {
 
     public void setPropertiesPath(String propertiesPath) {
         this.propertiesPath = propertiesPath;
+    }
+
+    public Boolean getStart() {
+        return start;
+    }
+
+    public void setStart(Boolean start) {
+        this.start = start;
     }
 }

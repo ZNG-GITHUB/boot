@@ -3,6 +3,7 @@ package com.zng.system.user.entity;
 import com.zng.common.entity.CommonEntity;
 import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Set;
 import java.util.UUID;
 
@@ -13,7 +14,7 @@ import static javax.persistence.GenerationType.TABLE;
  */
 @Entity
 @Table(name = "tab_sys_user")
-public class SysUser extends CommonEntity{
+public class SysUser extends CommonEntity implements Serializable{
 
     @Id
     @Column(name = "user_id")
