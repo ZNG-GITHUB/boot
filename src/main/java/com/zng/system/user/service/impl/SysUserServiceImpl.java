@@ -36,8 +36,8 @@ public class SysUserServiceImpl implements SysUserService {
     private SysPermissionRepository sysPermissionRepository;
     @Autowired
     private SysRoleRepository sysRoleRepository;
-//    @Autowired
-//    private SysUserMapper sysUserMapper;
+    @Autowired
+    private SysUserMapper sysUserMapper;
 
     @Override
     public SysUser findByUserCode(String userCode) {

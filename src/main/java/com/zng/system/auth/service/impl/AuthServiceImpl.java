@@ -39,7 +39,7 @@ public class AuthServiceImpl implements AuthService {
         }catch (Exception e){
             return new ResponseModel(ResponseCode.Error,"其他错误",e);
         }
-        return new ResponseModel();
+        return new ResponseModel(SecurityUtils.getSubject().getSession().getId());
     }
 
     @Override
@@ -50,8 +50,10 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public ResponseModel getLoginUser() {
         SysUser user = (SysUser)SecurityUtils.getSubject().getPrincipal();
+        String sessionId = SecurityUtils.getSubject().getSession().getId().toString();
         if(user != null){
             user = userRepository.findByIdSoftly(user.getId());
+            user.setDescr(sessionId);
             return new ResponseModel(SysUserDTO.toDTO(user));
         }
         return new ResponseModel(ResponseCode.NoAuth,"未授权");

@@ -8,10 +8,8 @@
     <div>
         <label>当前登录用户：</label>
         <span id="loginUser"></span><br/>
-        <label>拥有角色：</label>
-        <span id="user-role"></span><br/>
-        <label>拥有权限：</label>
-        <span id="user-permission"></span>
+        <label>SessionId：</label>
+        <span id="sessionId"></span><br/>
     </div>
     <div>
         <button onclick="loginOut()" value="logout">注销</button>
@@ -27,6 +25,7 @@
     function getLoginUser() {
         SysApi.commenSubmitNoParm("getLoginUser",function (data) {
             $('#loginUser').html(data.data.userName);
+            $('#sessionId').html(data.data.descrbe);
         })
     }
     
