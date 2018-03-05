@@ -20,7 +20,7 @@ public class CorsConfig implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletResponse res = (HttpServletResponse) response;
         HttpServletRequest req = (HttpServletRequest) request;
-        String sessionId = req.getParameter("JSESSIONID");
+       /* String sessionId = req.getParameter("JSESSIONID");
         try {
             Session session = SecurityUtils.getSecurityManager().getSession(new SessionKey() {
                 @Override
@@ -30,7 +30,7 @@ public class CorsConfig implements Filter {
             });
         }catch (Exception e){
             res.setStatus(401);
-        }
+        }*/
         res.setHeader("Access-Control-Allow-Origin",req.getHeader("Origin"));
         res.setHeader("Access-Control-Allow-Credentials", "true");
         res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");

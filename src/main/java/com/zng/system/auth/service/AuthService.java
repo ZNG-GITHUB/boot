@@ -20,4 +20,5 @@ public interface AuthService {
 
     ResponseModel getLoginUser();
 
+    ResponseModel logout();
 }

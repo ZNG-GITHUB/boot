@@ -59,4 +59,10 @@ public class AuthServiceImpl implements AuthService {
         return new ResponseModel(ResponseCode.NoAuth,"未授权");
     }
 
+    @Override
+    public ResponseModel logout() {
+        SecurityUtils.getSubject().logout();
+        return new ResponseModel();
+    }
+
 }

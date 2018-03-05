@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import javax.servlet.Filter;
+import javax.servlet.http.HttpServletResponse;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -30,11 +31,11 @@ public class ShiroConfig {
      *
      */
     @Bean
-    public ShiroFilterFactoryBean shirFilter(SecurityManager securityManager,CorsConfig corsFilter) {
+    public ShiroFilterFactoryBean shirFilter(SecurityManager securityManager, CorsConfig corsFilter) {
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
         // 必须设置 SecurityManager
         shiroFilterFactoryBean.setSecurityManager(securityManager);
-        shiroFilterFactoryBean.setLoginUrl("/logout");
+        shiroFilterFactoryBean.setLoginUrl("http://127.0.0.1:8020/aa/index.html");
 //        shiroFilterFactoryBean.setUnauthorizedUrl("http://192.168.6.68:8089/");
         // 未授权界面;
 //        shiroFilterFactoryBean.setUnauthorizedUrl("/403");
@@ -52,9 +53,9 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/to", "anon");
         // 配置退出过滤器,其中的具体的退出代码Shiro已经替我们实现了
         filterChainDefinitionMap.put("/logout", "anon");
+        filterChainDefinitionMap.put("/**", "cors");
         // <!-- 过滤链定义，从上向下顺序执行，一般将 /**放在最为下边 -->:这是一个坑呢，一不小心代码就不好使了;
         // <!-- authc:所有url都必须认证通过才可以访问; anon:所有url都都可以匿名访问-->
-        filterChainDefinitionMap.put("/**", "cors");
         filterChainDefinitionMap.put("/**", "authc");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return shiroFilterFactoryBean;
