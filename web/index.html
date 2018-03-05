@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8" />
+		<title></title>
+	</head>
+
+	<body>
+		<button onclick="test()">测试登录</button>
+		<button onclick="getLoginUser()">测试权限</button>
+	</body>
+	<script>
+		function test() {
+			SysApi.commenSubmit("http://192.168.6.68:8088/login", {
+				"username":"zng",
+				"password":"123"
+			}, function(data) {
+				alert("1111");
+				localStorage.setItem("session-id",data.data);
+				console.log(JSON.stringify(data))
+			})
+		}
+
+		function getLoginUser() {
+			SysApi.commenSubmitNoParm("http://192.168.6.68:8088/getLoginUser", function(data) {
+				alert(data.data.userName);
+			})
+		}
+	</script>
+	<script src="js/jquery-2.1.1.min.js" type="text/javascript"></script>
+	<script src="js/ajax.js"></script>
+	<script src="js/login.js" type="text/javascript"></script>
+
+</html>
