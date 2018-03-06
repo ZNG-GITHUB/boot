@@ -31,13 +31,13 @@ public class AuthServiceImpl implements AuthService {
         try {
             SecurityUtils.getSubject().login(token);
         }catch (UnknownAccountException e){
-            return new ResponseModel(ResponseCode.Error,"用户名不存在",e);
+            return new ResponseModel(ResponseCode.Error,"用户名不存在",e.getMessage());
         }catch (IncorrectCredentialsException e) {
-            return new ResponseModel(ResponseCode.Error,"密码错误",e);
+            return new ResponseModel(ResponseCode.Error,"密码错误",e.getMessage());
         }catch (LockedAccountException e){
-            return new ResponseModel(ResponseCode.Error,"用户已被锁定，无法登录",e);
+            return new ResponseModel(ResponseCode.Error,"用户已被锁定，无法登录",e.getMessage());
         }catch (Exception e){
-            return new ResponseModel(ResponseCode.Error,"其他错误",e);
+            return new ResponseModel(ResponseCode.Error,"其他错误",e.getMessage());
         }
         return new ResponseModel(SecurityUtils.getSubject().getSession().getId());
     }

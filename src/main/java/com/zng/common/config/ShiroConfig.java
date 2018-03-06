@@ -1,5 +1,6 @@
 package com.zng.common.config;
 
+import com.zng.system.auth.shiro.CustomShiroFilter;
 import com.zng.system.auth.shiro.ShiroRealm;
 import org.apache.shiro.authc.credential.CredentialsMatcher;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
@@ -31,19 +32,15 @@ public class ShiroConfig {
      *
      */
     @Bean
-    public ShiroFilterFactoryBean shirFilter(SecurityManager securityManager, CorsConfig corsFilter) {
+    public ShiroFilterFactoryBean shirFilter(SecurityManager securityManager, CorsConfig corsFilter,CustomShiroFilter customShiroFilter) {
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
         // 必须设置 SecurityManager
         shiroFilterFactoryBean.setSecurityManager(securityManager);
-        shiroFilterFactoryBean.setLoginUrl("http://127.0.0.1:8020/aa/index.html");
-//        shiroFilterFactoryBean.setUnauthorizedUrl("http://192.168.6.68:8089/");
-        // 未授权界面;
-//        shiroFilterFactoryBean.setUnauthorizedUrl("/403");
-
+        shiroFilterFactoryBean.setLoginUrl("http://127.0.0.1:8020/aa/noAuth.html");
         Map<String,Filter> filters = new LinkedHashMap<>();
         filters.put("cors",corsFilter);
+        filters.put("customShiroFilter",customShiroFilter);
         shiroFilterFactoryBean.setFilters(filters);
-
         // 拦截器.
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<String, String>();
         // 配置不会被拦截的链接 顺序判断
@@ -54,9 +51,8 @@ public class ShiroConfig {
         // 配置退出过滤器,其中的具体的退出代码Shiro已经替我们实现了
         filterChainDefinitionMap.put("/logout", "anon");
         filterChainDefinitionMap.put("/**", "cors");
-        // <!-- 过滤链定义，从上向下顺序执行，一般将 /**放在最为下边 -->:这是一个坑呢，一不小心代码就不好使了;
         // <!-- authc:所有url都必须认证通过才可以访问; anon:所有url都都可以匿名访问-->
-        filterChainDefinitionMap.put("/**", "authc");
+        filterChainDefinitionMap.put("/**", "customShiroFilter");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return shiroFilterFactoryBean;
     }
@@ -64,6 +60,10 @@ public class ShiroConfig {
     @Bean(name = "corsFilter")
     public CorsConfig corsFilter(){
         return new CorsConfig();
+    }
+    @Bean(name = "customShiroFilter")
+    public CustomShiroFilter customShiroFilter(){
+        return new CustomShiroFilter();
     }
 
     @Bean

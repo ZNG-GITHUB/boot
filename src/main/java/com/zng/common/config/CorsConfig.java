@@ -13,24 +13,13 @@ import java.io.Serializable;
 /**
  * Created by John.Zhang on 2018/3/2.
  */
-public class CorsConfig implements Filter {
+public class CorsConfig implements Filter{
     final static org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(CorsConfig.class);
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletResponse res = (HttpServletResponse) response;
         HttpServletRequest req = (HttpServletRequest) request;
-       /* String sessionId = req.getParameter("JSESSIONID");
-        try {
-            Session session = SecurityUtils.getSecurityManager().getSession(new SessionKey() {
-                @Override
-                public Serializable getSessionId() {
-                    return sessionId;
-                }
-            });
-        }catch (Exception e){
-            res.setStatus(401);
-        }*/
         res.setHeader("Access-Control-Allow-Origin",req.getHeader("Origin"));
         res.setHeader("Access-Control-Allow-Credentials", "true");
         res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
