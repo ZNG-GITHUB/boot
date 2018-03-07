@@ -1,6 +1,6 @@
 package com.zng.common.config;
 
-import com.zng.system.auth.shiro.CustomShiroFilter;
+import com.zng.system.auth.shiro.SessionManager;
 import com.zng.system.auth.shiro.ShiroRealm;
 import org.apache.shiro.authc.credential.CredentialsMatcher;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
@@ -13,7 +13,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import javax.servlet.Filter;
-import javax.servlet.http.HttpServletResponse;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -32,44 +31,31 @@ public class ShiroConfig {
      *
      */
     @Bean
-    public ShiroFilterFactoryBean shirFilter(SecurityManager securityManager, CorsConfig corsFilter,CustomShiroFilter customShiroFilter) {
+    public ShiroFilterFactoryBean shirFilter(SecurityManager securityManager) {
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
         // 必须设置 SecurityManager
         shiroFilterFactoryBean.setSecurityManager(securityManager);
-        shiroFilterFactoryBean.setLoginUrl("http://127.0.0.1:8020/aa/noAuth.html");
-        Map<String,Filter> filters = new LinkedHashMap<>();
-        filters.put("cors",corsFilter);
-        filters.put("customShiroFilter",customShiroFilter);
-        shiroFilterFactoryBean.setFilters(filters);
+        shiroFilterFactoryBean.setLoginUrl("/noAuth");
         // 拦截器.
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<String, String>();
         // 配置不会被拦截的链接 顺序判断
         filterChainDefinitionMap.put("/asert/**", "anon");
         filterChainDefinitionMap.put("/login", "anon");
         filterChainDefinitionMap.put("/", "anon");
-        filterChainDefinitionMap.put("/to", "anon");
         // 配置退出过滤器,其中的具体的退出代码Shiro已经替我们实现了
-        filterChainDefinitionMap.put("/logout", "anon");
-        filterChainDefinitionMap.put("/**", "cors");
+        filterChainDefinitionMap.put("/logout", "logout");
         // <!-- authc:所有url都必须认证通过才可以访问; anon:所有url都都可以匿名访问-->
-        filterChainDefinitionMap.put("/**", "customShiroFilter");
+        filterChainDefinitionMap.put("/**", "authc");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return shiroFilterFactoryBean;
     }
 
-    @Bean(name = "corsFilter")
-    public CorsConfig corsFilter(){
-        return new CorsConfig();
-    }
-    @Bean(name = "customShiroFilter")
-    public CustomShiroFilter customShiroFilter(){
-        return new CustomShiroFilter();
-    }
 
     @Bean
     public SecurityManager securityManager() {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
         WebSessionManager webSessionManager = new DefaultWebSessionManager();
+//        SessionManager webSessionManager = new SessionManager();
         // 设置realm.
         securityManager.setRealm(myShiroRealm());
         // 注入缓存管理器;

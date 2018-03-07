@@ -9,6 +9,12 @@ $(document).ready(function(){
             url: sysurl,
             type: "post",
             async: async,
+            beforeSend: function(request) {
+            	var sessionId = localStorage.getItem("session-id");
+		        if(sessionId){
+		            request.setRequestHeader("Authorization", sessionId);
+		        }
+             },
             dataType: "json",
             contentType: 'application/json;charset=UTF-8',
             data: JSON.stringify(parm),
@@ -27,6 +33,12 @@ $(document).ready(function(){
             url: sysurl,
             type: type,
             async: async,
+            beforeSend: function(request) {
+            	var sessionId = localStorage.getItem("session-id");
+		        if(sessionId){
+		            request.setRequestHeader("Authorization", sessionId);
+		        }
+             },
             dataType: "json",
             contentType: 'application/json;charset=UTF-8',
             success: success,
@@ -40,24 +52,12 @@ $(document).ready(function(){
     };
     window.SysApi = {
         commenSubmit: function (url,parm, success, error) {
-            var sessionId = localStorage.getItem("session-id");
-            if(sessionId){
-                url = url+"?JSESSIONID="+sessionId;
-            }
             SysAjax(url,parm,false,success, error)
         },
         commenSubmitNoParm:function (url,success, error) {
-            var sessionId = localStorage.getItem("session-id");
-            if(sessionId){
-                url = url+"?JSESSIONID="+sessionId;
-            }
             SysAjaxNoParm(url,"post",false,success, error)
         },
         getSubmitNoParm:function (url,success, error) {
-            var sessionId = localStorage.getItem("session-id");
-            if(sessionId){
-                url = url+"?JSESSIONID="+sessionId;
-            }
             SysAjaxNoParm(url,"get",false,success, error)
         }
     }
