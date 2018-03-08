@@ -2,15 +2,20 @@ package com.zng.system.auth.shiro;
 
 import com.zng.system.auth.service.AuthService;
 import com.zng.system.user.entity.SysUser;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.session.mgt.SessionKey;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.io.Serializable;
 
 /**
  * Created by John.Zhang on 2017/10/10.
@@ -32,6 +37,7 @@ public class ShiroRealm extends AuthorizingRealm {
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
         UsernamePasswordToken token = (UsernamePasswordToken) authenticationToken;
         logger.info("验证当前Subject时获取到token为：" + token.toString());
+
         //查出是否有此用户
         SysUser hasUser = authService.findByUserCode(token.getUsername());
         if (hasUser != null) {

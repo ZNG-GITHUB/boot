@@ -4,6 +4,10 @@
 $(document).ready(function(){
     var SysAjax = function(baseurl,type,parm,async,success, error) {
         var sysurl = baseurl;
+        var sessionId = localStorage.getItem("session-id");
+        if(sessionId){
+            sysurl = sysurl+"?ticket="+sessionId;
+        }
         $.ajax({
             url: sysurl,
             type: type,
@@ -22,6 +26,10 @@ $(document).ready(function(){
     };
     var SysAjaxNoParm = function(baseurl,type,async,success, error) {
         var sysurl = baseurl;
+        var sessionId = localStorage.getItem("session-id");
+        if(sessionId){
+            sysurl = sysurl+"?ticket="+sessionId;
+        }
         $.ajax({
             url: sysurl,
             type: type,

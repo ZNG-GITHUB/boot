@@ -1,8 +1,6 @@
 package com.zng.common.config;
 
-import com.zng.system.auth.shiro.SessionManager;
-import com.zng.system.auth.shiro.ShiroCasRealm;
-import com.zng.system.auth.shiro.ShiroRealm;
+import com.zng.system.auth.shiro.*;
 import org.apache.shiro.authc.credential.CredentialsMatcher;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.cas.CasFilter;
@@ -32,7 +30,7 @@ import java.util.Map;
 public class ShiroConfig {
 
     // CasServerUrlPrefix
-    public static final String casServerUrlPrefix = "https://localhost:8088";
+    public static final String casServerUrlPrefix = "http://localhost:8088";
     // Cas登录页面地址
     public static final String casLoginUrl = casServerUrlPrefix + "/login";
     // Cas登出页面地址
@@ -42,7 +40,7 @@ public class ShiroConfig {
     // casFilter UrlPattern
     public static final String casFilterUrlPattern = "/";
     // 登录地址
-    public static final String loginUrl = casLoginUrl + "?service=" + shiroServerUrlPrefix + casFilterUrlPattern;
+    public static final String loginUrl = casLoginUrl;
 
     @Bean
     public FilterRegistrationBean filterRegistrationBean() {
@@ -71,7 +69,7 @@ public class ShiroConfig {
         /////////////////////// 下面这些规则配置最好配置到配置文件中 ///////////////////////
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<String, String>();
 
-        filterChainDefinitionMap.put(casFilterUrlPattern, "casFilter");// shiro集成cas后，首先添加该规则
+        filterChainDefinitionMap.put(casFilterUrlPattern, "authFilter");// shiro集成cas后，首先添加该规则
 
         // 配置不会被拦截的链接 顺序判断
         filterChainDefinitionMap.put("/asert/**", "anon");
@@ -86,7 +84,7 @@ public class ShiroConfig {
     }
 
     @Bean
-    public ShiroFilterFactoryBean shiroFilter(SecurityManager securityManager,CasFilter casFilter) {
+    public ShiroFilterFactoryBean shiroFilter(SecurityManager securityManager,AuthFilter authFilter) {
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
         // 必须设置 SecurityManager
         shiroFilterFactoryBean.setSecurityManager(securityManager);
@@ -97,7 +95,7 @@ public class ShiroConfig {
         shiroFilterFactoryBean.setUnauthorizedUrl("/403");
         // 添加casFilter到shiroFilter中
         Map<String, Filter> filters = new HashMap<>();
-        filters.put("casFilter", casFilter);
+        filters.put("authFilter", authFilter);
         shiroFilterFactoryBean.setFilters(filters);
 
         loadShiroFilterChain(shiroFilterFactoryBean);
@@ -114,6 +112,16 @@ public class ShiroConfig {
         return casFilter;
     }
 
+    @Bean(name = "authFilter")
+    public AuthFilter getAuthFilter() {
+        AuthFilter authFilter = new AuthFilter();
+        authFilter.setName("authFilter");
+        authFilter.setEnabled(true);
+        // 登录失败后跳转的URL，也就是 Shiro 执行 CasRealm 的 doGetAuthenticationInfo 方法向CasServer验证tiket
+        authFilter.setFailureUrl(loginUrl);// 我们选择认证失败后再打开登录页面
+        return authFilter;
+    }
+
 
     @Bean
     public SecurityManager securityManager() {
@@ -122,7 +130,7 @@ public class ShiroConfig {
 //        SessionManager webSessionManager = new SessionManager();
         // 设置realm.
 //        securityManager.setRealm(myShiroRealm());
-        securityManager.setRealm(myShiroCasRealm());
+        securityManager.setRealm(myCustomRealm());
         // 注入缓存管理器;
 //        securityManager.setCacheManager(cacheManager);// 这个如果执行多次，也是同样的一个对象;
         // session管理器
@@ -148,11 +156,18 @@ public class ShiroConfig {
         return myShiroRealm;
     }
 
-    @Bean
+    /*@Bean
     public ShiroCasRealm myShiroCasRealm() {
         ShiroCasRealm myShiroCasRealm = new ShiroCasRealm();
         myShiroCasRealm.setCredentialsMatcher(credentialsMatcher());
         return myShiroCasRealm;
+    }*/
+
+    @Bean
+    public CustomRealm myCustomRealm() {
+        CustomRealm myCustomRealm = new CustomRealm();
+        myCustomRealm.setCredentialsMatcher(credentialsMatcher());
+        return myCustomRealm;
     }
 
     /**
