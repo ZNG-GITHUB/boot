@@ -30,7 +30,7 @@ import java.util.Map;
 public class ShiroConfig {
 
     // CasServerUrlPrefix
-    public static final String casServerUrlPrefix = "http://localhost:8088";
+    public static final String casServerUrlPrefix = "https://sso.boot.com:8443/cas";
     // Cas登录页面地址
     public static final String casLoginUrl = casServerUrlPrefix + "/login";
     // Cas登出页面地址
@@ -38,9 +38,9 @@ public class ShiroConfig {
     // 当前工程对外提供的服务地址
     public static final String shiroServerUrlPrefix = "http://localhost:8088";
     // casFilter UrlPattern
-    public static final String casFilterUrlPattern = "/";
+    public static final String casFilterUrlPattern = "/index";
     // 登录地址
-    public static final String loginUrl = casLoginUrl;
+    public static final String loginUrl = casLoginUrl + "?service=" + shiroServerUrlPrefix + casFilterUrlPattern;
 
     @Bean
     public FilterRegistrationBean filterRegistrationBean() {
@@ -69,7 +69,7 @@ public class ShiroConfig {
         /////////////////////// 下面这些规则配置最好配置到配置文件中 ///////////////////////
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<String, String>();
 
-        filterChainDefinitionMap.put(casFilterUrlPattern, "authFilter");// shiro集成cas后，首先添加该规则
+        filterChainDefinitionMap.put(casFilterUrlPattern, "casFilter");// shiro集成cas后，首先添加该规则
 
         // 配置不会被拦截的链接 顺序判断
         filterChainDefinitionMap.put("/asert/**", "anon");
@@ -78,24 +78,24 @@ public class ShiroConfig {
         // 配置退出过滤器,其中的具体的退出代码Shiro已经替我们实现了
         filterChainDefinitionMap.put("/logout", "logout");
         // <!-- authc:所有url都必须认证通过才可以访问; anon:所有url都都可以匿名访问-->
-        filterChainDefinitionMap.put("/**", "authc");
+        filterChainDefinitionMap.put("/**", "anon");
 
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
     }
 
     @Bean
-    public ShiroFilterFactoryBean shiroFilter(SecurityManager securityManager,AuthFilter authFilter) {
+    public ShiroFilterFactoryBean shiroFilter(SecurityManager securityManager,CasFilter casFilter) {
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
         // 必须设置 SecurityManager
         shiroFilterFactoryBean.setSecurityManager(securityManager);
 
         shiroFilterFactoryBean.setLoginUrl(loginUrl);
         // 登录成功后要跳转的连接
-        shiroFilterFactoryBean.setSuccessUrl("/user");
+//        shiroFilterFactoryBean.setSuccessUrl("/index");
         shiroFilterFactoryBean.setUnauthorizedUrl("/403");
         // 添加casFilter到shiroFilter中
         Map<String, Filter> filters = new HashMap<>();
-        filters.put("authFilter", authFilter);
+        filters.put("casFilter", casFilter);
         shiroFilterFactoryBean.setFilters(filters);
 
         loadShiroFilterChain(shiroFilterFactoryBean);
@@ -130,7 +130,7 @@ public class ShiroConfig {
 //        SessionManager webSessionManager = new SessionManager();
         // 设置realm.
 //        securityManager.setRealm(myShiroRealm());
-        securityManager.setRealm(myCustomRealm());
+        securityManager.setRealm(myShiroCasRealm());
         // 注入缓存管理器;
 //        securityManager.setCacheManager(cacheManager);// 这个如果执行多次，也是同样的一个对象;
         // session管理器
@@ -152,31 +152,31 @@ public class ShiroConfig {
     @Bean
     public ShiroRealm myShiroRealm() {
         ShiroRealm myShiroRealm = new ShiroRealm();
-        myShiroRealm.setCredentialsMatcher(credentialsMatcher());
+//        myShiroRealm.setCredentialsMatcher(credentialsMatcher());
         return myShiroRealm;
     }
 
-    /*@Bean
+    @Bean
     public ShiroCasRealm myShiroCasRealm() {
         ShiroCasRealm myShiroCasRealm = new ShiroCasRealm();
-        myShiroCasRealm.setCredentialsMatcher(credentialsMatcher());
+//        myShiroCasRealm.setCredentialsMatcher(credentialsMatcher());
         return myShiroCasRealm;
-    }*/
+    }
 
-    @Bean
+   /* @Bean
     public CustomRealm myCustomRealm() {
         CustomRealm myCustomRealm = new CustomRealm();
         myCustomRealm.setCredentialsMatcher(credentialsMatcher());
         return myCustomRealm;
-    }
+    }*/
 
     /**
      * 凭证匹配器
      */
-    @Bean
+    /*@Bean
     public CredentialsMatcher credentialsMatcher(){
         HashedCredentialsMatcher credentialsMatcher = new HashedCredentialsMatcher("MD5");
         credentialsMatcher.setHashIterations(2);
         return credentialsMatcher;
-    }
+    }*/
 }

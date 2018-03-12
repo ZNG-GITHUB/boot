@@ -1,5 +1,6 @@
 package com.zng.common.resource;
 
+import com.zng.common.config.ShiroConfig;
 import com.zng.common.entity.ResponseCode;
 import com.zng.common.entity.ResponseModel;
 import com.zng.common.entity.SysPagePath_;
@@ -20,18 +21,13 @@ public class PathController {
 
     @GetMapping({"","login"})
     public String getLoginPath(){
-        return SysPagePath_.LOGIN;
+        return "redirect:" + ShiroConfig.loginUrl;
+//        return SysPagePath_.LOGIN;
     }
 
-    @GetMapping(value = "noAuth")
-    @ResponseBody
-    public ResponseModel noAuth(HttpServletResponse response){
-        try {
-            response.sendRedirect("http://127.0.0.1:8020/web/noAuth.html");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return new ResponseModel(ResponseCode.NoAuth,"未认证");
+    @GetMapping(value = "index")
+    public String index(HttpServletResponse response){
+        return SysPagePath_.INDEX;
     }
 
 }

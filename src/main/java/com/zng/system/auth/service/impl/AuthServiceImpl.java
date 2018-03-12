@@ -28,8 +28,8 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public ResponseModel login(UserToken userToken) {
-//        UsernamePasswordToken token = new UsernamePasswordToken(userToken.getUsername(), userToken.getPassword());
-        CasToken token = new CasToken(SecurityUtils.getSubject().getSession().getId().toString());
+        UsernamePasswordToken token = new UsernamePasswordToken(userToken.getUsername(), userToken.getPassword());
+//        CasToken token = new CasToken(SecurityUtils.getSubject().getSession().getId().toString());
         try {
             SecurityUtils.getSubject().login(token);
         }catch (UnknownAccountException e){

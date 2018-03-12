@@ -1,5 +1,6 @@
 package com.zng.system.auth.controller;
 
+import com.zng.common.config.ShiroConfig;
 import com.zng.common.entity.ResponseCode;
 import com.zng.common.entity.ResponseModel;
 import com.zng.system.auth.entity.UserToken;
@@ -23,10 +24,10 @@ public class LoginController {
     @Autowired
     private AuthService authService;
 
-    @PostMapping(value = "login")
+    /*@PostMapping(value = "login")
     public ResponseModel login(@RequestBody UserToken userToken){
         return authService.login(userToken);
-    }
+    }*/
 
     @PostMapping(value = "getLoginUser")
     public ResponseModel getLoginUser(){
