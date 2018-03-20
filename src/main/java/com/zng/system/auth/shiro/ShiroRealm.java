@@ -1,6 +1,8 @@
 package com.zng.system.auth.shiro;
 
 import com.zng.system.auth.service.AuthService;
+import com.zng.system.user.entity.SysPermission;
+import com.zng.system.user.entity.SysRole;
 import com.zng.system.user.entity.SysUser;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
@@ -11,6 +13,10 @@ import org.apache.shiro.util.ByteSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Created by John.Zhang on 2017/10/10.
@@ -39,6 +45,9 @@ public class ShiroRealm extends AuthorizingRealm {
             if(hasUser.getIsLocked() != null && hasUser.getIsLocked().equals(SysUser.IsLocked.LOCKED)){
                 throw new LockedAccountException("用户已被锁定，无法登录");
             }
+
+//            List<SysRole> rlist = userSevice.findRolesByUid(hasUser.getId());//获取用户角色
+//            List<SysPermission> plist = userSevice.findPermissionsByUid(hasUser.getId());//获取用户权限
 //            session.setAttribute("user", hasUser);//成功则放入session
 
             // 若存在，将此用户存放到登录认证info中，无需自己做密码对比，Shiro会为我们进行密码对比校验
@@ -59,8 +68,18 @@ public class ShiroRealm extends AuthorizingRealm {
         SysUser user = (SysUser) principalCollection.getPrimaryPrincipal();
 
         if (user != null) {
-            //权限信息对象info,用来存放查出的用户的所有的角色（role）及权限（permission）
-            return new SimpleAuthorizationInfo();
+            //权限信息对象info,用来存放查出的用户的所有的角色（role）及权限（permission)
+            SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
+
+            SysUser hasUser = authService.findByUserCode(user.getUserCode());
+//            List<SysRole> roles = authService.findRolesByUid(user.getId());
+            Set<SysRole> roles = hasUser.getRoles();
+            List<String> roleNames = new ArrayList<>();
+            for(SysRole role : roles){
+                roleNames.add(role.getName());
+            }
+            info.addRoles(roleNames);
+            return info;
         }
         // 返回null的话，就会导致任何用户访问被拦截的请求时，都会自动跳转到unauthorizedUrl指定的地址
         return null;

@@ -7,7 +7,6 @@
 }
 body {
   font-family: 'Source Sans Pro', sans-serif;
-  color: white;
   font-weight: 300;
   background-color: white;
 }
@@ -49,6 +48,7 @@ body :-ms-input-placeholder {
   height: 400px;
   margin-top: -200px;
   overflow: hidden;
+  color: white;
 
 }
 
@@ -89,7 +89,7 @@ form input {
   padding: 10px 15px;
   margin: 0 auto 10px auto;
   display: block;
-  text-align: center;
+  /*text-align: center;*/
   font-size: 18px;
   color: white;
   -webkit-transition-duration: 0.25s;
@@ -115,6 +115,7 @@ form button {
   color: #53e3a6;
   border-radius: 3px;
   width: 250px;
+  margin-top: 10px;
   cursor: pointer;
   font-size: 18px;
   -webkit-transition-duration: 0.25s;
@@ -232,4 +233,7 @@ form button:hover {
     -webkit-transform: translateY(-700px) rotate(600deg);
             transform: translateY(-700px) rotate(600deg);
   }
+}
+#login-tip{
+  position: static;
 }

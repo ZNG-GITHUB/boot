@@ -20,12 +20,26 @@
 <script>
     $(function () {
         getLoginUser();
-    })
+        getUser();
+        getUsers();
+    });
 
     function getLoginUser() {
         SysApi.commenSubmitNoParm("getLoginUser",function (data) {
             $('#loginUser').html(data.data.userName);
             $('#sessionId').html(data.data.descrbe);
+        })
+    }
+
+    function getUser() {
+        SysApi.getSubmitNoParm("user/getUser/zng",function (data) {
+            console.log(JSON.stringify(data));
+        })
+    }
+
+    function getUsers() {
+        SysApi.getSubmitNoParm("user/getUsers",function (data) {
+            console.log(JSON.stringify(data));
         })
     }
     

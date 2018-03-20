@@ -7,7 +7,6 @@ function login() {
     SysApi.commenSubmit("login",parm,function (data) {
         if(data.code == 200){
             formFadeOut();
-            localStorage.setItem("session-id",data.data);
         }else{
             $('#login-tip').html(data.message);
             $('#login-tip').fadeIn(1000,function () {

@@ -1,5 +1,7 @@
 package com.zng.common.config;
 
+import com.zng.system.user.entity.SysUser;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
 
@@ -13,9 +15,11 @@ public class UserAuditorConfig implements AuditorAware<String> {
 
     @Override
     public Optional<String> getCurrentAuditor() {
-
-        Optional<String> userName = Optional.of("系统");
-
-        return userName;
+        SysUser user = (SysUser) SecurityUtils.getSubject().getPrincipal();
+        Optional<String> name = Optional.of("系统管理员");
+        if(user != null && user.getUserName() != null){
+            name = Optional.of(user.getUserName());
+        }
+        return name;
     }
 }

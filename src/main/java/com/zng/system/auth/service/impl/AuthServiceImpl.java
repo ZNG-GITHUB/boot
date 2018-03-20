@@ -5,7 +5,9 @@ import com.zng.common.entity.ResponseModel;
 import com.zng.system.auth.entity.UserToken;
 import com.zng.system.auth.service.AuthService;
 import com.zng.system.user.dto.SysUserDTO;
+import com.zng.system.user.entity.SysRole;
 import com.zng.system.user.entity.SysUser;
+import com.zng.system.user.repository.SysRoleRepository;
 import com.zng.system.user.repository.SysUserRepository;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
@@ -15,6 +17,9 @@ import org.apache.shiro.authc.UsernamePasswordToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Set;
+
 /**
  * Created by John.Zhang on 2018/2/27.
  */
@@ -23,6 +28,8 @@ public class AuthServiceImpl implements AuthService {
 
     @Autowired
     private SysUserRepository userRepository;
+    @Autowired
+    private SysRoleRepository roleRepository;
 
 
     @Override
@@ -63,6 +70,14 @@ public class AuthServiceImpl implements AuthService {
     public ResponseModel logout() {
         SecurityUtils.getSubject().logout();
         return new ResponseModel();
+    }
+
+    @Override
+    public List<SysRole> findRolesByUid(Long uid) {
+
+//        List<SysRole> roles = roleRepository.findRolesByUid(uid);
+
+        return null;
     }
 
 }

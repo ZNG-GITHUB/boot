@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @SpringBootApplication
 @EnableJpaAuditing
-@EnableRedisHttpSession
+//@EnableRedisHttpSession
 @MapperScan("com.zng.**.mapper")
 public class BootApplication {
 	public static void main(String[] args) {

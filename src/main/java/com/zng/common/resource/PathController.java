@@ -7,6 +7,7 @@ import com.zng.system.user.entity.SysUser;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletResponse;
@@ -23,15 +24,10 @@ public class PathController {
         return SysPagePath_.LOGIN;
     }
 
-    @GetMapping(value = "noAuth")
+    @RequestMapping("noAuth")
     @ResponseBody
-    public ResponseModel noAuth(HttpServletResponse response){
-        try {
-            response.sendRedirect("http://127.0.0.1:8020/web/noAuth.html");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return new ResponseModel(ResponseCode.NoAuth,"未认证");
+    public ResponseModel noAuth(){
+        return new ResponseModel(ResponseCode.NoAuth,"未授权");
     }
 
 }

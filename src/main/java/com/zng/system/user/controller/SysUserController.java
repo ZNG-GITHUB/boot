@@ -6,6 +6,7 @@ import com.zng.system.user.dto.SysUserDTO;
 import com.zng.system.user.entity.SysPermission;
 import com.zng.system.user.entity.SysUser;
 import com.zng.system.user.service.SysUserService;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
@@ -24,12 +25,14 @@ public class SysUserController {
     private SysUserService sysUserService;
 
     @GetMapping("getUser/{userCode}")
+    @RequiresRoles("admin")
     public ResponseModel getUserByUserCode(@PathVariable String userCode){
         SysUser user = sysUserService.findByUserCode(userCode);
         return new ResponseModel(SysUserDTO.toDTO(user));
     }
 
     @GetMapping("getUsers")
+    @RequiresRoles("normal")
     public ResponseModel getAllUsersSoftly(){
 //        List<SysUser> users = sysUserService.findAllUsersSoftly();
         List<SysUser> users = sysUserService.findAllUsers();
