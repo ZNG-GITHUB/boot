@@ -4,6 +4,7 @@ import com.zng.system.auth.alias.PermissionFilterView;
 import com.zng.system.user.entity.SysUser;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.web.filter.AccessControlFilter;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -31,7 +32,6 @@ public class PermissionFilter extends AccessControlFilter{
         if(isAuthenticated){
             SysUser user = (SysUser)SecurityUtils.getSubject().getPrincipal();
             List<PermissionFilterView> pers = user.getPermissions();
-
             boolean hasPer = checkUrlPermission(pers,url,urlType);
             if(hasPer){
              return true;
@@ -48,10 +48,21 @@ public class PermissionFilter extends AccessControlFilter{
             String type = view.getUrlType();
             Pattern p = Pattern.compile(hasUrl);
             Matcher m = p.matcher(url);
-            boolean success = m.matches();
-            if(success && type.equals(urlType)){
+            boolean urlMactch = m.matches();
+            boolean typeMactch = matchRequestType(type,urlType);
+            if(urlMactch && typeMactch){
                 return true;
             }
+        }
+        return false;
+    }
+
+    private boolean matchRequestType(String type, String urlType) {
+        if(StringUtils.isEmpty(type)){
+            return true;
+        }
+        if(type.toLowerCase().equals(urlType.toLowerCase())){
+            return true;
         }
         return false;
     }

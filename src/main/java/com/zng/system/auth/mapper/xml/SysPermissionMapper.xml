@@ -24,7 +24,7 @@
                         WHERE
                             ur.user_id = 3
                     )
-            ) AND p.is_daleted = 0
+            ) AND p.is_deleted = 0
     </select>
 
 </mapper>
