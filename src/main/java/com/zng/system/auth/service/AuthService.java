@@ -1,6 +1,7 @@
 package com.zng.system.auth.service;
 
 import com.zng.common.entity.ResponseModel;
+import com.zng.system.auth.alias.PermissionFilterView;
 import com.zng.system.auth.entity.UserToken;
 import com.zng.system.user.entity.SysPermission;
 import com.zng.system.user.entity.SysRole;
@@ -24,4 +25,6 @@ public interface AuthService {
     ResponseModel logout();
 
     List<SysRole> findRolesByUid(Long id);
+
+    List<PermissionFilterView> findPermissionsByUser(Long userId);
 }

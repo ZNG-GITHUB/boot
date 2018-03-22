@@ -135,7 +135,8 @@ public class SysUserServiceImpl implements SysUserService {
         SysUser user = new SysUser();
         user.setUserCode("zng1");
         user.setUserName("测试二号");
-        user.setPassword("123");
+        user.setSalt("123");
+        user.setPassword("0db97e6ff35a2716d672006a872c0967");
         sysUserRepository.save(user);
 
 

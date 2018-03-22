@@ -1,9 +1,11 @@
 package com.zng.system.user.entity;
 
 import com.zng.common.entity.CommonEntity;
+import com.zng.system.auth.alias.PermissionFilterView;
 import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -111,6 +113,9 @@ public class SysUser extends CommonEntity implements Serializable{
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "tab_sys_user_role",joinColumns = @JoinColumn(name = "user_id"),inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<SysRole> roles;
+
+    @Transient
+    private List<PermissionFilterView> permissions;
 
     public Long getId() {
         return id;
@@ -230,6 +235,14 @@ public class SysUser extends CommonEntity implements Serializable{
 
     public void setSalt(String salt) {
         this.salt = salt;
+    }
+
+    public List<PermissionFilterView> getPermissions() {
+        return permissions;
+    }
+
+    public void setPermissions(List<PermissionFilterView> permissions) {
+        this.permissions = permissions;
     }
 
     public static enum IsLocked{

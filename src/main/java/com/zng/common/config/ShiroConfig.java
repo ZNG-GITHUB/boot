@@ -1,5 +1,6 @@
 package com.zng.common.config;
 
+import com.zng.system.auth.filter.PermissionFilter;
 import com.zng.system.auth.shiro.SessionManager;
 import com.zng.system.auth.shiro.ShiroRealm;
 import org.apache.shiro.authc.credential.CredentialsMatcher;
@@ -17,6 +18,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import javax.servlet.Filter;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -41,6 +43,12 @@ public class ShiroConfig {
         shiroFilterFactoryBean.setSecurityManager(securityManager);
         shiroFilterFactoryBean.setLoginUrl("/");
         shiroFilterFactoryBean.setUnauthorizedUrl("/noAuth");
+
+        //添加过滤器
+        Map<String,Filter> filterMap = new HashMap<>();
+        filterMap.put("per",getPermissionFilter());
+        shiroFilterFactoryBean.setFilters(filterMap);
+
         // 拦截器.
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<String, String>();
         // 配置不会被拦截的链接 顺序判断
@@ -51,7 +59,8 @@ public class ShiroConfig {
         // 配置退出过滤器,其中的具体的退出代码Shiro已经替我们实现了
         filterChainDefinitionMap.put("/logout", "logout");
         // <!-- authc:所有url都必须认证通过才可以访问; anon:所有url都都可以匿名访问-->
-        filterChainDefinitionMap.put("/**", "authc");
+        filterChainDefinitionMap.put("/**", "authc,per");
+//        filterChainDefinitionMap.put("/**", "per");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return shiroFilterFactoryBean;
     }
@@ -82,6 +91,11 @@ public class ShiroConfig {
         ShiroRealm myShiroRealm = new ShiroRealm();
         myShiroRealm.setCredentialsMatcher(credentialsMatcher());
         return myShiroRealm;
+    }
+
+//    @Bean(name = "permissionFilter")
+    public PermissionFilter getPermissionFilter(){
+        return new PermissionFilter();
     }
 
     /**

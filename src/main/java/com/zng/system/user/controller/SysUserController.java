@@ -25,14 +25,12 @@ public class SysUserController {
     private SysUserService sysUserService;
 
     @GetMapping("getUser/{userCode}")
-    @RequiresRoles("admin")
     public ResponseModel getUserByUserCode(@PathVariable String userCode){
         SysUser user = sysUserService.findByUserCode(userCode);
         return new ResponseModel(SysUserDTO.toDTO(user));
     }
 
     @GetMapping("getUsers")
-    @RequiresRoles("normal")
     public ResponseModel getAllUsersSoftly(){
 //        List<SysUser> users = sysUserService.findAllUsersSoftly();
         List<SysUser> users = sysUserService.findAllUsers();

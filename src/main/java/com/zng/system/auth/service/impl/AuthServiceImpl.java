@@ -2,9 +2,12 @@ package com.zng.system.auth.service.impl;
 
 import com.zng.common.entity.ResponseCode;
 import com.zng.common.entity.ResponseModel;
+import com.zng.system.auth.alias.PermissionFilterView;
 import com.zng.system.auth.entity.UserToken;
+import com.zng.system.auth.mapper.SysPermissionMapper;
 import com.zng.system.auth.service.AuthService;
 import com.zng.system.user.dto.SysUserDTO;
+import com.zng.system.user.entity.SysPermission;
 import com.zng.system.user.entity.SysRole;
 import com.zng.system.user.entity.SysUser;
 import com.zng.system.user.repository.SysRoleRepository;
@@ -30,6 +33,8 @@ public class AuthServiceImpl implements AuthService {
     private SysUserRepository userRepository;
     @Autowired
     private SysRoleRepository roleRepository;
+    @Autowired
+    private SysPermissionMapper sysPermissionMapper;
 
 
     @Override
@@ -78,6 +83,11 @@ public class AuthServiceImpl implements AuthService {
 //        List<SysRole> roles = roleRepository.findRolesByUid(uid);
 
         return null;
+    }
+
+    @Override
+    public List<PermissionFilterView> findPermissionsByUser(Long userId) {
+        return sysPermissionMapper.findPermissionsByUser(userId);
     }
 
 }
