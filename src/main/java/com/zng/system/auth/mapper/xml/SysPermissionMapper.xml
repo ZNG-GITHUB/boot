@@ -4,27 +4,29 @@
 
     <select id="findPermissionsByUser" resultType="com.zng.system.auth.alias.PermissionFilterView">
         SELECT
-            p.permission_id as id,
-            p.permission_url as url,
-            p.url_type as urlType
+                p.permission_id as id,
+                p.permission_url as url,
+                p.url_type as urlType,
+                p.per_type as perType
         FROM
-            tab_sys_permission p
+                tab_sys_permission p
         WHERE
-            p.permission_id IN (
-                SELECT
-                    sp.perssion_id
-                FROM
-                    tab_sys_role_permission sp
-                WHERE
-                    sp.role_id IN (
+                (p.permission_id IN (
                         SELECT
-                            ur.role_id
+                                sp.perssion_id
                         FROM
-                            tab_sys_user_role ur
+                                tab_sys_role_permission sp
                         WHERE
-                            ur.user_id = 3
-                    )
-            ) AND p.is_deleted = 0
+                                sp.role_id IN (
+                                        SELECT
+                                                ur.role_id
+                                        FROM
+                                                tab_sys_user_role ur
+                                        WHERE
+                                                ur.user_id = #{userId}
+                                )
+                ) OR p.per_type = #{perType} )
+                AND p.is_deleted = 0
     </select>
 
 </mapper>

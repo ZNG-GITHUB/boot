@@ -17,6 +17,10 @@ function login() {
     event.preventDefault();
 }
 
+function loginOut() {
+    location.href = "logout";
+}
+
 function checkInput(formId) {
     var f = true;
     var requireds = $('#'+formId+ ' .required');
@@ -35,6 +39,6 @@ function formFadeOut() {
     $('form').fadeOut(500);
     $('.wrapper').addClass('form-success');
     setTimeout(function () {
-        location.href = "Index.html";
+        location.href = "/";
     },500);
 }

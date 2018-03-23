@@ -5,6 +5,7 @@ import com.zng.common.entity.ResponseModel;
 import com.zng.common.entity.SysPagePath_;
 import com.zng.system.user.entity.SysUser;
 import org.apache.shiro.SecurityUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,9 +20,14 @@ import java.io.IOException;
 @Controller
 public class PathController {
 
-    @GetMapping({"","login"})
+    @RequestMapping("login")
     public String getLoginPath(){
         return SysPagePath_.LOGIN;
+    }
+
+    @RequestMapping("/")
+    public String getIndexPath(){
+        return SysPagePath_.INDEX;
     }
 
     @RequestMapping("noAuth")

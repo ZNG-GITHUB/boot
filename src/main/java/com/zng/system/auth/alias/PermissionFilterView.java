@@ -11,6 +11,8 @@ public class PermissionFilterView {
 
     private String urlType;
 
+    private Integer perType;
+
     public Long getId() {
         return id;
     }
@@ -33,5 +35,13 @@ public class PermissionFilterView {
 
     public void setUrlType(String urlType) {
         this.urlType = urlType;
+    }
+
+    public Integer getPerType() {
+        return perType;
+    }
+
+    public void setPerType(Integer perType) {
+        this.perType = perType;
     }
 }

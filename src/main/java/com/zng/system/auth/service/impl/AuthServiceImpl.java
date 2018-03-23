@@ -20,6 +20,8 @@ import org.apache.shiro.authc.UsernamePasswordToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Set;
 
@@ -35,7 +37,6 @@ public class AuthServiceImpl implements AuthService {
     private SysRoleRepository roleRepository;
     @Autowired
     private SysPermissionMapper sysPermissionMapper;
-
 
     @Override
     public ResponseModel login(UserToken userToken) {
@@ -87,7 +88,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public List<PermissionFilterView> findPermissionsByUser(Long userId) {
-        return sysPermissionMapper.findPermissionsByUser(userId);
+        return sysPermissionMapper.findPermissionsByUser(userId, SysPermission.PermissionType.Other.ordinal());
     }
 
 }

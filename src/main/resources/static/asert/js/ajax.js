@@ -17,6 +17,10 @@ $(document).ready(function(){
                 console.log(type);
                 console.log(xhr.status);
                 console.log(errorThrown);
+                if(xhr.status && xhr.status == 401){
+                    alert("权限不足！");
+                }
+
             }
         });
     };
@@ -34,6 +38,9 @@ $(document).ready(function(){
                 console.log(type);
                 console.log(xhr.status);
                 console.log(errorThrown);
+                if(xhr.status && xhr.status == 401){
+                    alert("权限不足！");
+                }
             }
         });
     };

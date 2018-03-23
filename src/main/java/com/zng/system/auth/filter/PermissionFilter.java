@@ -34,7 +34,7 @@ public class PermissionFilter extends AccessControlFilter{
             List<PermissionFilterView> pers = user.getPermissions();
             boolean hasPer = checkUrlPermission(pers,url,urlType);
             if(hasPer){
-             return true;
+                return true;
             }
         }
         response.setStatus(401);
@@ -42,7 +42,6 @@ public class PermissionFilter extends AccessControlFilter{
     }
 
     private boolean checkUrlPermission(List<PermissionFilterView> pers, String url, String urlType) {
-
         for(PermissionFilterView view : pers){
             String hasUrl = view.getUrl();
             String type = view.getUrlType();
@@ -58,10 +57,7 @@ public class PermissionFilter extends AccessControlFilter{
     }
 
     private boolean matchRequestType(String type, String urlType) {
-        if(StringUtils.isEmpty(type)){
-            return true;
-        }
-        if(type.toLowerCase().equals(urlType.toLowerCase())){
+        if(StringUtils.isEmpty(type) || type.toLowerCase().equals(urlType.toLowerCase())){
             return true;
         }
         return false;

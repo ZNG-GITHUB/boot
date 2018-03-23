@@ -50,20 +50,22 @@ public class SysPermission extends CommonEntity{
     /**
      * 权限级别
      */
+    @Column(name = "per_type")
     private PermissionType perType = PermissionType.Other;
 
     /**
      * url类型
      */
+    @Column(name = "url_type")
     private String urlType;
 
     /**
      * 是否隐藏
      */
+    @Column(name = "is_hided")
     private Boolean isHided;
 
-
-    public static enum PermissionType {
+    public enum PermissionType {
         /**
          * 目录，菜单，方法，其他
          */

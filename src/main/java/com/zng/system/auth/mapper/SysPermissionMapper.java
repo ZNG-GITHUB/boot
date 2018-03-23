@@ -3,6 +3,7 @@ package com.zng.system.auth.mapper;
 import com.zng.system.auth.alias.PermissionFilterView;
 import com.zng.system.user.entity.SysPermission;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -12,5 +13,5 @@ import java.util.List;
 @Mapper
 public interface SysPermissionMapper {
 
-    List<PermissionFilterView> findPermissionsByUser(Long userId);
+    List<PermissionFilterView> findPermissionsByUser(@Param("userId") Long userId,@Param("perType") Integer perType);
 }
