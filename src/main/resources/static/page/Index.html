@@ -6,15 +6,57 @@
     <!-- 引入样式 -->
     <link rel="shortcut icon" href="asert/img/favicon.ico" mce_href="asert/img/favicon.ico" type="image/x-icon"/>
     <link rel="stylesheet" href="asert/element-ui/css/index.css">
+    <style rel="stylesheet" type="text/css">
+        a{
+            color: black;
+            text-decoration: none;
+        }
+        body{
+            color: #666;
+        }
+        .header{
+            background-color: #2F4050;
+            color: #fff;
+        }
+        .header-logo {
+            display: block;
+            height: 100%;
+            float: left;
+            line-height: 60px;
+            color: #fff;
+            font-family: '华文楷体';
+            font-size: large;
+        }
+        .header-menu{
+            display: block;
+            height: 100%;
+            float: right;
+            line-height: 60px;
+        }
+        .page-aside{
+            background-color: #2F4050;
+            color: #fff;
+        }
+        .page-main{
+            background-color: whitesmoke;
+        }
+    </style>
 </head>
 <body>
     <div id="index">
         <el-container>
-            <el-header>Header</el-header>
+            <el-header class="header">
+                <a href="javascript:;" class="header-logo">无锡费哲软件科技有限公司</a>
+                <div class="header-menu">
+                    登录用户位置
+                </div>
+            </el-header>
             <el-container>
-                <el-aside width="200px">Aside</el-aside>
-                <el-main>
-                    <main></main>
+                <!--<el-aside class="page-aside" width="225px">
+
+                </el-aside>-->
+                <el-main class="page-main">
+                    <main>mian</main>
                 </el-main>
             </el-container>
         </el-container>
@@ -22,9 +64,16 @@
 </body>
 <script src="asert/js/jquery-2.1.1.min.js" type="text/javascript"></script>
 <script src="asert/js/ajax.js"></script>
-<!-- 引入组件库 -->
-<script src="asert/element-ui/vue.js"></script>
-<script src="https://cdn.bootcss.com/vue-router/2.7.0/vue-router.min.js"></script>
-<script src="asert/element-ui/index.js"></script>
 <script src="page/index.js"></script>
+<script src="asert/element-ui/vue.js"></script>
+<!-- import JavaScript -->
+<script src="asert/element-ui/index.js"></script>
+<script>
+    new Vue({
+        el: '#index',
+        data: function() {
+            return { visible: false }
+        }
+    })
+</script>
 </html>
