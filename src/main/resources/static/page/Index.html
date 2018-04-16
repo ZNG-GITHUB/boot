@@ -30,12 +30,14 @@
         .header-menu{
             display: block;
             height: 100%;
-            float: right;
+            float: left;
+            margin-left: 100px;
             line-height: 60px;
         }
         .page-aside{
             background-color: #2F4050;
             color: #fff;
+            opacity: 0.2;
         }
         .page-main{
             background-color: whitesmoke;
@@ -47,14 +49,46 @@
         <el-container>
             <el-header class="header">
                 <a href="javascript:;" class="header-logo">无锡费哲软件科技有限公司</a>
+                <!--<div class="header-menu">-->
+                    <!--登录用户位置-->
+                <!--</div>-->
                 <div class="header-menu">
-                    登录用户位置
+                    <el-menu
+                            :default-active="activeIndex2"
+                            class="el-menu-demo"
+                            mode="horizontal"
+                            @select="handleSelect"
+                            background-color="#2F4050"
+                            text-color="#fff"
+                            active-text-color="#ffd04b">
+                        <el-menu-item index="1">主页</el-menu-item>
+                        <el-menu-item index="2">库存管理</el-menu-item>
+                        <el-menu-item index="3" disabled>系统管理</el-menu-item>
+                    </el-menu>
                 </div>
             </el-header>
             <el-container>
-                <!--<el-aside class="page-aside" width="225px">
-
-                </el-aside>-->
+                <el-aside class="page-aside" width="225px">
+                    <el-menu
+                            default-active="2"
+                            class="el-menu-vertical-demo"
+                            background-color="#000000"
+                            text-color="#fff"
+                            active-text-color="#ffd04b">
+                        <el-menu-item index="1">
+                            <i class="el-icon-menu"></i>
+                            <span slot="title">首页</span>
+                        </el-menu-item>
+                        <el-menu-item index="3" disabled>
+                            <i class="el-icon-document"></i>
+                            <span slot="title">仓库管理</span>
+                        </el-menu-item>
+                        <el-menu-item index="4">
+                            <i class="el-icon-setting"></i>
+                            <span slot="title">系统管理</span>
+                        </el-menu-item>
+                    </el-menu>
+                </el-aside>
                 <el-main class="page-main">
                     <main>mian</main>
                 </el-main>
