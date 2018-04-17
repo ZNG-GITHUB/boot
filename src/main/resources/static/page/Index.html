@@ -6,8 +6,8 @@
     <!-- 引入样式 -->
     <link rel="shortcut icon" href="asert/img/favicon.ico" mce_href="asert/img/favicon.ico" type="image/x-icon"/>
     <link rel="stylesheet" href="asert/element-ui/css/index.css">
-    <link rel="stylesheet" href="asert/element-ui/css/theme-chalk/index.css">
-    <link rel="stylesheet" href="asert/element-ui/css/theme-chalk/icon.css">
+    <!-- 引入样式 -->
+    <!--<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">-->
     <link rel="stylesheet" href="asert/font-awesome-4.7.0/css/font-awesome.min.css">
     <style rel="stylesheet" type="text/css">
         a{
@@ -16,6 +16,8 @@
         }
         body{
             color: #666;
+            padding: 0;
+            margin: 0;
         }
         .header{
             background-color: #2F4050;
@@ -38,11 +40,14 @@
             line-height: 60px;
         }
         .page-aside{
-            background-color: #2F4050;
+            background-color: #545c64;
             color: #fff;
         }
         .page-main{
             background-color: whitesmoke;
+        }
+        .left-menu{
+            border-right: 0;
         }
     </style>
 </head>
@@ -65,34 +70,63 @@
                             active-text-color="#ffd04b">
                         <el-menu-item index="1">主页</el-menu-item>
                         <el-menu-item index="2">库存管理</el-menu-item>
-                        <el-menu-item index="3" disabled>系统管理</el-menu-item>
+                        <el-submenu index="3">
+                            <template slot="title">
+                                <span>系统管理</span>
+                            </template>
+                            <el-menu-item index="1-1">选项1</el-menu-item>
+                            <el-menu-item index="1-2">选项2</el-menu-item>
+                        </el-submenu>
                     </el-menu>
                 </div>
             </el-header>
             <el-container>
                 <el-aside class="page-aside" width="225px">
                     <el-menu
-                            default-active="2"
-                            class="el-menu-vertical-demo"
-                            background-color="#000000"
+                            default-active="1"
+                            class="el-menu-vertical-demo left-menu"
+                            background-color="#545c64"
                             text-color="#fff"
-                            active-text-color="#ffd04b">
+                            active-text-color="#ffd04b"
+                            :collapse="isCollapse">
                         <el-menu-item index="1">
                             <i class="el-icon-menu"></i>
                             <span slot="title">首页</span>
                         </el-menu-item>
-                        <el-menu-item index="3" disabled>
+                        <el-menu-item index="2">
                             <i class="el-icon-document"></i>
                             <span slot="title">仓库管理</span>
                         </el-menu-item>
-                        <el-menu-item index="4">
-                            <i class="el-icon-setting"></i>
-                            <span slot="title">系统管理</span>
-                        </el-menu-item>
+                        <el-submenu index="3">
+                            <template slot="title">
+                                <i class="el-icon-setting"></i>
+                                <span>系统管理</span>
+                            </template>
+                            <el-menu-item index="1-1">选项1</el-menu-item>
+                            <el-menu-item index="1-2">选项2</el-menu-item>
+                        </el-submenu>
                     </el-menu>
                 </el-aside>
                 <el-main class="page-main">
-                    <main>mian</main>
+                    <el-input placeholder="请输入内容"></el-input>
+                    <el-table
+                            :data="tableData"
+                            style="width: 100%">
+                        <el-table-column
+                                prop="date"
+                                label="日期"
+                                width="180">
+                        </el-table-column>
+                        <el-table-column
+                                prop="name"
+                                label="姓名"
+                                width="180">
+                        </el-table-column>
+                        <el-table-column
+                                prop="address"
+                                label="地址">
+                        </el-table-column>
+                    </el-table>
                 </el-main>
             </el-container>
         </el-container>
@@ -108,7 +142,34 @@
     new Vue({
         el: '#index',
         data: function() {
-            return { visible: false }
+            return {
+                visible: false,
+                tableData: [{
+                    date: '2016-05-02',
+                    name: '王小虎',
+                    address: '上海市普陀区金沙江路 1518 弄'
+                }, {
+                    date: '2016-05-04',
+                    name: '王小虎',
+                    address: '上海市普陀区金沙江路 1517 弄'
+                }, {
+                    date: '2016-05-01',
+                    name: '王小虎',
+                    address: '上海市普陀区金沙江路 1519 弄'
+                }, {
+                    date: '2016-05-03',
+                    name: '王小虎',
+                    address: '上海市普陀区金沙江路 1516 弄'
+                }],
+                activeIndex: '1',
+                activeIndex2: '1',
+                isCollapse: false
+            }
+        },
+        methods: {
+            handleSelect(key, keyPath) {
+                console.log(key, keyPath);
+            }
         }
     })
 </script>
