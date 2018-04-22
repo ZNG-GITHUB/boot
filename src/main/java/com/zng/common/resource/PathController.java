@@ -36,4 +36,9 @@ public class PathController {
         return new ResponseModel(ResponseCode.NoAuth,"未授权");
     }
 
+    @RequestMapping("main")
+    public String getMainPath(){
+        return SysPagePath_.MAIN;
+    }
+
 }

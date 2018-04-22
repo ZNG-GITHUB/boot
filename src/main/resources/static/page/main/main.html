@@ -1,0 +1,183 @@
+<div id="main">
+    <el-form :inline="true" :model="searchData" class="demo-form-inline" size="mini">
+        <el-row :gutter="20">
+            <el-col :span="24">
+                <el-form-item label="船厂">
+                    <el-input v-model="searchData.shipyard" placeholder="船厂名称"></el-input>
+                </el-form-item>
+                <el-form-item label="项目">
+                    <el-input v-model="searchData.project" placeholder="项目名称"></el-input>
+                </el-form-item>
+                <el-form-item label="船号">
+                    <el-input v-model="searchData.shipNo" placeholder="船号"></el-input>
+                </el-form-item>
+                <el-form-item label="产品">
+                    <el-input v-model="searchData.product" placeholder="产品名称"></el-input>
+                </el-form-item>
+                <el-form-item>
+                    <el-button type="primary" @click="showMoreSearch">更多</el-button>
+                </el-form-item>
+                <el-form-item>
+                    <el-button type="primary" @click="reloadTable">查询</el-button>
+                </el-form-item>
+            </el-col>
+        </el-row>
+        <el-row :gutter="20" v-if="moreSearchable">
+            <el-col :span="24">
+                <el-form-item label="产品编号">
+                    <el-input v-model="searchData.productNo" placeholder="产品编号"></el-input>
+                </el-form-item>
+                <el-form-item label="采购情况">
+                    <el-select v-model="searchData.isPurchased" placeholder="活动区域">
+                        <el-option label="全部" value=""></el-option>
+                        <el-option label="未采购" value="1"></el-option>
+                        <el-option label="已采购" value="2"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="到货情况">
+                    <el-select v-model="searchData.isArrived" placeholder="活动区域">
+                        <el-option label="全部" value=""></el-option>
+                        <el-option label="未到货" value="1"></el-option>
+                        <el-option label="已到货" value="2"></el-option>
+                    </el-select>
+                </el-form-item>
+            </el-col>
+        </el-row>
+    </el-form>
+    <el-table
+            :data="product_tableData"
+            style="width: 100%">
+        <el-table-column
+                type="index"
+                width="50">
+        </el-table-column>
+        <el-table-column
+                prop="shipyardName"
+                min-width="12%"
+                sortable
+                label="船厂">
+        </el-table-column>
+        <el-table-column
+                prop="projectName"
+                min-width="10%"
+                sortable
+                label="项目">
+        </el-table-column>
+        <el-table-column
+                prop="shipNo"
+                min-width="8%"
+                sortable
+                label="船号">
+        </el-table-column>
+        <el-table-column
+                prop="productName"
+                min-width="10%"
+                sortable
+                label="产品">
+        </el-table-column>
+        <el-table-column
+                prop="productNo"
+                min-width="8%"
+                sortable
+                label="产品编号">
+        </el-table-column>
+        <el-table-column
+                prop="deliveryDate"
+                min-width="10%"
+                sortable
+                label="交货日期">
+        </el-table-column>
+        <el-table-column
+                prop="contractAmount"
+                min-width="7%"
+                sortable
+                label="合同金额">
+        </el-table-column>
+        <el-table-column
+                prop="costSummary"
+                min-width="7%"
+                sortable
+                label="成本汇总">
+        </el-table-column>
+        <el-table-column
+                prop="version"
+                min-width="5%"
+                sortable
+                label="版本">
+        </el-table-column>
+        <el-table-column
+                prop="mapNo"
+                min-width="8%"
+                sortable
+                label="产品图号">
+        </el-table-column>
+        <el-table-column
+                prop="isPurchased"
+                min-width="7%"
+                label="是否已采购">
+        </el-table-column>
+        <el-table-column
+                prop="isArrived"
+                min-width="7%"
+                label="是否已到货">
+        </el-table-column>
+        <el-table-column label="操作" width="180">
+            <template slot-scope="scope">
+                <el-button
+                        size="mini"
+                        @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                <el-button
+                        size="mini"
+                        type="danger"
+                        @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+            </template>
+        </el-table-column>
+    </el-table>
+</div>
+<script>
+    new Vue({
+        el: '#main',
+        data: function() {
+            return {
+                searchData:{
+                    shipyard:"",
+                    project:"",
+                    shipNo:"",
+                    product:"",
+                    productNo:"",
+                    isPurchased:"",
+                    isArrived:""
+                },
+                moreSearchable:false,
+                product_tableData: [{
+                    shipyardName:"德隆船厂",
+                    projectName:"一号项目",
+                    shipNo:"一号船",
+                    productName:"也好产品",
+                    productNo:"10086111",
+                    deliveryDate:"2018-12-12",
+                    contractAmount:"123",
+                    costSummary:"123",
+                    version:"1",
+                    mapNo:"10086111",
+                    isPurchased:"是",
+                    isArrived:"否"
+                }]
+            }
+        },
+        mounted:function () {
+        },
+        methods: {
+            reloadTable(){
+                console.log(JSON.stringify(this.searchData));
+            },
+            showMoreSearch(){
+                if(this.moreSearchable){
+                    this.moreSearchable = false;
+                }else{
+                    this.moreSearchable = true;
+                }
+            }
+        }
+    })
+</script>

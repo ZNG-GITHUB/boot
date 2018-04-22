@@ -9,4 +9,6 @@ public class SysPagePath_ {
 
     public static String INDEX = "page/Index";
 
+    public static String MAIN = "page/main/main";
+
 }
