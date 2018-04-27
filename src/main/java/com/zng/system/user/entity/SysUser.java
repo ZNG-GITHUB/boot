@@ -16,7 +16,7 @@ import static javax.persistence.GenerationType.TABLE;
  */
 @Entity
 @Table(name = "tab_sys_user")
-public class SysUser extends CommonEntity implements Serializable{
+public class SysUser extends CommonEntity{
 
     @Id
     @Column(name = "user_id")

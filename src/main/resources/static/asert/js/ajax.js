@@ -46,7 +46,7 @@ $(document).ready(function(){
     };
     window.SysApi = {
         commenSubmit: function (url,parm, success, error) {
-            SysAjax(url,"post",parm,false,success, error)
+            SysAjax(url,"POST",parm,false,success, error)
         },
         commenSubmitNoParm:function (url,success, error) {
             SysAjaxNoParm(url,"post",false,success, error)

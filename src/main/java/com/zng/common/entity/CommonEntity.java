@@ -8,6 +8,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -15,7 +16,7 @@ import java.util.Date;
  */
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-public class CommonEntity {
+public class CommonEntity  implements Serializable {
 
     @Column(name = "is_deleted",nullable = false,length = 1)
     private Boolean isDeleted = false;
@@ -37,6 +38,9 @@ public class CommonEntity {
     @Column(name = "update_by")
     @LastModifiedBy
     private String updateBy;
+
+    @Column(name = "describes")
+    private String describe;
 
     public Boolean getDeleted() {
         return isDeleted;
@@ -76,5 +80,13 @@ public class CommonEntity {
 
     public void setUpdateBy(String updateBy) {
         this.updateBy = updateBy;
+    }
+
+    public String getDescribe() {
+        return describe;
+    }
+
+    public void setDescribe(String describe) {
+        this.describe = describe;
     }
 }

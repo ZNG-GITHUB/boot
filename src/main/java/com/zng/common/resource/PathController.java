@@ -20,23 +20,23 @@ import java.io.IOException;
 @Controller
 public class PathController {
 
-    @RequestMapping("login")
+    @GetMapping("login")
     public String getLoginPath(){
         return SysPagePath_.LOGIN;
     }
 
-    @RequestMapping("/")
+    @GetMapping("/")
     public String getIndexPath(){
         return SysPagePath_.INDEX;
     }
 
-    @RequestMapping("noAuth")
+    @GetMapping("noAuth")
     @ResponseBody
     public ResponseModel noAuth(){
         return new ResponseModel(ResponseCode.NoAuth,"未授权");
     }
 
-    @RequestMapping("main")
+    @GetMapping("main")
     public String getMainPath(){
         return SysPagePath_.MAIN;
     }
