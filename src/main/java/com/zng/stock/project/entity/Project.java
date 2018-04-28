@@ -31,6 +31,9 @@ public class Project extends CommonEntity{
             })
     private Long id;
 
+    @Column(name="project_name")
+    private String projectName;
+
     /**
      * 是否送审
      */
@@ -75,6 +78,14 @@ public class Project extends CommonEntity{
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
     }
 
     public boolean isGetAuditing() {
