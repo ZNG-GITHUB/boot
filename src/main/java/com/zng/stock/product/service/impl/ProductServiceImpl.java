@@ -5,6 +5,7 @@ import com.zng.common.entity.ResponseModel;
 import com.zng.common.entity.TableCondition;
 import com.zng.common.entity.TableSort;
 import com.zng.common.service.TableService;
+import com.zng.common.util.DateUtil;
 import com.zng.stock.product.dto.ProductTableDto;
 import com.zng.stock.product.entity.Product;
 import com.zng.stock.product.respository.ProductRespository;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.criteria.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -36,11 +38,9 @@ public class ProductServiceImpl implements ProductService {
         Page<Product> list = productRespository.findAll(new Specification<Product>() {
             @Override
             public Predicate toPredicate(Root<Product> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
-
                 List<TableCondition> conditions = request.getConditions();
                 List<Predicate> predicateList = TableService.buildPredicate(conditions,root,criteriaBuilder);
                 predicateList.add(criteriaBuilder.isFalse(root.get("isDeleted")));
-
                 List<TableSort> sorts = request.getSorts();
                 List<Order> sortList = TableService.buildSort(sorts,root,criteriaBuilder);
                 criteriaQuery.orderBy(sortList);
@@ -59,11 +59,13 @@ public class ProductServiceImpl implements ProductService {
         for(Product product : list){
             ProductTableDto dto = new ProductTableDto();
             dto.setId(product.getId());
-            dto.setArrived(product.isArrived());
+            dto.setIsArrived(product.isArrived());
+            dto.setIsPurchased(product.isPurchased());
             dto.setCertificateType(product.getCertificateType());
             Ship ship = product.getShip();
             if(ship != null){
                 dto.setClassificationSociety(ship.getClassificationSociety());
+                dto.setShipNo(ship.getShipNo());
                 Project project = ship.getProject();
                 if(project != null){
                     dto.setProjectName(project.getProjectName());
@@ -74,7 +76,8 @@ public class ProductServiceImpl implements ProductService {
                 }
             }
             dto.setCost(product.getCost());
-            dto.setHandDate(product.getHandDate());
+            dto.setVersion(product.getVersion());
+            dto.setHandDate(DateUtil.formatDate(product.getHandDate()));
             dto.setMapNo(product.getMapNo());
             dto.setProductCode(product.getProductCode());
             dto.setProductName(product.getProductName());

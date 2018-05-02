@@ -42,10 +42,12 @@ public class TableService {
 
     public static List<Predicate> buildPredicate(List<TableCondition> conditions, Root<Product> root, CriteriaBuilder criteriaBuilder) {
         List<Predicate> predicateList = new ArrayList<>();
-        for(TableCondition condition : conditions){
-            Predicate predicate = toPredicate(condition,root,criteriaBuilder);
-            if(predicate != null){
-                predicateList.add(predicate);
+        if(!CollectionUtils.isEmpty(conditions)){
+            for(TableCondition condition : conditions){
+                Predicate predicate = toPredicate(condition,root,criteriaBuilder);
+                if(predicate != null){
+                    predicateList.add(predicate);
+                }
             }
         }
         return predicateList;

@@ -14,7 +14,7 @@ public class ProductTableDto {
     private String productName;
     private String productCode;
     private String certificateType;
-    private Date handDate;
+    private String handDate;
     private String version;
     private String mapNo;
     private Double cost;
@@ -85,11 +85,11 @@ public class ProductTableDto {
         this.certificateType = certificateType;
     }
 
-    public Date getHandDate() {
+    public String getHandDate() {
         return handDate;
     }
 
-    public void setHandDate(Date handDate) {
+    public void setHandDate(String handDate) {
         this.handDate = handDate;
     }
 
@@ -117,19 +117,19 @@ public class ProductTableDto {
         this.cost = cost;
     }
 
-    public boolean isPurchased() {
+    public boolean getIsPurchased() {
         return isPurchased;
     }
 
-    public void setPurchased(boolean purchased) {
+    public void setIsPurchased(boolean purchased) {
         isPurchased = purchased;
     }
 
-    public boolean isArrived() {
+    public boolean getIsArrived() {
         return isArrived;
     }
 
-    public void setArrived(boolean arrived) {
+    public void setIsArrived(boolean arrived) {
         isArrived = arrived;
     }
 }

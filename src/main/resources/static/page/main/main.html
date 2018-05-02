@@ -30,15 +30,15 @@
                 <el-form-item label="采购情况">
                     <el-select v-model="searchData.isPurchased" placeholder="活动区域">
                         <el-option label="全部" value=""></el-option>
-                        <el-option label="未采购" value="1"></el-option>
-                        <el-option label="已采购" value="2"></el-option>
+                        <el-option label="未采购" value="0"></el-option>
+                        <el-option label="已采购" value="1"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="到货情况">
                     <el-select v-model="searchData.isArrived" placeholder="活动区域">
                         <el-option label="全部" value=""></el-option>
-                        <el-option label="未到货" value="1"></el-option>
-                        <el-option label="已到货" value="2"></el-option>
+                        <el-option label="未到货" value="0"></el-option>
+                        <el-option label="已到货" value="1"></el-option>
                     </el-select>
                 </el-form-item>
             </el-col>
@@ -70,34 +70,34 @@
                 label="船号">
         </el-table-column>
         <el-table-column
+                prop="classificationSociety"
+                min-width="8%"
+                sortable
+                label="船级社">
+        </el-table-column>
+        <el-table-column
                 prop="productName"
                 min-width="10%"
                 sortable
                 label="产品">
         </el-table-column>
         <el-table-column
-                prop="productNo"
+                prop="productCode"
                 min-width="8%"
                 sortable
                 label="产品编号">
         </el-table-column>
         <el-table-column
-                prop="deliveryDate"
-                min-width="10%"
+                prop="certificateType"
+                min-width="8%"
+                sortable
+                label="证书类型">
+        </el-table-column>
+        <el-table-column
+                prop="handDate"
+                min-width="11%"
                 sortable
                 label="交货日期">
-        </el-table-column>
-        <el-table-column
-                prop="contractAmount"
-                min-width="7%"
-                sortable
-                label="合同金额">
-        </el-table-column>
-        <el-table-column
-                prop="costSummary"
-                min-width="7%"
-                sortable
-                label="成本汇总">
         </el-table-column>
         <el-table-column
                 prop="version"
@@ -112,13 +112,21 @@
                 label="产品图号">
         </el-table-column>
         <el-table-column
+                prop="cost"
+                min-width="7%"
+                sortable
+                label="成本">
+        </el-table-column>
+        <el-table-column
                 prop="isPurchased"
                 min-width="7%"
+                :formatter="booleanFormatter"
                 label="是否已采购">
         </el-table-column>
         <el-table-column
                 prop="isArrived"
                 min-width="7%"
+                :formatter="booleanFormatter"
                 label="是否已到货">
         </el-table-column>
         <el-table-column label="操作" width="180">
@@ -149,20 +157,7 @@
                     isArrived:""
                 },
                 moreSearchable:false,
-                product_tableData: [{
-                    shipyardName:"德隆船厂",
-                    projectName:"一号项目",
-                    shipNo:"一号船",
-                    productName:"也好产品",
-                    productNo:"10086111",
-                    deliveryDate:"2018-12-12",
-                    contractAmount:"123",
-                    costSummary:"123",
-                    version:"1",
-                    mapNo:"10086111",
-                    isPurchased:"是",
-                    isArrived:"否"
-                }]
+                product_tableData: []
             }
         },
         mounted:function () {
@@ -171,6 +166,7 @@
         methods: {
             reloadTable(){
                 console.log(JSON.stringify(this.searchData));
+                this.loadPoductTableData();
             },
             showMoreSearch(){
                 if(this.moreSearchable){
@@ -181,12 +177,29 @@
             },
             loadPoductTableData(){
                 var me =this;
-                SysApi.commenSubmitNoParm("/product/table",function (response) {
+
+                //拼接参数
+
+
+
+                SysApi.commenSubmit("/product/table",{
+                    "page":{
+                        "toPage":0,
+                        "pageSize":10
+                    }
+                },function (response) {
                     if(response.data){
                         console.log(JSON.stringify(response.data));
                         me.product_tableData = response.data;
                     }
                 });
+            },
+            booleanFormatter(row, column, cellValue, index){
+                if(cellValue){
+                    return "是";
+                }else {
+                    return "否";
+                }
             }
         }
     })
