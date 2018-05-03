@@ -15,6 +15,8 @@ public class TableCondition {
 
     public static final String NOT_IN = "not_in";
 
+    public static final String BOOLEAN = "boolean";
+
     private String attr;
 
     private String op;

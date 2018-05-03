@@ -66,11 +66,14 @@ public class ProductServiceImpl implements ProductService {
             if(ship != null){
                 dto.setClassificationSociety(ship.getClassificationSociety());
                 dto.setShipNo(ship.getShipNo());
+                dto.setShipId(ship.getId());
                 Project project = ship.getProject();
                 if(project != null){
                     dto.setProjectName(project.getProjectName());
+                    dto.setProjectId(project.getId());
                     Shipyard shipyard = project.getShipyard();
                     if(shipyard != null){
+                        dto.setShipyardId(shipyard.getId());
                         dto.setShipyardName(shipyard.getShipyardName());
                     }
                 }

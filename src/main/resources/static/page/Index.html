@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="asert/font-awesome-4.7.0/css/font-awesome.min.css">
     <style rel="stylesheet" type="text/css">
         a{
-            color: black;
+            color: #419EFF;
             text-decoration: none;
         }
         body{
@@ -82,7 +82,8 @@
                             background-color="#2F4050"
                             text-color="#fff"
                             active-text-color="#ffd04b">
-                        <el-menu-item index="main">首页</el-menu-item>
+                        <el-menu-item index="1">项目信息</el-menu-item>
+                        <el-menu-item index="main">产品信息</el-menu-item>
                         <el-menu-item index="2">库存管理</el-menu-item>
                         <el-submenu index="3">
                             <template slot="title">
@@ -105,9 +106,13 @@
                             text-color="#fff"
                             active-text-color="#ffd04b"
                             :collapse="isCollapse">
+                        <el-menu-item index="1">
+                            <i class="el-icon-more"></i>
+                            <span slot="title">项目信息</span>
+                        </el-menu-item>
                         <el-menu-item index="main">
                             <i class="el-icon-star-off"></i>
-                            <span slot="title">首页</span>
+                            <span slot="title">产品信息</span>
                         </el-menu-item>
                         <el-menu-item index="2">
                             <i class="el-icon-document"></i>

@@ -7,8 +7,11 @@ import java.util.Date;
  */
 public class ProductTableDto {
     private Long id;
+    private Long shipyardId;
     private String shipyardName;
+    private Long projectId;
     private String projectName;
+    private Long shipId;
     private String shipNo;
     private String classificationSociety;
     private String productName;
@@ -131,5 +134,29 @@ public class ProductTableDto {
 
     public void setIsArrived(boolean arrived) {
         isArrived = arrived;
+    }
+
+    public Long getShipyardId() {
+        return shipyardId;
+    }
+
+    public void setShipyardId(Long shipyardId) {
+        this.shipyardId = shipyardId;
+    }
+
+    public Long getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(Long projectId) {
+        this.projectId = projectId;
+    }
+
+    public Long getShipId() {
+        return shipId;
+    }
+
+    public void setShipId(Long shipId) {
+        this.shipId = shipId;
     }
 }

@@ -69,7 +69,7 @@ public class Project extends CommonEntity{
      * 船厂
      */
     @ManyToOne
-    @JoinColumn(name = "shipyard")
+    @JoinColumn(name = "shipyard_id")
     private Shipyard shipyard;
 
     public Long getId() {

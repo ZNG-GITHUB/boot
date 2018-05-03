@@ -1,18 +1,18 @@
 <div id="main">
-    <el-form :inline="true" :model="searchData" class="demo-form-inline" size="mini">
+    <el-form :inline="true" class="demo-form-inline" size="mini">
         <el-row :gutter="20">
             <el-col :span="24">
                 <el-form-item label="船厂">
-                    <el-input v-model="searchData.shipyard" placeholder="船厂名称"></el-input>
+                    <el-input v-model="searchData[0].value" placeholder="船厂名称"></el-input>
                 </el-form-item>
                 <el-form-item label="项目">
-                    <el-input v-model="searchData.project" placeholder="项目名称"></el-input>
+                    <el-input v-model="searchData[1].value" placeholder="项目名称"></el-input>
                 </el-form-item>
                 <el-form-item label="船号">
-                    <el-input v-model="searchData.shipNo" placeholder="船号"></el-input>
+                    <el-input v-model="searchData[2].value" placeholder="船号"></el-input>
                 </el-form-item>
                 <el-form-item label="产品">
-                    <el-input v-model="searchData.product" placeholder="产品名称"></el-input>
+                    <el-input v-model="searchData[3].value" placeholder="产品名称"></el-input>
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="showMoreSearch">更多</el-button>
@@ -25,17 +25,17 @@
         <el-row :gutter="20" v-if="moreSearchable">
             <el-col :span="24">
                 <el-form-item label="产品编号">
-                    <el-input v-model="searchData.productNo" placeholder="产品编号"></el-input>
+                    <el-input v-model="searchData[4].value" placeholder="产品编号"></el-input>
                 </el-form-item>
                 <el-form-item label="采购情况">
-                    <el-select v-model="searchData.isPurchased" placeholder="活动区域">
+                    <el-select v-model="searchData[5].value" placeholder="活动区域">
                         <el-option label="全部" value=""></el-option>
                         <el-option label="未采购" value="0"></el-option>
                         <el-option label="已采购" value="1"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="到货情况">
-                    <el-select v-model="searchData.isArrived" placeholder="活动区域">
+                    <el-select v-model="searchData[6].value" placeholder="活动区域">
                         <el-option label="全部" value=""></el-option>
                         <el-option label="未到货" value="0"></el-option>
                         <el-option label="已到货" value="1"></el-option>
@@ -52,22 +52,28 @@
                 width="50">
         </el-table-column>
         <el-table-column
-                prop="shipyardName"
                 min-width="12%"
                 sortable
                 label="船厂">
+            <template slot-scope="scope">
+                <a href="javascript:;" @click="showProjectList(scope.row.shipyardId)">{{scope.row.shipyardName}}</a>
+            </template>
         </el-table-column>
         <el-table-column
-                prop="projectName"
                 min-width="10%"
                 sortable
                 label="项目">
+            <template slot-scope="scope">
+                <a href="javascript:;" @click="showShipList(scope.row.projectId)">{{scope.row.projectName}}</a>
+            </template>
         </el-table-column>
         <el-table-column
-                prop="shipNo"
                 min-width="8%"
                 sortable
                 label="船号">
+            <template slot-scope="scope">
+                <a href="javascript:;" @click="showProductList(scope.row.shipId)">{{scope.row.shipNo}}</a>
+            </template>
         </el-table-column>
         <el-table-column
                 prop="classificationSociety"
@@ -76,10 +82,12 @@
                 label="船级社">
         </el-table-column>
         <el-table-column
-                prop="productName"
                 min-width="10%"
                 sortable
                 label="产品">
+            <template slot-scope="scope">
+                <a href="javascript:;">{{scope.row.productName}}</a>
+            </template>
         </el-table-column>
         <el-table-column
                 prop="productCode"
@@ -141,23 +149,97 @@
             </template>
         </el-table-column>
     </el-table>
+
+    <template>
+        <el-dialog title="项目列表" width="26%" :visible.sync="projectVisible" center>
+            <div style="text-align: center">
+                <el-form :inline="true" :model="search" class="demo-form-inline" size="mini">
+                    <el-form-item label="项目">
+                        <el-input v-model="search.projectName" placeholder="项目名称"></el-input>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="primary" @click="loadProjectTableData">查询</el-button>
+                    </el-form-item>
+                </el-form>
+
+                <el-table :data="project_tableData" style="width: 100%">
+                    <el-table-column
+                            type="index"
+                            label="序号"
+                            align="center"
+                            width="100">
+                    </el-table-column>
+                    <el-table-column
+                            prop="name"
+                            align="center"
+                            label="项目名称">
+                    </el-table-column>
+                </el-table>
+            </div>
+
+        </el-dialog>
+
+        <el-dialog title="船号列表" :visible.sync="shipVisible" >
+            船号列表
+        </el-dialog>
+
+        <el-dialog title="产品列表" :visible.sync="productVisible" >
+            产品列表
+        </el-dialog>
+    </template>
 </div>
 <script>
     new Vue({
         el: '#main',
         data: function() {
             return {
-                searchData:{
-                    shipyard:"",
-                    project:"",
-                    shipNo:"",
-                    product:"",
-                    productNo:"",
-                    isPurchased:"",
-                    isArrived:""
-                },
+                searchData:[{
+                    attr:"ship.project.shipyard.shipyardName",
+                    op:"like",
+                    value:""
+                },{
+                    attr:"ship.project.projectName",
+                    op:"like",
+                    value:""
+                },{
+                    attr:"ship.shipNo",
+                    op:"like",
+                    value:""
+                },{
+                    attr:"productName",
+                    op:"like",
+                    value:""
+                },{
+                    attr:"productCode",
+                    op:"like",
+                    value:""
+                },{
+                    attr:"isPurchased",
+                    op:"=",
+                    value:""
+                },{
+                    attr:"isArrived",
+                    op:"=",
+                    value:""
+                }],
                 moreSearchable:false,
-                product_tableData: []
+                search:{
+                    projectName:"",
+                    shipName:"",
+                    productName:""
+                },
+                product_tableData: [],
+                pageInfo:{
+                    "toPage":0,
+                    "pageSize":10
+                },
+                projectVisible: false,
+                shipVisible: false,
+                productVisible: false,
+                project_tableData:[],
+                click:{
+                    shipyardId:""
+                }
             }
         },
         mounted:function () {
@@ -165,7 +247,6 @@
         },
         methods: {
             reloadTable(){
-                console.log(JSON.stringify(this.searchData));
                 this.loadPoductTableData();
             },
             showMoreSearch(){
@@ -177,19 +258,11 @@
             },
             loadPoductTableData(){
                 var me =this;
-
-                //拼接参数
-
-
-
-                SysApi.commenSubmit("/product/table",{
-                    "page":{
-                        "toPage":0,
-                        "pageSize":10
-                    }
-                },function (response) {
+                var conditions = {};
+                conditions.page = this.pageInfo;
+                conditions.conditions = this.searchData;
+                SysApi.commenSubmit("/product/table",conditions,function (response) {
                     if(response.data){
-                        console.log(JSON.stringify(response.data));
                         me.product_tableData = response.data;
                     }
                 });
@@ -200,6 +273,26 @@
                 }else {
                     return "否";
                 }
+            },
+            showProjectList(shipyardId){
+                this.click.shipyardId = shipyardId;
+                this.projectVisible = true;
+                this.loadProjectTableData();
+            },
+            loadProjectTableData(){
+                var me = this;
+                var shipyardId = this.click.shipyardId;
+                SysApi.commenSubmitNoParm("/project/byshipyardId/"+shipyardId,function (response) {
+                    if(response.data){
+                        me.project_tableData = response.data;
+                    }
+                });
+            },
+            showShipList(id){
+                this.shipVisible = true;
+            },
+            showProductList(id){
+                this.productVisible = true;
             }
         }
     })

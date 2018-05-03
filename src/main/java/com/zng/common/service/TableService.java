@@ -6,10 +6,7 @@ import com.zng.stock.product.entity.Product;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.Order;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,22 +58,40 @@ public class TableService {
         String value = condition.getValue();
         List<String> values = condition.getValues();
 
-        if(!StringUtils.isEmpty(attr) && !StringUtils.isEmpty(op)){
+        if(StringUtils.isEmpty(attr)){
+            return null;
+        }
+
+        Path path = root;
+        From from = root;
+        String[] attrs = attr.split("\\.");
+        for(String str :attrs){
+            if(!attrs[attrs.length-1].equals(str)){
+                from = (From) from.fetch(str,JoinType.LEFT);
+            }else {
+                path = from.get(str);
+            }
+        }
+        Object val = bulidType(path.getJavaType().getName(),value);
+
+        if(!StringUtils.isEmpty(op)){
             switch (op){
                 case TableCondition.EQUAL:
-                    predicate = criteriaBuilder.equal(root.get(attr),value);
+                    if(!StringUtils.isEmpty(val)){
+                        predicate = criteriaBuilder.equal(path,val);
+                    }
                     break;
 
                 case TableCondition.LIKE:
-                    predicate = criteriaBuilder.like(root.get(attr),"%"+value+"%");
+                    predicate = criteriaBuilder.like(path,"%"+val+"%");
                     break;
 
                 case TableCondition.IN:
-                    predicate = root.in(values);
+                    predicate = path.in(values);
                     break;
 
                 case TableCondition.NOT_IN:
-                    predicate = root.in(values).not();
+                    predicate = path.in(values).not();
                     break;
 
 
@@ -85,6 +100,22 @@ public class TableService {
             }
         }
         return predicate;
+    }
+
+    private static Object bulidType(String name, String value) {
+        if(name.equals("boolean") || name.equals("java.lang.Boolean")){
+            if (value.equals("0") || value.toLowerCase().equals("false")){
+                return false;
+            }else if(value.equals("1") || value.toLowerCase().equals("true")){
+                return true;
+            }else {
+                return null;
+            }
+        }else if(name.equals("java.lang.Integer") || name.equals("int")){
+            return Integer.valueOf(value);
+        }else {
+            return value;
+        }
     }
 
 }
