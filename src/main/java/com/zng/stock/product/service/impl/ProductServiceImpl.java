@@ -8,7 +8,7 @@ import com.zng.common.service.TableService;
 import com.zng.common.util.DateUtil;
 import com.zng.stock.product.dto.ProductTableDto;
 import com.zng.stock.product.entity.Product;
-import com.zng.stock.product.respository.ProductRespository;
+import com.zng.stock.product.repository.ProductRepository;
 import com.zng.stock.product.service.ProductService;
 import com.zng.stock.project.entity.Project;
 import com.zng.stock.ship.entity.Ship;
@@ -21,21 +21,20 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.criteria.*;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Service
 public class ProductServiceImpl implements ProductService {
 
     @Autowired
-    private ProductRespository productRespository;
+    private ProductRepository productRepository;
 
     @Override
     public ResponseModel table(CommonTableRequest request) {
 
         PageRequest pageRequest = PageRequest.of(request.getPage().getToPage(),request.getPage().getPageSize());
 
-        Page<Product> list = productRespository.findAll(new Specification<Product>() {
+        Page<Product> list = productRepository.findAll(new Specification<Product>() {
             @Override
             public Predicate toPredicate(Root<Product> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
                 List<TableCondition> conditions = request.getConditions();

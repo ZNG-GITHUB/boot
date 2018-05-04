@@ -3,8 +3,9 @@ package com.zng.stock.project.service.impl;
 import com.zng.common.entity.ResponseModel;
 import com.zng.stock.project.dto.ProjectNameDto;
 import com.zng.stock.project.entity.Project;
-import com.zng.stock.project.respository.ProjectRespository;
+import com.zng.stock.project.repository.ProjectRepository;
 import com.zng.stock.project.service.ProjectService;
+import com.zng.stock.project.view.ProjectSearchRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,12 +20,15 @@ public class ProjectServiceImpl implements ProjectService {
 
 
     @Autowired
-    private ProjectRespository projectRespository;
+    private ProjectRepository projectRespository;
 
     @Override
-    public ResponseModel getByShipyardId(Long shipyardId) {
+    public ResponseModel getByShipyardId(ProjectSearchRequest request) {
 
-        List<Project> projects  = projectRespository.findByShipyardId(shipyardId);
+        Long shipyardId = request.getShipyardId();
+        String projectName = request.getProjectName();
+
+        List<Project> projects  = projectRespository.findByShipyardIdAndName(shipyardId,projectName);
 
         List<ProjectNameDto> dtos = new ArrayList<>();
         for(Project project : projects){

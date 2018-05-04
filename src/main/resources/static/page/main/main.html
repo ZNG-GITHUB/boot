@@ -170,17 +170,42 @@
                             width="100">
                     </el-table-column>
                     <el-table-column
-                            prop="name"
                             align="center"
                             label="项目名称">
+                        <template slot-scope="scope">
+                            <a href="javascript:;" @click="showShipList(scope.row.id)">{{scope.row.name}}</a>
+                        </template>
                     </el-table-column>
                 </el-table>
             </div>
 
         </el-dialog>
 
-        <el-dialog title="船号列表" :visible.sync="shipVisible" >
-            船号列表
+        <el-dialog title="船号列表" width="26%" :visible.sync="shipVisible" center>
+            <div style="text-align: center">
+                <el-form :inline="true" :model="search" class="demo-form-inline" size="mini">
+                    <el-form-item label="船号">
+                        <el-input v-model="search.shipNo" placeholder="船只编号"></el-input>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="primary" @click="loadShipTableData">查询</el-button>
+                    </el-form-item>
+                </el-form>
+
+                <el-table :data="ship_tableData" style="width: 100%">
+                    <el-table-column
+                            type="index"
+                            label="序号"
+                            align="center"
+                            width="100">
+                    </el-table-column>
+                    <el-table-column
+                            prop="no"
+                            align="center"
+                            label="船号">
+                    </el-table-column>
+                </el-table>
+            </div>
         </el-dialog>
 
         <el-dialog title="产品列表" :visible.sync="productVisible" >
@@ -225,7 +250,7 @@
                 moreSearchable:false,
                 search:{
                     projectName:"",
-                    shipName:"",
+                    shipNo:"",
                     productName:""
                 },
                 product_tableData: [],
@@ -237,8 +262,10 @@
                 shipVisible: false,
                 productVisible: false,
                 project_tableData:[],
+                ship_tableData:[],
                 click:{
-                    shipyardId:""
+                    shipyardId:"",
+                    projectId:""
                 }
             }
         },
@@ -276,20 +303,37 @@
             },
             showProjectList(shipyardId){
                 this.click.shipyardId = shipyardId;
+                this.search.projectName = "";
                 this.projectVisible = true;
                 this.loadProjectTableData();
             },
             loadProjectTableData(){
                 var me = this;
-                var shipyardId = this.click.shipyardId;
-                SysApi.commenSubmitNoParm("/project/byshipyardId/"+shipyardId,function (response) {
+                SysApi.commenSubmit("/project/byshipyardId",{
+                    "shipyardId":me.click.shipyardId,
+                    "projectName":me.search.projectName
+                },function (response) {
                     if(response.data){
                         me.project_tableData = response.data;
                     }
                 });
             },
-            showShipList(id){
+            showShipList(projectId){
+                this.click.projectId = projectId;
+                this.search.shipNo = "";
                 this.shipVisible = true;
+                this.loadShipTableData();
+            },
+            loadShipTableData(){
+                var me = this;
+                SysApi.commenSubmit("/ship/byprojectId", {
+                    "projectId": me.click.projectId,
+                    "shipNo": me.search.shipNo
+                },function (response) {
+                    if(response.data){
+                        me.ship_tableData = response.data;
+                    }
+                });
             },
             showProductList(id){
                 this.productVisible = true;
