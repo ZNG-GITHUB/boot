@@ -9,6 +9,8 @@ public class TablePage {
 
     private Integer pageSize;
 
+    private Long totalCount;
+
     public Integer getToPage() {
         return toPage;
     }
@@ -23,5 +25,13 @@ public class TablePage {
 
     public void setPageSize(Integer pageSize) {
         this.pageSize = pageSize;
+    }
+
+    public Long getTotalCount() {
+        return totalCount;
+    }
+
+    public void setTotalCount(Long totalCount) {
+        this.totalCount = totalCount;
     }
 }

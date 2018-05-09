@@ -149,7 +149,17 @@
             </template>
         </el-table-column>
     </el-table>
-
+    <div style="text-align: right;padding-top: 10px">
+        <el-pagination
+                @size-change="handleSizeChange"
+                @current-change="handleCurrentChange"
+                :current-page="pageInfo.toPage"
+                :page-sizes="[10, 50, 100]"
+                :page-size="pageInfo.pageSize"
+                layout="total, sizes, prev, pager, next, jumper"
+                :total="pageInfo.totalCount">
+        </el-pagination>
+    </div>
     <template>
         <el-dialog title="项目列表" width="26%" :visible.sync="projectVisible" center>
             <div style="text-align: center">
@@ -162,7 +172,7 @@
                     </el-form-item>
                 </el-form>
 
-                <el-table :data="project_tableData" style="width: 100%">
+                <el-table :data="project_tableData" max-height="500" style="width: 100%">
                     <el-table-column
                             type="index"
                             label="序号"
@@ -192,7 +202,7 @@
                     </el-form-item>
                 </el-form>
 
-                <el-table :data="ship_tableData" style="width: 100%">
+                <el-table :data="ship_tableData" max-height="500" style="width: 100%">
                     <el-table-column
                             type="index"
                             label="序号"
@@ -203,13 +213,47 @@
                             prop="no"
                             align="center"
                             label="船号">
+                        <template slot-scope="scope">
+                            <a href="javascript:;" @click="showProductList(scope.row.id)">{{scope.row.no}}</a>
+                        </template>
                     </el-table-column>
                 </el-table>
             </div>
         </el-dialog>
 
-        <el-dialog title="产品列表" :visible.sync="productVisible" >
-            产品列表
+        <el-dialog title="产品列表" width="40%" :visible.sync="productVisible" >
+            <div style="text-align: center;">
+                <el-form :inline="true" :model="search" class="demo-form-inline" size="mini">
+                    <el-form-item label="产品">
+                        <el-input v-model="search.productName" placeholder="产品名称"></el-input>
+                    </el-form-item>
+                    <el-form-item label="产品编号">
+                        <el-input v-model="search.productCode" placeholder="产品编号"></el-input>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="primary" @click="loadProductMinTableData">查询</el-button>
+                    </el-form-item>
+                </el-form>
+
+                <el-table :data="product_min_tableData" max-height="500"  style="width: 100%;">
+                    <el-table-column
+                            type="index"
+                            label="序号"
+                            align="center"
+                            width="100">
+                    </el-table-column>
+                    <el-table-column
+                            prop="name"
+                            align="center"
+                            label="名称">
+                    </el-table-column>
+                    <el-table-column
+                            prop="code"
+                            align="center"
+                            label="编号">
+                    </el-table-column>
+                </el-table>
+            </div>
         </el-dialog>
     </template>
 </div>
@@ -251,30 +295,34 @@
                 search:{
                     projectName:"",
                     shipNo:"",
-                    productName:""
+                    productName:"",
+                    productCode:""
                 },
                 product_tableData: [],
                 pageInfo:{
-                    "toPage":0,
-                    "pageSize":10
+                    toPage:1,
+                    pageSize:10,
+                    totalCount:0
                 },
                 projectVisible: false,
                 shipVisible: false,
                 productVisible: false,
                 project_tableData:[],
                 ship_tableData:[],
+                product_min_tableData:[],
                 click:{
                     shipyardId:"",
-                    projectId:""
+                    projectId:"",
+                    shipId:""
                 }
             }
         },
         mounted:function () {
-            this.loadPoductTableData();
+            this.loadProductTableData();
         },
         methods: {
             reloadTable(){
-                this.loadPoductTableData();
+                this.loadProductTableData();
             },
             showMoreSearch(){
                 if(this.moreSearchable){
@@ -283,7 +331,7 @@
                     this.moreSearchable = true;
                 }
             },
-            loadPoductTableData(){
+            loadProductTableData(){
                 var me =this;
                 var conditions = {};
                 conditions.page = this.pageInfo;
@@ -291,8 +339,19 @@
                 SysApi.commenSubmit("/product/table",conditions,function (response) {
                     if(response.data){
                         me.product_tableData = response.data;
+                        if(response.otherMap.pageInfo){
+                            me.pageInfo = response.otherMap.pageInfo;
+                        }
                     }
                 });
+            },
+            handleSizeChange(val){
+                this.pageInfo.pageSize = val;
+                this.reloadTable();
+            },
+            handleCurrentChange(val){
+                this.pageInfo.toPage = val;
+                this.reloadTable();
             },
             booleanFormatter(row, column, cellValue, index){
                 if(cellValue){
@@ -335,8 +394,23 @@
                     }
                 });
             },
-            showProductList(id){
+            showProductList(shipId){
                 this.productVisible = true;
+                this.click.shipId = shipId;
+                this.search.productName = "";
+                this.loadProductMinTableData();
+            },
+            loadProductMinTableData(){
+                var me = this;
+                SysApi.commenSubmit("/product/byshipId", {
+                    "shipId": me.click.shipId,
+                    "productName": me.search.productName,
+                    "productCode": me.search.productCode
+                },function (response) {
+                    if(response.data){
+                        me.product_min_tableData = response.data;
+                    }
+                });
             }
         }
     })

@@ -87,7 +87,7 @@ public class Product extends CommonEntity {
     /**
      * 船
      */
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.REMOVE)
     @JoinColumn(name = "ship_id")
     private Ship ship;
 

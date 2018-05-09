@@ -10,12 +10,21 @@ import java.util.Date;
 public class DateUtil {
 
     private static String LONG_FORMAT="yyyy-MM-dd hh:mm:ss";
+    private static String SHORT_FORMAT="yyyy-MM-dd";
 
     public static String formatDate(Date date){
         if(date == null){
             return null;
         }
         SimpleDateFormat format = new SimpleDateFormat(DateUtil.LONG_FORMAT);
+        return format.format(date);
+    }
+
+    public static String formatShortDate(Date date){
+        if(date == null){
+            return null;
+        }
+        SimpleDateFormat format = new SimpleDateFormat(DateUtil.SHORT_FORMAT);
         return format.format(date);
     }
 

@@ -1,5 +1,8 @@
 package com.zng.common.entity;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by John.Zhang on 2017/12/22.
  */
@@ -30,6 +33,11 @@ public class ResponseModel{
      */
     private String exceptionName;
 
+    /**
+     * 其他值
+     */
+    private Map<String,Object> otherMap = new HashMap<>();
+
 
     public ResponseModel (){
         this(ResponseCode.Sucess,null,null,null);
@@ -55,6 +63,11 @@ public class ResponseModel{
         if(e != null){
             this.exceptionName = e.getClass().getSimpleName();
         }
+    }
+
+    public ResponseModel put(String key,Object value){
+        this.otherMap.put(key, value);
+        return this;
     }
 
     public Integer getCode() {
@@ -95,5 +108,13 @@ public class ResponseModel{
 
     public void setExceptionName(String exceptionName) {
         this.exceptionName = exceptionName;
+    }
+
+    public Map<String, Object> getOtherMap() {
+        return otherMap;
+    }
+
+    public void setOtherMap(Map<String, Object> otherMap) {
+        this.otherMap = otherMap;
     }
 }

@@ -68,7 +68,7 @@ public class Project extends CommonEntity{
     /**
      * 船厂
      */
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.REMOVE)
     @JoinColumn(name = "shipyard_id")
     private Shipyard shipyard;
 

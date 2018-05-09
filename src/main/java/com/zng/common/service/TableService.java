@@ -2,17 +2,17 @@ package com.zng.common.service;
 
 import com.zng.common.entity.TableCondition;
 import com.zng.common.entity.TableSort;
-import com.zng.stock.product.entity.Product;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.criteria.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class TableService {
 
-    public static List<Order> buildSort(List<TableSort> sorts, Root<Product> root, CriteriaBuilder criteriaBuilder) {
+    public static List<Order> buildSort(List<TableSort> sorts, Root<?> root, CriteriaBuilder criteriaBuilder) {
 
         List<Order> sortList = new ArrayList<>();
         if(!CollectionUtils.isEmpty(sorts)){
@@ -37,11 +37,32 @@ public class TableService {
         return sortList;
     }
 
-    public static List<Predicate> buildPredicate(List<TableCondition> conditions, Root<Product> root, CriteriaBuilder criteriaBuilder) {
+    public static List<Predicate> buildPredicate(List<TableCondition> conditions, Root<?> root, CriteriaBuilder criteriaBuilder) {
         List<Predicate> predicateList = new ArrayList<>();
         if(!CollectionUtils.isEmpty(conditions)){
+            HashMap<String,From> map = new HashMap<>();
             for(TableCondition condition : conditions){
-                Predicate predicate = toPredicate(condition,root,criteriaBuilder);
+
+                String attr = condition.getAttr();
+                if(StringUtils.isEmpty(attr)){
+                    return null;
+                }
+                Path path = root;
+                From from = root;
+                String[] attrs = attr.split("\\.");
+                for(String str :attrs){
+                    if(!attrs[attrs.length-1].equals(str)){
+                        if(map.containsKey(str)){
+                            from = map.get(str);
+                        }else{
+                            from = from.join(str,JoinType.LEFT);
+                            map.put(str,from);
+                        }
+                    }else {
+                        path = from.get(str);
+                    }
+                }
+                Predicate predicate = toPredicate(condition,path,criteriaBuilder);
                 if(predicate != null){
                     predicateList.add(predicate);
                 }
@@ -50,31 +71,14 @@ public class TableService {
         return predicateList;
     }
 
-    public static Predicate toPredicate(TableCondition condition,Root<Product> root, CriteriaBuilder criteriaBuilder) {
+    public static Predicate toPredicate(TableCondition condition,Path path, CriteriaBuilder criteriaBuilder) {
         Predicate predicate = null;
-
-        String attr = condition.getAttr();
         String op = condition.getOp();
         String value = condition.getValue();
         List<String> values = condition.getValues();
-
-        if(StringUtils.isEmpty(attr)){
-            return null;
-        }
-
-        Path path = root;
-        From from = root;
-        String[] attrs = attr.split("\\.");
-        for(String str :attrs){
-            if(!attrs[attrs.length-1].equals(str)){
-                from = (From) from.fetch(str,JoinType.LEFT);
-            }else {
-                path = from.get(str);
-            }
-        }
         Object val = bulidType(path.getJavaType().getName(),value);
 
-        if(!StringUtils.isEmpty(op)){
+        if(!StringUtils.isEmpty(op) && !StringUtils.isEmpty(value)){
             switch (op){
                 case TableCondition.EQUAL:
                     if(!StringUtils.isEmpty(val)){
