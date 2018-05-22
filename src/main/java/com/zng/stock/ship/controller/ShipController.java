@@ -23,4 +23,9 @@ public class ShipController {
         return shipService.getByProjectId(request);
     }
 
+    @PostMapping("tree")
+    public ResponseModel tree(){
+        return shipService.tree();
+    }
+
 }

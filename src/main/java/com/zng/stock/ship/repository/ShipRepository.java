@@ -1,5 +1,6 @@
 package com.zng.stock.ship.repository;
 
+import com.zng.common.entity.TreeNode;
 import com.zng.common.repository.InitRepository;
 import com.zng.stock.ship.entity.Ship;
 import org.springframework.data.jpa.repository.Query;
@@ -18,4 +19,7 @@ public interface ShipRepository extends InitRepository<Ship,Long>{
 
     @Query("select s from #{#entityName} s where s.project.id = ?1 and s.shipNo like %?2% and s.isDeleted = 0")
     List<Ship> findByProjectIdAndNo(Long projectId, String shipNo);
+
+    @Query("select new com.zng.common.entity.TreeNode(s.id,s.shipNo,s.project.id) from #{#entityName} s where s.isDeleted = 0")
+    List<TreeNode> findTreeNodes();
 }

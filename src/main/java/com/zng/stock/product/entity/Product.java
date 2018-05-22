@@ -38,7 +38,7 @@ public class Product extends CommonEntity {
     /**
      * 产品编号
      */
-    @Column(name = "product_code")
+    @Column(name = "product_code",unique = true)
     private String productCode;
 
     /**
@@ -76,13 +76,13 @@ public class Product extends CommonEntity {
      * 是否采购
      */
     @Column(name = "is_purchased")
-    private boolean isPurchased;
+    private boolean isPurchased = false;
 
     /**
      * 是否已到货
      */
     @Column(name = "is_arrived")
-    private boolean isArrived;
+    private boolean isArrived = false;
 
     /**
      * 船

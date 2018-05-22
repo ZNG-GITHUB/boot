@@ -1,267 +1,388 @@
+<style>
+    .top-label{
+        padding-right: 20px;
+    }
+    .tab-panl{
+        min-height: 640px;
+    }
+</style>
 <div id="main">
-    <el-form :inline="true" class="demo-form-inline" size="mini">
-        <el-row :gutter="20">
-            <el-col :span="24">
-                <el-form-item label="船厂">
-                    <el-input v-model="searchData[0].value" placeholder="船厂名称"></el-input>
-                </el-form-item>
-                <el-form-item label="项目">
-                    <el-input v-model="searchData[1].value" placeholder="项目名称"></el-input>
-                </el-form-item>
-                <el-form-item label="船号">
-                    <el-input v-model="searchData[2].value" placeholder="船号"></el-input>
-                </el-form-item>
-                <el-form-item label="产品">
-                    <el-input v-model="searchData[3].value" placeholder="产品名称"></el-input>
-                </el-form-item>
-                <el-form-item>
-                    <el-button type="primary" @click="showMoreSearch">更多</el-button>
-                </el-form-item>
-                <el-form-item>
-                    <el-button type="primary" @click="reloadTable">查询</el-button>
-                </el-form-item>
-            </el-col>
-        </el-row>
-        <el-row :gutter="20" v-if="moreSearchable">
-            <el-col :span="24">
-                <el-form-item label="产品编号">
-                    <el-input v-model="searchData[4].value" placeholder="产品编号"></el-input>
-                </el-form-item>
-                <el-form-item label="采购情况">
-                    <el-select v-model="searchData[5].value" placeholder="活动区域">
-                        <el-option label="全部" value=""></el-option>
-                        <el-option label="未采购" value="0"></el-option>
-                        <el-option label="已采购" value="1"></el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="到货情况">
-                    <el-select v-model="searchData[6].value" placeholder="活动区域">
-                        <el-option label="全部" value=""></el-option>
-                        <el-option label="未到货" value="0"></el-option>
-                        <el-option label="已到货" value="1"></el-option>
-                    </el-select>
-                </el-form-item>
-            </el-col>
-        </el-row>
-    </el-form>
-    <el-table
-            :data="product_tableData"
-            style="width: 100%">
-        <el-table-column
-                type="index"
-                width="50">
-        </el-table-column>
-        <el-table-column
-                min-width="12%"
-                sortable
-                label="船厂">
-            <template slot-scope="scope">
-                <a href="javascript:;" @click="showProjectList(scope.row.shipyardId)">{{scope.row.shipyardName}}</a>
+    <el-tabs v-model="activeName" @tab-click="handleTabClick">
+        <el-tab-pane label="产品列表" name="first">
+            <el-form :inline="true" class="demo-form-inline" size="mini">
+                <el-row :gutter="20">
+                    <el-col :span="20">
+                        <el-form-item label="船厂">
+                            <el-input v-model="searchData[0].value" placeholder="船厂名称"></el-input>
+                        </el-form-item>
+                        <el-form-item label="项目">
+                            <el-input v-model="searchData[1].value" placeholder="项目名称"></el-input>
+                        </el-form-item>
+                        <el-form-item label="船号">
+                            <el-input v-model="searchData[2].value" placeholder="船号"></el-input>
+                        </el-form-item>
+                        <el-form-item label="产品">
+                            <el-input v-model="searchData[3].value" placeholder="产品名称"></el-input>
+                        </el-form-item>
+                        <el-form-item>
+                            <el-button type="primary" @click="showMoreSearch">更多</el-button>
+                        </el-form-item>
+                        <el-form-item>
+                            <el-button type="primary" @click="reloadTable">查询</el-button>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="4">
+                        <el-form-item>
+                            <el-button type="success" @click="openAddDialog">新增</el-button>
+                        </el-form-item>
+                        <el-form-item>
+                            <el-button type="warning">生成采购单</el-button>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row :gutter="20" v-if="moreSearchable">
+                    <el-col :span="20">
+                        <el-form-item label="产品编号">
+                            <el-input v-model="searchData[4].value" placeholder="产品编号"></el-input>
+                        </el-form-item>
+                        <el-form-item label="采购情况">
+                            <el-select v-model="searchData[5].value" placeholder="活动区域">
+                                <el-option label="全部" value=""></el-option>
+                                <el-option label="未采购" value="0"></el-option>
+                                <el-option label="已采购" value="1"></el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item label="到货情况">
+                            <el-select v-model="searchData[6].value" placeholder="活动区域">
+                                <el-option label="全部" value=""></el-option>
+                                <el-option label="未到货" value="0"></el-option>
+                                <el-option label="已到货" value="1"></el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form>
+            <el-table
+                    :data="product_tableData"
+                    style="width: 100%">
+                <el-table-column
+                        type="index"
+                        width="50">
+                </el-table-column>
+                <el-table-column
+                        min-width="12%"
+                        sortable
+                        label="船厂">
+                    <template slot-scope="scope">
+                        <a href="javascript:;" @click="showProjectList(scope.row.shipyardId)">{{scope.row.shipyardName}}</a>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        min-width="10%"
+                        sortable
+                        label="项目">
+                    <template slot-scope="scope">
+                        <a href="javascript:;" @click="showShipList(scope.row.projectId)">{{scope.row.projectName}}</a>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        min-width="8%"
+                        sortable
+                        label="船号">
+                    <template slot-scope="scope">
+                        <a href="javascript:;" @click="showProductList(scope.row.shipId)">{{scope.row.shipNo}}</a>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        prop="classificationSociety"
+                        min-width="8%"
+                        sortable
+                        label="船级社">
+                </el-table-column>
+                <el-table-column
+                        min-width="10%"
+                        sortable
+                        label="产品">
+                    <template slot-scope="scope">
+                        <a href="javascript:;" @click="showProductDetail(scope.row.id)">{{scope.row.productName}}</a>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        prop="productCode"
+                        min-width="8%"
+                        sortable
+                        label="产品编号">
+                </el-table-column>
+                <el-table-column
+                        prop="certificateType"
+                        min-width="8%"
+                        sortable
+                        label="证书类型">
+                </el-table-column>
+                <el-table-column
+                        prop="handDate"
+                        min-width="11%"
+                        sortable
+                        label="交货日期">
+                </el-table-column>
+                <el-table-column
+                        prop="version"
+                        min-width="6%"
+                        sortable
+                        label="版本">
+                </el-table-column>
+                <el-table-column
+                        prop="mapNo"
+                        min-width="8%"
+                        sortable
+                        label="产品图号">
+                </el-table-column>
+                <el-table-column
+                        prop="cost"
+                        min-width="7%"
+                        sortable
+                        label="成本">
+                </el-table-column>
+                <el-table-column
+                        prop="isPurchased"
+                        min-width="7%"
+                        :formatter="booleanFormatter"
+                        label="是否已采购">
+                </el-table-column>
+                <el-table-column
+                        prop="isArrived"
+                        min-width="7%"
+                        :formatter="booleanFormatter"
+                        label="是否已到货">
+                </el-table-column>
+                <el-table-column label="操作" width="180">
+                    <template slot-scope="scope">
+                        <el-button
+                                size="mini"
+                                @click="openUpdDialog(scope.row.id)">编辑</el-button>
+                        <el-button
+                                size="mini"
+                                type="danger"
+                                @click="openDelDialog(scope.row.id)">删除</el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+            <div style="text-align: right;padding-top: 10px">
+                <el-pagination
+                        @size-change="handleSizeChange"
+                        @current-change="handleCurrentChange"
+                        :current-page="pageInfo.toPage"
+                        :page-sizes="[10, 50, 100]"
+                        :page-size="pageInfo.pageSize"
+                        layout="total, sizes, prev, pager, next, jumper"
+                        :total="pageInfo.totalCount">
+                </el-pagination>
+            </div>
+            <template>
+                <el-dialog title="项目列表" width="26%" :visible.sync="projectVisible" center>
+                    <div style="text-align: center">
+                        <el-form :inline="true" :model="search" class="demo-form-inline" size="mini">
+                            <el-form-item label="项目">
+                                <el-input v-model="search.projectName" placeholder="项目名称"></el-input>
+                            </el-form-item>
+                            <el-form-item>
+                                <el-button type="primary" @click="loadProjectTableData">查询</el-button>
+                            </el-form-item>
+                        </el-form>
+
+                        <el-table :data="project_tableData" max-height="500" style="width: 100%">
+                            <el-table-column
+                                    type="index"
+                                    label="序号"
+                                    align="center"
+                                    width="100">
+                            </el-table-column>
+                            <el-table-column
+                                    align="center"
+                                    label="项目名称">
+                                <template slot-scope="scope">
+                                    <a href="javascript:;" @click="showShipList(scope.row.id)">{{scope.row.name}}</a>
+                                </template>
+                            </el-table-column>
+                        </el-table>
+                    </div>
+
+                </el-dialog>
+
+                <el-dialog title="船号列表" width="26%" :visible.sync="shipVisible" center>
+                    <div style="text-align: center">
+                        <el-form :inline="true" :model="search" class="demo-form-inline" size="mini">
+                            <el-form-item label="船号">
+                                <el-input v-model="search.shipNo" placeholder="船只编号"></el-input>
+                            </el-form-item>
+                            <el-form-item>
+                                <el-button type="primary" @click="loadShipTableData">查询</el-button>
+                            </el-form-item>
+                        </el-form>
+
+                        <el-table :data="ship_tableData" max-height="500" style="width: 100%">
+                            <el-table-column
+                                    type="index"
+                                    label="序号"
+                                    align="center"
+                                    width="100">
+                            </el-table-column>
+                            <el-table-column
+                                    prop="no"
+                                    align="center"
+                                    label="船号">
+                                <template slot-scope="scope">
+                                    <a href="javascript:;" @click="showProductList(scope.row.id)">{{scope.row.no}}</a>
+                                </template>
+                            </el-table-column>
+                        </el-table>
+                    </div>
+                </el-dialog>
+
+                <el-dialog title="产品列表" width="40%" :visible.sync="productVisible" center>
+                    <div style="text-align: center;">
+                        <el-form :inline="true" :model="search" class="demo-form-inline" size="mini">
+                            <el-form-item label="产品">
+                                <el-input v-model="search.productName" placeholder="产品名称"></el-input>
+                            </el-form-item>
+                            <el-form-item label="产品编号">
+                                <el-input v-model="search.productCode" placeholder="产品编号"></el-input>
+                            </el-form-item>
+                            <el-form-item>
+                                <el-button type="primary" @click="loadProductMinTableData">查询</el-button>
+                            </el-form-item>
+                        </el-form>
+
+                        <el-table :data="product_min_tableData" max-height="500"  style="width: 100%;">
+                            <el-table-column
+                                    type="index"
+                                    label="序号"
+                                    align="center"
+                                    width="100">
+                            </el-table-column>
+                            <el-table-column
+                                    align="center"
+                                    label="名称">
+                                <template slot-scope="scope">
+                                    <a href="javascript:;" @click="showProductDetail(scope.row.id)">{{scope.row.name}}</a>
+                                </template>
+                            </el-table-column>
+                            <el-table-column
+                                    prop="code"
+                                    align="center"
+                                    label="编号">
+                            </el-table-column>
+                        </el-table>
+                    </div>
+                </el-dialog>
+
+                <el-dialog :title="infoTitle" width="40%" :visible.sync="infoVisible" :close-on-click-modal="false" @close="resetForm('productInfo')">
+                    <el-form ref="productInfo" :model="productInfo" :rules="productInfoRules" label-width="80px">
+                        <el-row :gutter="20">
+                            <el-col :span="12">
+                                <el-form-item label="船号" prop="shipId">
+                                    <el-cascader
+                                            placeholder="请输入船号"
+                                            style="width: 100%"
+                                            v-model="shipId"
+                                            :options="shipTree"
+                                            :show-all-levels="false"
+                                            @change="shipSelected"
+                                            @blur="validShipSelected"
+                                            filterable
+                                            clearable>
+                                    </el-cascader>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                        <el-row :gutter="20">
+                            <el-col :span="12">
+                                <el-form-item label="产品" prop="productName">
+                                    <el-input v-model="productInfo.productName" placeholder="产品"></el-input>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="12">
+                                <el-form-item label="产品编号" prop="productCode">
+                                    <el-input v-model="productInfo.productCode" placeholder="产品编号"></el-input>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                        <el-row :gutter="20">
+                            <el-col :span="12">
+                                <el-form-item label="证书类型" prop="certificateType">
+                                    <el-input v-model="productInfo.certificateType" placeholder="证书类型"></el-input>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="12">
+                                <el-form-item label="交货期" prop="handDate">
+                                    <el-date-picker v-model="productInfo.handDate" type="date"
+                                                    style="width: 100%"
+                                                    placeholder="选择日期"
+                                                    format="yyyy 年 MM 月 dd 日"
+                                                    value-format="yyyy-MM-dd"></el-date-picker>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                        <el-row :gutter="20">
+                            <el-col :span="12">
+                                <el-form-item label="版本" prop="version">
+                                    <el-input v-model="productInfo.version" placeholder="版本"></el-input>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="12">
+                                <el-form-item label="产品图号" prop="mapNo">
+                                    <el-input v-model="productInfo.mapNo" placeholder="产品图号"></el-input>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                    </el-form>
+                    <div slot="footer" class="dialog-footer">
+                        <el-button type="primary" @click="saveProduct">保存</el-button>
+                        <el-button @click="infoVisible = false">取消</el-button>
+                    </div>
+                </el-dialog>
             </template>
-        </el-table-column>
-        <el-table-column
-                min-width="10%"
-                sortable
-                label="项目">
-            <template slot-scope="scope">
-                <a href="javascript:;" @click="showShipList(scope.row.projectId)">{{scope.row.projectName}}</a>
-            </template>
-        </el-table-column>
-        <el-table-column
-                min-width="8%"
-                sortable
-                label="船号">
-            <template slot-scope="scope">
-                <a href="javascript:;" @click="showProductList(scope.row.shipId)">{{scope.row.shipNo}}</a>
-            </template>
-        </el-table-column>
-        <el-table-column
-                prop="classificationSociety"
-                min-width="8%"
-                sortable
-                label="船级社">
-        </el-table-column>
-        <el-table-column
-                min-width="10%"
-                sortable
-                label="产品">
-            <template slot-scope="scope">
-                <a href="javascript:;">{{scope.row.productName}}</a>
-            </template>
-        </el-table-column>
-        <el-table-column
-                prop="productCode"
-                min-width="8%"
-                sortable
-                label="产品编号">
-        </el-table-column>
-        <el-table-column
-                prop="certificateType"
-                min-width="8%"
-                sortable
-                label="证书类型">
-        </el-table-column>
-        <el-table-column
-                prop="handDate"
-                min-width="11%"
-                sortable
-                label="交货日期">
-        </el-table-column>
-        <el-table-column
-                prop="version"
-                min-width="5%"
-                sortable
-                label="版本">
-        </el-table-column>
-        <el-table-column
-                prop="mapNo"
-                min-width="8%"
-                sortable
-                label="产品图号">
-        </el-table-column>
-        <el-table-column
-                prop="cost"
-                min-width="7%"
-                sortable
-                label="成本">
-        </el-table-column>
-        <el-table-column
-                prop="isPurchased"
-                min-width="7%"
-                :formatter="booleanFormatter"
-                label="是否已采购">
-        </el-table-column>
-        <el-table-column
-                prop="isArrived"
-                min-width="7%"
-                :formatter="booleanFormatter"
-                label="是否已到货">
-        </el-table-column>
-        <el-table-column label="操作" width="180">
-            <template slot-scope="scope">
-                <el-button
-                        size="mini"
-                        @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-                <el-button
-                        size="mini"
-                        type="danger"
-                        @click="handleDelete(scope.$index, scope.row)">删除</el-button>
-            </template>
-        </el-table-column>
-    </el-table>
-    <div style="text-align: right;padding-top: 10px">
-        <el-pagination
-                @size-change="handleSizeChange"
-                @current-change="handleCurrentChange"
-                :current-page="pageInfo.toPage"
-                :page-sizes="[10, 50, 100]"
-                :page-size="pageInfo.pageSize"
-                layout="total, sizes, prev, pager, next, jumper"
-                :total="pageInfo.totalCount">
-        </el-pagination>
-    </div>
-    <template>
-        <el-dialog title="项目列表" width="26%" :visible.sync="projectVisible" center>
-            <div style="text-align: center">
-                <el-form :inline="true" :model="search" class="demo-form-inline" size="mini">
-                    <el-form-item label="项目">
-                        <el-input v-model="search.projectName" placeholder="项目名称"></el-input>
+        </el-tab-pane>
+        <template v-if="detailShow">
+            <el-tab-pane label="零配件清单" name="second">
+                <el-form :inline="true" class="demo-form-inline" size="mini">
+                    <el-form-item class="top-label" label="船厂:">
+                        <label>复仇者联盟</label>
                     </el-form-item>
-                    <el-form-item>
-                        <el-button type="primary" @click="loadProjectTableData">查询</el-button>
+                    <el-form-item class="top-label" label="项目:">
+                        <label>复仇者联盟</label>
+                    </el-form-item>
+                    <el-form-item class="top-label" label="船号:">
+                        <label>复仇者联盟</label>
+                    </el-form-item>
+                    <el-form-item class="top-label" label="产品:">
+                        <label>复仇者联盟</label>
                     </el-form-item>
                 </el-form>
 
-                <el-table :data="project_tableData" max-height="500" style="width: 100%">
-                    <el-table-column
-                            type="index"
-                            label="序号"
-                            align="center"
-                            width="100">
-                    </el-table-column>
-                    <el-table-column
-                            align="center"
-                            label="项目名称">
-                        <template slot-scope="scope">
-                            <a href="javascript:;" @click="showShipList(scope.row.id)">{{scope.row.name}}</a>
-                        </template>
-                    </el-table-column>
-                </el-table>
-            </div>
-
-        </el-dialog>
-
-        <el-dialog title="船号列表" width="26%" :visible.sync="shipVisible" center>
-            <div style="text-align: center">
-                <el-form :inline="true" :model="search" class="demo-form-inline" size="mini">
-                    <el-form-item label="船号">
-                        <el-input v-model="search.shipNo" placeholder="船只编号"></el-input>
-                    </el-form-item>
-                    <el-form-item>
-                        <el-button type="primary" @click="loadShipTableData">查询</el-button>
-                    </el-form-item>
-                </el-form>
-
-                <el-table :data="ship_tableData" max-height="500" style="width: 100%">
-                    <el-table-column
-                            type="index"
-                            label="序号"
-                            align="center"
-                            width="100">
-                    </el-table-column>
-                    <el-table-column
-                            prop="no"
-                            align="center"
-                            label="船号">
-                        <template slot-scope="scope">
-                            <a href="javascript:;" @click="showProductList(scope.row.id)">{{scope.row.no}}</a>
-                        </template>
-                    </el-table-column>
-                </el-table>
-            </div>
-        </el-dialog>
-
-        <el-dialog title="产品列表" width="40%" :visible.sync="productVisible" >
-            <div style="text-align: center;">
-                <el-form :inline="true" :model="search" class="demo-form-inline" size="mini">
-                    <el-form-item label="产品">
-                        <el-input v-model="search.productName" placeholder="产品名称"></el-input>
-                    </el-form-item>
-                    <el-form-item label="产品编号">
-                        <el-input v-model="search.productCode" placeholder="产品编号"></el-input>
-                    </el-form-item>
-                    <el-form-item>
-                        <el-button type="primary" @click="loadProductMinTableData">查询</el-button>
-                    </el-form-item>
-                </el-form>
-
-                <el-table :data="product_min_tableData" max-height="500"  style="width: 100%;">
-                    <el-table-column
-                            type="index"
-                            label="序号"
-                            align="center"
-                            width="100">
-                    </el-table-column>
-                    <el-table-column
-                            prop="name"
-                            align="center"
-                            label="名称">
-                    </el-table-column>
-                    <el-table-column
-                            prop="code"
-                            align="center"
-                            label="编号">
-                    </el-table-column>
-                </el-table>
-            </div>
-        </el-dialog>
-    </template>
+                <el-row :gutter="20">
+                    <el-tabs type="border-card">
+                        <el-tab-pane class="tab-panl" label="电气外购件">电气外购件</el-tab-pane>
+                        <el-tab-pane label="标准件">标准件</el-tab-pane>
+                        <el-tab-pane label="备件">备件</el-tab-pane>
+                        <el-tab-pane label="外购件">外购件</el-tab-pane>
+                        <el-tab-pane label="管接头">管接头</el-tab-pane>
+                        <el-tab-pane label="液压件">液压件</el-tab-pane>
+                        <el-tab-pane label="钢材">钢材</el-tab-pane>
+                        <el-tab-pane label="其他">其他</el-tab-pane>
+                    </el-tabs>
+                </el-row>
+            </el-tab-pane>
+        </template>
+    </el-tabs>
 </div>
 <script>
     new Vue({
         el: '#main',
         data: function() {
             return {
+                activeName: 'first',
+                detailShow:false,
                 searchData:[{
                     attr:"ship.project.shipyard.shipyardName",
                     op:"like",
@@ -307,6 +428,8 @@
                 projectVisible: false,
                 shipVisible: false,
                 productVisible: false,
+                infoVisible:false,
+                infoTitle:"新增产品",
                 project_tableData:[],
                 ship_tableData:[],
                 product_min_tableData:[],
@@ -314,11 +437,31 @@
                     shipyardId:"",
                     projectId:"",
                     shipId:""
-                }
+                },
+                productInfo:{
+                    shipId:"",
+                    productName:"",
+                    productCode:"",
+                    certificateType:"",
+                    handDate:"",
+                    version:"",
+                    mapNo:""
+                },
+                productInfoRules:{
+                    shipId: [
+                        { required: true, message: '请选择所属船只', trigger: 'blur'}
+                    ],
+                    productName:[
+                        { required: true, message: '请填写产品名称', trigger: 'blur'}
+                    ]
+                },
+                shipId:[],
+                shipTree:[]
             }
         },
         mounted:function () {
             this.loadProductTableData();
+            this.loadShipTree();
         },
         methods: {
             reloadTable(){
@@ -381,6 +524,7 @@
                 this.click.projectId = projectId;
                 this.search.shipNo = "";
                 this.shipVisible = true;
+                this.projectVisible = false;
                 this.loadShipTableData();
             },
             loadShipTableData(){
@@ -396,6 +540,7 @@
             },
             showProductList(shipId){
                 this.productVisible = true;
+                this.shipVisible = false;
                 this.click.shipId = shipId;
                 this.search.productName = "";
                 this.loadProductMinTableData();
@@ -409,6 +554,108 @@
                 },function (response) {
                     if(response.data){
                         me.product_min_tableData = response.data;
+                    }
+                });
+            },
+            handleTabClick(tab, event) {
+                if(tab.name === 'first'){
+                    this.detailShow = false;
+                }
+            },
+            showProductDetail(id){
+                this.detailShow = true;
+                this.productVisible = false;
+                this.activeName = "second";
+            },
+            openAddDialog(){
+                this.infoVisible = true;
+                this.loadShipTree();
+            },
+            openUpdDialog(id){
+                this.loadShipTree();
+                var me = this;
+                SysApi.commenSubmitNoParm("/product/info/"+id,function (response) {
+                    if(response.data){
+                        me.infoTitle = "编辑产品";
+                        me.infoVisible = true;
+                        me.fillForm(response.data);
+                    }
+                });
+            },
+            openDelDialog(id){
+                var me = this;
+                this.$confirm('此操作将永久删除该产品, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(function () {
+                    me.delProject(id);
+                }).catch(function () {
+                    me.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });
+                });
+            },
+            delProject(id){
+                var me = this;
+                SysApi.commenSubmitNoParm("/product/del/"+id,function (response) {
+                    if(response.code === 200){
+                        me.$message.success('删除成功');
+                        me.reloadTable();
+                    }
+                });
+            },
+            fillForm(data){
+                if(data.treeId){
+                    this.shipId = data.treeId;
+                }
+                this.productInfo = data;
+            },
+            resetForm(formName){
+                this.productInfo = {
+                    shipId:"",
+                    productName:"",
+                    productCode:"",
+                    certificateType:"",
+                    handDate:"",
+                    version:"",
+                    mapNo:""
+                };
+                this.shipId = [];
+                this.$refs["productInfo"].clearValidate();
+            },
+            shipSelected(val){
+                this.productInfo.shipId = this.shipId[2];
+                this.validShipSelected();
+            },
+            saveProduct(){
+                var me = this;
+                var valid = false;
+                this.$refs["productInfo"].validate(function (rs) {
+                    valid = rs;
+                });
+                if(!valid){
+                    return;
+                }
+                SysApi.commenSubmit("/product/save",this.productInfo,function (response) {
+                    if(response.code == 200){
+                        me.infoVisible = false;
+                        me.$message.success('保存成功');
+                        me.reloadTable();
+                    }else {
+                        me.$message.error(response.message);
+                    }
+                });
+            },
+            validShipSelected(){
+                this.$refs["productInfo"].validateField("shipId");
+            },
+            loadShipTree(){
+                var me = this;
+                SysApi.commenSubmitNoParm("/ship/tree",function (response) {
+                    if(response.data){
+                        me.shipTree = response.data;
                     }
                 });
             }

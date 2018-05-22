@@ -8,4 +8,6 @@ import com.zng.stock.ship.view.ShipSearchRequest;
  */
 public interface ShipService {
     ResponseModel getByProjectId(ShipSearchRequest request);
+
+    ResponseModel tree();
 }

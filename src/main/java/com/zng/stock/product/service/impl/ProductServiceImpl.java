@@ -3,23 +3,28 @@ package com.zng.stock.product.service.impl;
 import com.zng.common.entity.*;
 import com.zng.common.service.TableService;
 import com.zng.common.util.DateUtil;
+import com.zng.stock.product.dto.ProductInfoDto;
 import com.zng.stock.product.dto.ProductNameDto;
 import com.zng.stock.product.dto.ProductTableDto;
 import com.zng.stock.product.entity.Product;
 import com.zng.stock.product.repository.ProductRepository;
 import com.zng.stock.product.service.ProductService;
+import com.zng.stock.product.view.ProductSaveRequest;
 import com.zng.stock.product.view.ProductSearchRequest;
 import com.zng.stock.project.entity.Project;
 import com.zng.stock.ship.entity.Ship;
+import com.zng.stock.ship.repository.ShipRepository;
 import com.zng.stock.shipyard.entity.Shipyard;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.Table;
 import javax.persistence.criteria.*;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +33,14 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private ProductRepository productRepository;
+    @Autowired
+    private ShipRepository shipRepository;
 
+    /**
+     * 获得产品列表
+     * @param request
+     * @return
+     */
     @Override
     public ResponseModel table(CommonTableRequest request) {
 
@@ -56,6 +68,11 @@ public class ProductServiceImpl implements ProductService {
         return new ResponseModel(tableList).put("pageInfo",pageInfo);
     }
 
+    /**
+     * 根据船只获得产品
+     * @param request
+     * @return
+     */
     @Override
     public ResponseModel getByShipId(ProductSearchRequest request) {
 
@@ -75,6 +92,77 @@ public class ProductServiceImpl implements ProductService {
             dtos.add(dto);
         }
         return new ResponseModel(dtos);
+    }
+
+    /**
+     * 保存产品
+     * @param request
+     * @return
+     */
+    @Override
+    public ResponseModel save(ProductSaveRequest request) {
+
+        Long shipId = request.getShipId();
+        Ship ship = shipRepository.findByIdSoftly(shipId);
+        if(ship == null){
+            return new ResponseModel(ResponseCode.Error,"船只不存在");
+        }
+        Product product = new Product();
+        if(request.getId() != null){
+            product = productRepository.findByIdSoftly(request.getId());
+        }
+        product.setShip(ship);
+        product.setCertificateType(request.getCertificateType());
+        product.setProductName(request.getProductName());
+        product.setProductCode(request.getProductCode());
+        product.setHandDate(request.getHandDate());
+        product.setMapNo(request.getMapNo());
+        product.setVersion(request.getVersion());
+        productRepository.save(product);
+
+        return new ResponseModel();
+    }
+
+    /**
+     * 获得产品信息
+     * @param id
+     * @return
+     */
+    @Override
+    public ResponseModel info(@NotNull Long id) {
+        Product product = productRepository.findByIdSoftly(id);
+        if(product != null){
+            ProductInfoDto dto = new ProductInfoDto();
+            dto.setId(product.getId());
+            dto.setCertificateType(product.getCertificateType());
+            dto.setHandDate(DateUtil.formatShortDate(product.getHandDate()));
+            dto.setProductCode(product.getProductCode());
+            dto.setProductName(product.getProductName());
+            dto.setMapNo(product.getMapNo());
+            dto.setVersion(product.getVersion());
+            List<Long> shipId = new ArrayList<>();
+            if(product.getShip() != null){
+                dto.setShipId(product.getShip().getId());
+                shipId.add(product.getShip().getId());
+            }
+            if(product.getShip().getProject() != null){
+                shipId.add(product.getShip().getProject().getId());
+            }
+            if(product.getShip().getProject().getShipyard() != null){
+                shipId.add(product.getShip().getProject().getShipyard().getId());
+            }
+            dto.setTreeId(shipId);
+            
+            return new ResponseModel(dto);
+        }
+        return new ResponseModel();
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    public ResponseModel delete(@NotNull Long id) {
+        productRepository.deleteByIdSoftly(id);
+        return new ResponseModel();
     }
 
 

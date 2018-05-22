@@ -39,7 +39,7 @@ $(document).ready(function(){
                 console.log(xhr.status);
                 console.log(errorThrown);
                 if(xhr.status && xhr.status == 401){
-                    alert("权限不足！");
+                    alert("权限不足");
                 }
             }
         });
