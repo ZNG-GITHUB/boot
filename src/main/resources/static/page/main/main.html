@@ -206,7 +206,6 @@
                             </el-table-column>
                         </el-table>
                     </div>
-
                 </el-dialog>
 
                 <el-dialog title="船号列表" width="26%" :visible.sync="shipVisible" center>
@@ -347,22 +346,138 @@
             <el-tab-pane label="零配件清单" name="second">
                 <el-form :inline="true" class="demo-form-inline" size="mini">
                     <el-form-item class="top-label" label="船厂:">
-                        <label>复仇者联盟</label>
+                        <label>{{productShowInfo.shipyardName}}</label>
                     </el-form-item>
                     <el-form-item class="top-label" label="项目:">
-                        <label>复仇者联盟</label>
+                        <label>{{productShowInfo.projectName}}</label>
                     </el-form-item>
                     <el-form-item class="top-label" label="船号:">
-                        <label>复仇者联盟</label>
+                        <label>{{productShowInfo.shipNo}}</label>
                     </el-form-item>
                     <el-form-item class="top-label" label="产品:">
-                        <label>复仇者联盟</label>
+                        <label>{{productShowInfo.productName}}</label>
                     </el-form-item>
                 </el-form>
 
                 <el-row :gutter="20">
                     <el-tabs type="border-card">
-                        <el-tab-pane class="tab-panl" label="电气外购件">电气外购件</el-tab-pane>
+                        <el-tab-pane class="tab-panl" label="电气外购件">
+                            <div style="margin-top: 10px">
+                                <el-form :inline="true" class="demo-form-inline" size="small">
+                                    <el-row :gutter="20">
+                                        <el-col :span="14" :offset="1">
+                                            <el-form-item label="船厂">
+                                                <el-input placeholder="船厂名称"></el-input>
+                                            </el-form-item>
+                                            <el-form-item>
+                                                <el-button type="primary">搜索</el-button>
+                                            </el-form-item>
+                                        </el-col>
+                                        <el-col :span="7">
+                                            <el-form-item style="padding-right: 20px">
+                                                <el-button type="success">新增</el-button>
+                                            </el-form-item>
+                                            <el-form-item>
+                                                <el-button type="primary">完成采购</el-button>
+                                            </el-form-item>
+                                            <el-form-item>
+                                                <el-button type="primary">完成到货</el-button>
+                                            </el-form-item>
+                                            <el-form-item>
+                                                <el-button type="primary">撤销采购</el-button>
+                                            </el-form-item>
+                                            <el-form-item>
+                                                <el-button type="primary">撤销到货</el-button>
+                                            </el-form-item>
+                                        </el-col>
+                                    </el-row>
+                                </el-form>
+                            </div>
+                            <div>
+                                <el-table :data="product_min_tableData" max-height="500"  style="width: 100%;">
+                                    <el-table-column
+                                            type="index"
+                                            label="序号"
+                                            align="center"
+                                            width="100">
+                                    </el-table-column>
+                                    <el-table-column
+                                            prop="code"
+                                            label="材料">
+                                    </el-table-column>
+                                    <el-table-column
+                                            prop="code"
+                                            label="名称">
+                                    </el-table-column>
+                                    <el-table-column
+                                            prop="code"
+                                            label="规格">
+                                    </el-table-column>
+                                    <el-table-column
+                                            prop="code"
+                                            label="总数量">
+                                    </el-table-column>
+                                    <el-table-column
+                                            prop="code"
+                                            label="现有库存数量">
+                                    </el-table-column>
+                                    <el-table-column
+                                            prop="code"
+                                            label="使用库存数量">
+                                    </el-table-column>
+                                    <el-table-column
+                                            prop="code"
+                                            label="采购数量">
+                                    </el-table-column>
+                                    <el-table-column
+                                            prop="code"
+                                            label="总成本">
+                                    </el-table-column>
+                                    <el-table-column
+                                            prop="code"
+                                            label="创建时间">
+                                    </el-table-column>
+                                    <el-table-column
+                                            prop="code"
+                                            label="修改时间">
+                                    </el-table-column>
+                                    <el-table-column
+                                            prop="code"
+                                            label="备注">
+                                    </el-table-column>
+                                    <el-table-column
+                                            prop="code"
+                                            label="是否已采购">
+                                    </el-table-column>
+                                    <el-table-column
+                                            prop="code"
+                                            label="是否已到货">
+                                    </el-table-column>
+                                    <el-table-column label="操作" width="180">
+                                        <template slot-scope="scope">
+                                            <el-button
+                                                    size="mini"
+                                                    @click="openUpdDialog(scope.row.id)">编辑</el-button>
+                                            <el-button
+                                                    size="mini"
+                                                    type="danger"
+                                                    @click="openDelDialog(scope.row.id)">删除</el-button>
+                                        </template>
+                                    </el-table-column>
+                                </el-table>
+                            </div>
+                            <div style="text-align: right;padding-top: 10px">
+                                <el-pagination
+                                        @size-change="handleSizeChange"
+                                        @current-change="handleCurrentChange"
+                                        :current-page="1"
+                                        :page-sizes="[10, 50, 100]"
+                                        :page-size="10"
+                                        layout="total, sizes, prev, pager, next, jumper"
+                                        :total="0">
+                                </el-pagination>
+                            </div>
+                        </el-tab-pane>
                         <el-tab-pane label="标准件">标准件</el-tab-pane>
                         <el-tab-pane label="备件">备件</el-tab-pane>
                         <el-tab-pane label="外购件">外购件</el-tab-pane>
@@ -447,6 +562,13 @@
                     version:"",
                     mapNo:""
                 },
+                productShowInfo:{
+                    id:"",
+                    productName:"",
+                    shipNo:"",
+                    projectName:"",
+                    shipyardName:""
+                },
                 productInfoRules:{
                     shipId: [
                         { required: true, message: '请选择所属船只', trigger: 'blur'}
@@ -464,17 +586,17 @@
             this.loadShipTree();
         },
         methods: {
-            reloadTable(){
+            reloadTable:function(){
                 this.loadProductTableData();
             },
-            showMoreSearch(){
+            showMoreSearch:function(){
                 if(this.moreSearchable){
                     this.moreSearchable = false;
                 }else{
                     this.moreSearchable = true;
                 }
             },
-            loadProductTableData(){
+            loadProductTableData:function(){
                 var me =this;
                 var conditions = {};
                 conditions.page = this.pageInfo;
@@ -488,28 +610,28 @@
                     }
                 });
             },
-            handleSizeChange(val){
+            handleSizeChange:function(val){
                 this.pageInfo.pageSize = val;
                 this.reloadTable();
             },
-            handleCurrentChange(val){
+            handleCurrentChange:function(val){
                 this.pageInfo.toPage = val;
                 this.reloadTable();
             },
-            booleanFormatter(row, column, cellValue, index){
+            booleanFormatter:function(row, column, cellValue, index){
                 if(cellValue){
                     return "是";
                 }else {
                     return "否";
                 }
             },
-            showProjectList(shipyardId){
+            showProjectList:function(shipyardId){
                 this.click.shipyardId = shipyardId;
                 this.search.projectName = "";
                 this.projectVisible = true;
                 this.loadProjectTableData();
             },
-            loadProjectTableData(){
+            loadProjectTableData:function(){
                 var me = this;
                 SysApi.commenSubmit("/project/byshipyardId",{
                     "shipyardId":me.click.shipyardId,
@@ -520,14 +642,14 @@
                     }
                 });
             },
-            showShipList(projectId){
+            showShipList:function(projectId){
                 this.click.projectId = projectId;
                 this.search.shipNo = "";
                 this.shipVisible = true;
                 this.projectVisible = false;
                 this.loadShipTableData();
             },
-            loadShipTableData(){
+            loadShipTableData:function(){
                 var me = this;
                 SysApi.commenSubmit("/ship/byprojectId", {
                     "projectId": me.click.projectId,
@@ -538,14 +660,14 @@
                     }
                 });
             },
-            showProductList(shipId){
+            showProductList:function(shipId){
                 this.productVisible = true;
                 this.shipVisible = false;
                 this.click.shipId = shipId;
                 this.search.productName = "";
                 this.loadProductMinTableData();
             },
-            loadProductMinTableData(){
+            loadProductMinTableData:function(){
                 var me = this;
                 SysApi.commenSubmit("/product/byshipId", {
                     "shipId": me.click.shipId,
@@ -557,21 +679,31 @@
                     }
                 });
             },
-            handleTabClick(tab, event) {
+            handleTabClick:function(tab, event) {
                 if(tab.name === 'first'){
                     this.detailShow = false;
                 }
             },
-            showProductDetail(id){
+            showProductDetail:function(id){
                 this.detailShow = true;
                 this.productVisible = false;
                 this.activeName = "second";
+                var me = this;
+                SysApi.commenSubmitNoParm("/product/info/"+id,function (response) {
+                    if(response.data){
+                        me.productShowInfo.id = response.data.id;
+                        me.productShowInfo.productName = response.data.productName;
+                        me.productShowInfo.shipNo = response.data.shipNo;
+                        me.productShowInfo.projectName = response.data.projectName;
+                        me.productShowInfo.shipyardName = response.data.shipyardName;
+                    }
+                });
             },
-            openAddDialog(){
+            openAddDialog:function(){
                 this.infoVisible = true;
                 this.loadShipTree();
             },
-            openUpdDialog(id){
+            openUpdDialog:function(id){
                 this.loadShipTree();
                 var me = this;
                 SysApi.commenSubmitNoParm("/product/info/"+id,function (response) {
@@ -582,7 +714,7 @@
                     }
                 });
             },
-            openDelDialog(id){
+            openDelDialog:function(id){
                 var me = this;
                 this.$confirm('此操作将永久删除该产品, 是否继续?', '提示', {
                     confirmButtonText: '确定',
@@ -597,7 +729,7 @@
                     });
                 });
             },
-            delProject(id){
+            delProject:function(id){
                 var me = this;
                 SysApi.commenSubmitNoParm("/product/del/"+id,function (response) {
                     if(response.code === 200){
@@ -606,13 +738,13 @@
                     }
                 });
             },
-            fillForm(data){
+            fillForm:function(data){
                 if(data.treeId){
                     this.shipId = data.treeId;
                 }
                 this.productInfo = data;
             },
-            resetForm(formName){
+            resetForm:function(formName){
                 this.productInfo = {
                     shipId:"",
                     productName:"",
@@ -625,11 +757,11 @@
                 this.shipId = [];
                 this.$refs["productInfo"].clearValidate();
             },
-            shipSelected(val){
+            shipSelected:function(val){
                 this.productInfo.shipId = this.shipId[2];
                 this.validShipSelected();
             },
-            saveProduct(){
+            saveProduct:function(){
                 var me = this;
                 var valid = false;
                 this.$refs["productInfo"].validate(function (rs) {
@@ -648,10 +780,10 @@
                     }
                 });
             },
-            validShipSelected(){
+            validShipSelected:function(){
                 this.$refs["productInfo"].validateField("shipId");
             },
-            loadShipTree(){
+            loadShipTree:function(){
                 var me = this;
                 SysApi.commenSubmitNoParm("/ship/tree",function (response) {
                     if(response.data){

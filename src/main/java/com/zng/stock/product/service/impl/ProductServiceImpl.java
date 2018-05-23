@@ -144,12 +144,15 @@ public class ProductServiceImpl implements ProductService {
             if(product.getShip() != null){
                 dto.setShipId(product.getShip().getId());
                 shipId.add(product.getShip().getId());
-            }
-            if(product.getShip().getProject() != null){
-                shipId.add(product.getShip().getProject().getId());
-            }
-            if(product.getShip().getProject().getShipyard() != null){
-                shipId.add(product.getShip().getProject().getShipyard().getId());
+                dto.setShipNo(product.getShip().getShipNo());
+                if(product.getShip().getProject() != null){
+                    shipId.add(product.getShip().getProject().getId());
+                    dto.setProjectName(product.getShip().getProject().getProjectName());
+                    if(product.getShip().getProject().getShipyard() != null){
+                        shipId.add(product.getShip().getProject().getShipyard().getId());
+                        dto.setShipyardName(product.getShip().getProject().getShipyard().getShipyardName());
+                    }
+                }
             }
             dto.setTreeId(shipId);
             

@@ -12,6 +12,9 @@ public class ProductInfoDto {
     private String handDate;
     private String version;
     private String mapNo;
+    private String shipNo;
+    private String projectName;
+    private String shipyardName;
     private List<Long> treeId;
 
     public Long getId() {
@@ -84,5 +87,29 @@ public class ProductInfoDto {
 
     public void setTreeId(List<Long> treeId) {
         this.treeId = treeId;
+    }
+
+    public String getShipNo() {
+        return shipNo;
+    }
+
+    public void setShipNo(String shipNo) {
+        this.shipNo = shipNo;
+    }
+
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
+
+    public String getShipyardName() {
+        return shipyardName;
+    }
+
+    public void setShipyardName(String shipyardName) {
+        this.shipyardName = shipyardName;
     }
 }

@@ -163,19 +163,19 @@
             };
         },
         methods: {
-            handleSelect(key, keyPath) {
+            handleSelect:function(key, keyPath) {
                 this.activeIndex = key;
                 $("#main").load(key);
                 console.log(key, keyPath);
             },
-            handleMenu(){
+            handleMenu:function(){
                 if(this.isCollapse){
                     this.isCollapse = false;
                 }else {
                     this.isCollapse = true;
                 }
             },
-            initMinPageHeight(){
+            initMinPageHeight:function(){
                 this.minPageHeight = $(window).height() - $(".page-main").offset().top;
             }
         }
