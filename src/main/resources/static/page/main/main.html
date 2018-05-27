@@ -360,17 +360,17 @@
                 </el-form>
 
                 <el-row :gutter="20">
-                    <el-tabs type="border-card">
-                        <el-tab-pane class="tab-panl" label="电气外购件">
+                    <el-tabs type="border-card" v-model="detailActiveName" @tab-click="getSpareParts">
+                        <el-tab-pane class="tab-panl" label="电气外购件" name="electrical">
                             <div style="margin-top: 10px">
                                 <el-form :inline="true" class="demo-form-inline" size="small">
                                     <el-row :gutter="20">
                                         <el-col :span="14" :offset="1">
-                                            <el-form-item label="船厂">
-                                                <el-input placeholder="船厂名称"></el-input>
+                                            <el-form-item label="名称">
+                                                <el-input v-model="electrical.searchData.value" placeholder="电气外购件名称"></el-input>
                                             </el-form-item>
                                             <el-form-item>
-                                                <el-button type="primary">搜索</el-button>
+                                                <el-button type="primary">查询</el-button>
                                             </el-form-item>
                                         </el-col>
                                         <el-col :span="7">
@@ -394,7 +394,7 @@
                                 </el-form>
                             </div>
                             <div>
-                                <el-table :data="product_min_tableData" max-height="500"  style="width: 100%;">
+                                <el-table :data="electrical.tableData" max-height="500"  style="width: 100%;">
                                     <el-table-column
                                             type="index"
                                             label="序号"
@@ -470,21 +470,21 @@
                                 <el-pagination
                                         @size-change="handleSizeChange"
                                         @current-change="handleCurrentChange"
-                                        :current-page="1"
+                                        :current-page="electrical.pageInfo.toPage"
                                         :page-sizes="[10, 50, 100]"
-                                        :page-size="10"
+                                        :page-size="electrical.pageInfo.pageSize"
                                         layout="total, sizes, prev, pager, next, jumper"
-                                        :total="0">
+                                        :total="electrical.pageInfo.totalCount">
                                 </el-pagination>
                             </div>
                         </el-tab-pane>
-                        <el-tab-pane label="标准件">标准件</el-tab-pane>
-                        <el-tab-pane label="备件">备件</el-tab-pane>
-                        <el-tab-pane label="外购件">外购件</el-tab-pane>
-                        <el-tab-pane label="管接头">管接头</el-tab-pane>
-                        <el-tab-pane label="液压件">液压件</el-tab-pane>
-                        <el-tab-pane label="钢材">钢材</el-tab-pane>
-                        <el-tab-pane label="其他">其他</el-tab-pane>
+                        <el-tab-pane label="标准件" name="standard">标准件</el-tab-pane>
+                        <el-tab-pane label="备件" name="spare">备件</el-tab-pane>
+                        <el-tab-pane label="外购件" name="outsourcing">外购件</el-tab-pane>
+                        <el-tab-pane label="管接头" name="pipeJoint">管接头</el-tab-pane>
+                        <el-tab-pane label="液压件" name="hydraulic">液压件</el-tab-pane>
+                        <el-tab-pane label="钢材" name="steel">钢材</el-tab-pane>
+                        <el-tab-pane label="其他" name="other">其他</el-tab-pane>
                     </el-tabs>
                 </el-row>
             </el-tab-pane>
@@ -497,6 +497,7 @@
         data: function() {
             return {
                 activeName: 'first',
+                detailActiveName:'electrical',
                 detailShow:false,
                 searchData:[{
                     attr:"ship.project.shipyard.shipyardName",
@@ -578,7 +579,20 @@
                     ]
                 },
                 shipId:[],
-                shipTree:[]
+                shipTree:[],
+                electrical:{
+                    searchData:[{
+                        attr:"name",
+                        op:"like",
+                        value:""
+                    }],
+                    tableData:[],
+                    pageInfo:{
+                        toPage:1,
+                        pageSize:10,
+                        totalCount:0
+                    }
+                }
             }
         },
         mounted:function () {
@@ -790,7 +804,45 @@
                         me.shipTree = response.data;
                     }
                 });
+            },
+            getSpareParts:function (tab) {
+                var tab_name = tab.name;
+                if(tab_name){
+                    //table数据初始化
+                    this.clearPartTableData(tab_name);
+
+                    //加载数据
+                    switch (tab_name){
+                        case 'electrical':
+                            this.loadElectricalPartTable();
+                            break;
+                    }
+                }
+            },
+            clearPartTableData:function (tab_name) {
+                this[tab_name].searchData = [{
+                    attr:"partName",
+                    op:"like",
+                    value:""
+                }];
+                this[tab_name].tableData = [];
+                this[tab_name].pageInfo = {toPage:1,pageSize:10,totalCount:0};
+            },
+            loadElectricalPartTable:function () {
+                var me =this;
+                var conditions = {};
+                conditions.page = this.electrical.pageInfo;
+                conditions.conditions = this.electrical.searchData;
+                SysApi.commenSubmit("/electrical/table",conditions,function (response) {
+                    if(response.data){
+                        me.electrical.tableData = response.data;
+                        if(response.otherMap.pageInfo){
+                            me.electrical.pageInfo = response.otherMap.pageInfo;
+                        }
+                    }
+                });
             }
         }
-    })
+    });
+
 </script>
