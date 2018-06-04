@@ -17,8 +17,8 @@ public class ElectricalController {
     private ElectricalService electricalService;
 
     @PostMapping("table")
-    public ResponseModel table(@RequestBody CommonTableRequest request){
-        return electricalService.table(request);
+    public ResponseModel purchaseTable(@RequestBody CommonTableRequest request){
+        return electricalService.purchaseTable(request);
     }
 
 }

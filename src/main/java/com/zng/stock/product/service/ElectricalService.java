@@ -5,5 +5,5 @@ import com.zng.common.entity.ResponseModel;
 
 public interface ElectricalService {
 
-    ResponseModel table(CommonTableRequest request);
+    ResponseModel purchaseTable(CommonTableRequest request);
 }

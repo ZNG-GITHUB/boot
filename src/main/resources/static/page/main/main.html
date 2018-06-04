@@ -370,7 +370,7 @@
                                                 <el-input v-model="electrical.searchData.value" placeholder="电气外购件名称"></el-input>
                                             </el-form-item>
                                             <el-form-item>
-                                                <el-button type="primary">查询</el-button>
+                                                <el-button type="primary" @click="loadElectricalPartTable">查询</el-button>
                                             </el-form-item>
                                         </el-col>
                                         <el-col :span="7">
@@ -402,55 +402,55 @@
                                             width="100">
                                     </el-table-column>
                                     <el-table-column
-                                            prop="code"
+                                            prop="partMaterial"
                                             label="材料">
                                     </el-table-column>
                                     <el-table-column
-                                            prop="code"
+                                            prop="partName"
                                             label="名称">
                                     </el-table-column>
                                     <el-table-column
-                                            prop="code"
+                                            prop="partSpecification"
                                             label="规格">
                                     </el-table-column>
                                     <el-table-column
-                                            prop="code"
+                                            prop="totalCount"
                                             label="总数量">
                                     </el-table-column>
                                     <el-table-column
-                                            prop="code"
+                                            prop="stockCount"
                                             label="现有库存数量">
                                     </el-table-column>
                                     <el-table-column
-                                            prop="code"
+                                            prop="stockUsedCount"
                                             label="使用库存数量">
                                     </el-table-column>
                                     <el-table-column
-                                            prop="code"
+                                            prop="purchaseCount"
                                             label="采购数量">
                                     </el-table-column>
                                     <el-table-column
-                                            prop="code"
+                                            prop="totalPrice"
                                             label="总成本">
                                     </el-table-column>
                                     <el-table-column
-                                            prop="code"
+                                            prop="createDate"
                                             label="创建时间">
                                     </el-table-column>
                                     <el-table-column
-                                            prop="code"
+                                            prop="updateDate"
                                             label="修改时间">
                                     </el-table-column>
                                     <el-table-column
-                                            prop="code"
+                                            prop="remarks"
                                             label="备注">
                                     </el-table-column>
                                     <el-table-column
-                                            prop="code"
+                                            prop="isPurchased"
                                             label="是否已采购">
                                     </el-table-column>
                                     <el-table-column
-                                            prop="code"
+                                            prop="isArrived"
                                             label="是否已到货">
                                     </el-table-column>
                                     <el-table-column label="操作" width="180">
@@ -582,7 +582,7 @@
                 shipTree:[],
                 electrical:{
                     searchData:[{
-                        attr:"name",
+                        attr:"partName",
                         op:"like",
                         value:""
                     }],

@@ -14,7 +14,7 @@ public class ElectricalPartDetail extends CommonEntity {
 
     @Id
     @Column(name = "electrical_detail_id")
-    @GeneratedValue(strategy = TABLE, generator = "sequence_generator_electrical")
+    @GeneratedValue(strategy = TABLE, generator = "sequence_generator_electrical_detail")
     @GenericGenerator(
             name = "sequence_generator_electrical_detail",
             strategy = "org.hibernate.id.enhanced.TableGenerator",
