@@ -15,7 +15,7 @@ public class ElectricalPartPurchaseTableDto {
     private Integer stockCount;
     private Integer stockUsedCount;
     private Integer purchaseCount;
-    private Integer totalPrice;
+    private Double totalPrice;
     private String createDate;
     private String updateDate;
     private String remarks;
@@ -86,11 +86,11 @@ public class ElectricalPartPurchaseTableDto {
         this.purchaseCount = purchaseCount;
     }
 
-    public Integer getTotalPrice() {
+    public Double getTotalPrice() {
         return totalPrice;
     }
 
-    public void setTotalPrice(Integer totalPrice) {
+    public void setTotalPrice(Double totalPrice) {
         this.totalPrice = totalPrice;
     }
 

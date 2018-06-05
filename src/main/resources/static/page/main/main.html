@@ -375,7 +375,7 @@
                                         </el-col>
                                         <el-col :span="7">
                                             <el-form-item style="padding-right: 20px">
-                                                <el-button type="success">新增</el-button>
+                                                <el-button type="success" @click="showElectricalAddDialog">新增</el-button>
                                             </el-form-item>
                                             <el-form-item>
                                                 <el-button type="primary">完成采购</el-button>
@@ -447,10 +447,12 @@
                                     </el-table-column>
                                     <el-table-column
                                             prop="isPurchased"
+                                            :formatter="booleanFormatter"
                                             label="是否已采购">
                                     </el-table-column>
                                     <el-table-column
                                             prop="isArrived"
+                                            :formatter="booleanFormatter"
                                             label="是否已到货">
                                     </el-table-column>
                                     <el-table-column label="操作" width="180">
@@ -477,6 +479,110 @@
                                         :total="electrical.pageInfo.totalCount">
                                 </el-pagination>
                             </div>
+                            <el-dialog title="电器外购件 - 新增" :visible.sync="electrical.addDialogVisible">
+                                <div>
+                                    <el-form ref="electricalPartInfo" :model="electrical.partInfo" :rules="electrical.partInfoRules" label-width="80px">
+                                        <el-row :gutter="20">
+                                            <el-col :span="12">
+                                                <el-form-item label="材料" prop="partMaterial">
+                                                    <el-input placeholder="材料"></el-input>
+                                                </el-form-item>
+                                            </el-col>
+                                            <el-col :span="12">
+                                                <el-form-item label="名称" prop="partName">
+                                                    <el-input placeholder="名称"></el-input>
+                                                </el-form-item>
+                                            </el-col>
+                                        </el-row>
+                                        <el-row :gutter="20">
+                                            <el-col :span="12">
+                                                <el-form-item label="规格" prop="partMaterial">
+                                                    <el-input placeholder="规格"></el-input>
+                                                </el-form-item>
+                                            </el-col>
+                                            <el-col :span="12">
+                                                <el-form-item label="总数量" prop="partName">
+                                                    <el-input placeholder="总数量"></el-input>
+                                                </el-form-item>
+                                            </el-col>
+                                        </el-row>
+                                        <el-row :gutter="20">
+                                            <el-col :span="12">
+                                                <el-form-item label="采购数量" prop="partMaterial">
+                                                    <el-input placeholder="采购数量"></el-input>
+                                                </el-form-item>
+                                            </el-col>
+                                            <el-col :span="12">
+                                                <el-form-item label="单价" prop="partName">
+                                                    <el-input placeholder="单价"></el-input>
+                                                </el-form-item>
+                                            </el-col>
+                                        </el-row>
+                                        <el-row :gutter="20" style="background-color:whitesmoke">
+                                            <el-col :span="16">
+                                                <el-form-item label="库存" style="margin-bottom: 10px;margin-top: 10px"></el-form-item>
+                                            </el-col>
+                                            <el-col :span="3">
+                                                <el-form-item style="margin-bottom: 10px;margin-top: 10px">
+                                                    <el-button type="primary" size="small">查看库存</el-button>
+                                                </el-form-item>
+                                            </el-col>
+                                            <el-col :span="3">
+                                                <el-form-item style="margin-bottom: 10px;margin-top: 10px">
+                                                    <el-button type="primary" size="small">领用</el-button>
+                                                </el-form-item>
+                                            </el-col>
+                                        </el-row>
+                                        <el-row :gutter="20" style="background-color:whitesmoke;margin-bottom: 12px;">
+                                            <el-col :span="24">
+                                                <el-table :data="electrical.stockPartTableData" max-height="400" style="width: 100%;margin-bottom: 10px;">
+                                                    <el-table-column
+                                                            type="index"
+                                                            label="序号"
+                                                            align="center"
+                                                            width="100">
+                                                    </el-table-column>
+                                                    <el-table-column
+                                                            align="center"
+                                                            label="材料">
+                                                    </el-table-column>
+                                                    <el-table-column
+                                                            align="center"
+                                                            label="名称">
+                                                    </el-table-column>
+                                                    <el-table-column
+                                                            align="center"
+                                                            label="规格">
+                                                    </el-table-column>
+                                                    <el-table-column
+                                                            align="center"
+                                                            label="单价">
+                                                    </el-table-column>
+                                                    <el-table-column
+                                                            align="center"
+                                                            label="库存数量">
+                                                    </el-table-column>
+                                                    <el-table-column
+                                                            align="center"
+                                                            label="领用数量">
+                                                    </el-table-column>
+                                                </el-table>
+                                            </el-col>
+                                        </el-row>
+                                        <el-row :gutter="20">
+                                            <el-col :span="12">
+                                                <el-form-item label="总成本">
+                                                    <el-input placeholder="总成本" disabled></el-input>
+                                                </el-form-item>
+                                            </el-col>
+                                        </el-row>
+                                    </el-form>
+                                </div>
+                                <div slot="footer" class="dialog-footer">
+                                    <el-button type="primary">保存</el-button>
+                                    <el-button @click="electrical.addDialogVisible = false">取消</el-button>
+                                </div>
+                            </el-dialog>
                         </el-tab-pane>
                         <el-tab-pane label="标准件" name="standard">标准件</el-tab-pane>
                         <el-tab-pane label="备件" name="spare">备件</el-tab-pane>
@@ -591,7 +697,8 @@
                         toPage:1,
                         pageSize:10,
                         totalCount:0
-                    }
+                    },
+                    addDialogVisible:false
                 }
             }
         },
@@ -710,6 +817,7 @@
                         me.productShowInfo.shipNo = response.data.shipNo;
                         me.productShowInfo.projectName = response.data.projectName;
                         me.productShowInfo.shipyardName = response.data.shipyardName;
+                        me.getSpareParts('electrical');
                     }
                 });
             },
@@ -841,6 +949,9 @@
                         }
                     }
                 });
+            },
+            showElectricalAddDialog:function () {
+                this.electrical.addDialogVisible = true;
             }
         }
     });

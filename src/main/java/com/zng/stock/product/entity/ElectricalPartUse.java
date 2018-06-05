@@ -34,6 +34,10 @@ public class ElectricalPartUse extends CommonEntity {
     @Column(name = "used_count")
     private Integer usedCount;
 
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "part_purchase_id")
+    private ElectricalPartPurchase electricalPartPurchase;
+
     public Long getId() {
         return id;
     }
@@ -56,5 +60,13 @@ public class ElectricalPartUse extends CommonEntity {
 
     public void setUsedCount(Integer usedCount) {
         this.usedCount = usedCount;
+    }
+
+    public ElectricalPartPurchase getElectricalPartPurchase() {
+        return electricalPartPurchase;
+    }
+
+    public void setElectricalPartPurchase(ElectricalPartPurchase electricalPartPurchase) {
+        this.electricalPartPurchase = electricalPartPurchase;
     }
 }

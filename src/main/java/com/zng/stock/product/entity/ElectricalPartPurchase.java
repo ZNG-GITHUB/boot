@@ -27,29 +27,16 @@ public class ElectricalPartPurchase extends CommonEntity {
             })
     private Long id;
 
-    /**
-     * 名称
-     */
-    @Column(name="part_name")
-    private String partName;
-
-    /**
-     * 材质
-     */
-    @Column(name="part_material")
-    private String partMaterial;
-
-    /**
-     * 规格
-     */
-    @Column(name="part_specification")
-    private String partSpecification;
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "part_id")
+    private ElectricalPart electricalPart;
 
     /**
      * 总数量
      */
     @Column(name="total_count")
     private Integer totalCount;
+
 
     /**
      * 采购数量
@@ -58,10 +45,16 @@ public class ElectricalPartPurchase extends CommonEntity {
     private Integer purchaseCount;
 
     /**
+     * 采购单价
+     */
+    @Column(name="purchase_price")
+    private Double purchasePrice;
+
+    /**
      * 总成本
      */
     @Column(name="total_price")
-    private Integer totalPrice;
+    private Double totalPrice;
 
     /**
      * 备注
@@ -89,28 +82,12 @@ public class ElectricalPartPurchase extends CommonEntity {
         this.id = id;
     }
 
-    public String getPartName() {
-        return partName;
+    public ElectricalPart getElectricalPart() {
+        return electricalPart;
     }
 
-    public void setPartName(String partName) {
-        this.partName = partName;
-    }
-
-    public String getPartMaterial() {
-        return partMaterial;
-    }
-
-    public void setPartMaterial(String partMaterial) {
-        this.partMaterial = partMaterial;
-    }
-
-    public String getPartSpecification() {
-        return partSpecification;
-    }
-
-    public void setPartSpecification(String partSpecification) {
-        this.partSpecification = partSpecification;
+    public void setElectricalPart(ElectricalPart electricalPart) {
+        this.electricalPart = electricalPart;
     }
 
     public Integer getTotalCount() {
@@ -129,11 +106,19 @@ public class ElectricalPartPurchase extends CommonEntity {
         this.purchaseCount = purchaseCount;
     }
 
-    public Integer getTotalPrice() {
+    public Double getPurchasePrice() {
+        return purchasePrice;
+    }
+
+    public void setPurchasePrice(Double purchasePrice) {
+        this.purchasePrice = purchasePrice;
+    }
+
+    public Double getTotalPrice() {
         return totalPrice;
     }
 
-    public void setTotalPrice(Integer totalPrice) {
+    public void setTotalPrice(Double totalPrice) {
         this.totalPrice = totalPrice;
     }
 
