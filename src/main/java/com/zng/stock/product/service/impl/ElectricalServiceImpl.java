@@ -111,12 +111,12 @@ public class ElectricalServiceImpl implements ElectricalService {
                 ElectricalPartDetail detail = electricalPartDetailRepository.findByIdSoftly(id);
                 if(detail != null){
 
-                    Integer stockCount = detail.getCount();
+                    /*Integer stockCount = detail.getCount();
                     if(stockCount < useCount){
                         return new ResponseModel(ResponseCode.Error,"库存不足");
                     }
                     detail.setCount(stockCount-useCount);
-                    detail = electricalPartDetailRepository.save(detail);
+                    detail = electricalPartDetailRepository.save(detail);*/
 
                     ElectricalPartUse use = new ElectricalPartUse();
                     use.setElectricalPartDetail(detail);

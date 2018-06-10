@@ -1,0 +1,1 @@
+INSERT INTO tab_sys_user(user_id,user_code,user_pass,is_deleted,is_active,is_hided,is_locked,user_salt,user_name) VALUES(1,'admin','0db97e6ff35a2716d672006a872c0967',0,1,0,0,'10086','admin');

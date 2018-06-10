@@ -33,7 +33,7 @@ public class PermissionFilter extends AccessControlFilter{
             SysUser user = (SysUser)SecurityUtils.getSubject().getPrincipal();
             List<PermissionFilterView> pers = user.getPermissions();
             boolean hasPer = checkUrlPermission(pers,url,urlType);
-            if(hasPer || user.getUserCode().equals("zng")){
+            if(hasPer || user.getUserCode().equals("admin")){
                 return true;
             }
         }

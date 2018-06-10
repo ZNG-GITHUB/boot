@@ -485,36 +485,36 @@
                                         <el-row :gutter="20">
                                             <el-col :span="12">
                                                 <el-form-item label="材料" prop="partMaterial">
-                                                    <el-input placeholder="材料"></el-input>
+                                                    <el-input v-model="electrical.partInfo.partMaterial" placeholder="材料"></el-input>
                                                 </el-form-item>
                                             </el-col>
                                             <el-col :span="12">
                                                 <el-form-item label="名称" prop="partName">
-                                                    <el-input placeholder="名称"></el-input>
+                                                    <el-input v-model="electrical.partInfo.partName" placeholder="名称"></el-input>
                                                 </el-form-item>
                                             </el-col>
                                         </el-row>
                                         <el-row :gutter="20">
                                             <el-col :span="12">
-                                                <el-form-item label="规格" prop="partMaterial">
-                                                    <el-input placeholder="规格"></el-input>
+                                                <el-form-item label="规格" prop="partSpecification">
+                                                    <el-input v-model="electrical.partInfo.partSpecification" placeholder="规格"></el-input>
                                                 </el-form-item>
                                             </el-col>
                                             <el-col :span="12">
-                                                <el-form-item label="总数量" prop="partName">
-                                                    <el-input placeholder="总数量"></el-input>
+                                                <el-form-item label="总数量" prop="totalCount">
+                                                    <el-input v-model="electrical.partInfo.totalCount" placeholder="总数量"></el-input>
                                                 </el-form-item>
                                             </el-col>
                                         </el-row>
                                         <el-row :gutter="20">
                                             <el-col :span="12">
-                                                <el-form-item label="采购数量" prop="partMaterial">
-                                                    <el-input placeholder="采购数量"></el-input>
+                                                <el-form-item label="采购数量" prop="purchaseCount">
+                                                    <el-input v-model="electrical.partInfo.purchaseCount" placeholder="采购数量"></el-input>
                                                 </el-form-item>
                                             </el-col>
                                             <el-col :span="12">
-                                                <el-form-item label="单价" prop="partName">
-                                                    <el-input placeholder="单价"></el-input>
+                                                <el-form-item label="单价" prop="purchasePrice">
+                                                    <el-input v-model="electrical.partInfo.purchasePrice" placeholder="单价"></el-input>
                                                 </el-form-item>
                                             </el-col>
                                         </el-row>
@@ -543,26 +543,32 @@
                                                             width="100">
                                                     </el-table-column>
                                                     <el-table-column
+                                                            prop="partMaterial"
                                                             align="center"
                                                             label="材料">
                                                     </el-table-column>
                                                     <el-table-column
+                                                            prop="partName"
                                                             align="center"
                                                             label="名称">
                                                     </el-table-column>
                                                     <el-table-column
+                                                            prop="partSpecification"
                                                             align="center"
                                                             label="规格">
                                                     </el-table-column>
                                                     <el-table-column
+                                                            prop="price"
                                                             align="center"
                                                             label="单价">
                                                     </el-table-column>
                                                     <el-table-column
+                                                            prop="count"
                                                             align="center"
                                                             label="库存数量">
                                                     </el-table-column>
                                                     <el-table-column
+                                                            prop="usedCount"
                                                             align="center"
                                                             label="领用数量">
                                                     </el-table-column>
@@ -572,14 +578,14 @@
                                         <el-row :gutter="20">
                                             <el-col :span="12">
                                                 <el-form-item label="总成本">
-                                                    <el-input placeholder="总成本" disabled></el-input>
+                                                    <el-input v-model="electrical.partInfo.totalPrice" placeholder="总成本" disabled></el-input>
                                                 </el-form-item>
                                             </el-col>
                                         </el-row>
                                     </el-form>
                                 </div>
                                 <div slot="footer" class="dialog-footer">
-                                    <el-button type="primary">保存</el-button>
+                                    <el-button type="primary" @click="addElectricalPart">保存</el-button>
                                     <el-button @click="electrical.addDialogVisible = false">取消</el-button>
                                 </div>
                             </el-dialog>
@@ -698,7 +704,28 @@
                         pageSize:10,
                         totalCount:0
                     },
-                    addDialogVisible:false
+                    addDialogVisible:false,
+                    partInfo:{
+                        "partMaterial":"",
+                        "partName":"",
+                        "partSpecification":"",
+                        "totalCount":"",
+                        "purchaseCount":"",
+                        "purchasePrice":"",
+                        "totalPrice":0
+                    },
+                    stockPartTableData:[],
+                    partInfoRules:{
+                        partMaterial:[
+                            { required: true, message: '请填写材料', trigger: 'blur'}
+                        ],
+                        partName:[
+                            { required: true, message: '请填写名称', trigger: 'blur'}
+                        ],
+                        partSpecification:[
+                            { required: true, message: '请填写规格', trigger: 'blur'}
+                        ]
+                    }
                 }
             }
         },
@@ -817,7 +844,7 @@
                         me.productShowInfo.shipNo = response.data.shipNo;
                         me.productShowInfo.projectName = response.data.projectName;
                         me.productShowInfo.shipyardName = response.data.shipyardName;
-                        me.getSpareParts('electrical');
+                        me.getSpareParts();
                     }
                 });
             },
@@ -914,8 +941,8 @@
                 });
             },
             getSpareParts:function (tab) {
-                var tab_name = tab.name;
-                if(tab_name){
+                if(tab){
+                    var tab_name = tab.name;
                     //table数据初始化
                     this.clearPartTableData(tab_name);
 
@@ -925,11 +952,14 @@
                             this.loadElectricalPartTable();
                             break;
                     }
+                }else {
+                    this.clearPartTableData('electrical');
+                    this.loadElectricalPartTable();
                 }
             },
             clearPartTableData:function (tab_name) {
                 this[tab_name].searchData = [{
-                    attr:"partName",
+                    attr:"electricalPart.partName",
                     op:"like",
                     value:""
                 }];
@@ -952,6 +982,25 @@
             },
             showElectricalAddDialog:function () {
                 this.electrical.addDialogVisible = true;
+            },
+            addElectricalPart:function () {
+                var me = this;
+                var valid = false;
+                this.$refs["electricalPartInfo"].validate(function (rs) {
+                    valid = rs;
+                });
+                if(!valid){
+                    return;
+                }
+                SysApi.commenSubmit("/electrical/save",this.productInfo,function (response) {
+                    if(response.code == 200){
+                        me.electrical.addDialogVisible = false;
+                        me.$message.success('保存成功');
+                        me.loadElectricalPartTable();
+                    }else {
+                        me.$message.error(response.message);
+                    }
+                });
             }
         }
     });

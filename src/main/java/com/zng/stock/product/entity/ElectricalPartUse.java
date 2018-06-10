@@ -38,6 +38,9 @@ public class ElectricalPartUse extends CommonEntity {
     @JoinColumn(name = "part_purchase_id")
     private ElectricalPartPurchase electricalPartPurchase;
 
+    @Column(name = "is_used")
+    private Boolean isUsed;
+
     public Long getId() {
         return id;
     }
@@ -68,5 +71,13 @@ public class ElectricalPartUse extends CommonEntity {
 
     public void setElectricalPartPurchase(ElectricalPartPurchase electricalPartPurchase) {
         this.electricalPartPurchase = electricalPartPurchase;
+    }
+
+    public Boolean getUsed() {
+        return isUsed;
+    }
+
+    public void setUsed(Boolean used) {
+        isUsed = used;
     }
 }
