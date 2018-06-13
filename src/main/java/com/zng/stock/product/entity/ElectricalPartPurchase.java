@@ -31,6 +31,10 @@ public class ElectricalPartPurchase extends CommonEntity {
     @JoinColumn(name = "part_id")
     private ElectricalPart electricalPart;
 
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "product_id")
+    private Product product;
+
     /**
      * 总数量
      */
@@ -144,5 +148,13 @@ public class ElectricalPartPurchase extends CommonEntity {
 
     public void setArrived(boolean arrived) {
         isArrived = arrived;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
     }
 }

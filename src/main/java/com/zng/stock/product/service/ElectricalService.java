@@ -6,7 +6,7 @@ import com.zng.stock.product.view.ElectricalSaveRequest;
 
 public interface ElectricalService {
 
-    ResponseModel purchaseTable(CommonTableRequest request);
+    ResponseModel purchaseTable(CommonTableRequest request, Long prodectId);
 
     ResponseModel save(ElectricalSaveRequest request);
 }

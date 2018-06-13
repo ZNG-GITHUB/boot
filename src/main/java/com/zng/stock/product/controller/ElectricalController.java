@@ -5,10 +5,9 @@ import com.zng.common.entity.ResponseModel;
 import com.zng.stock.product.service.ElectricalService;
 import com.zng.stock.product.view.ElectricalSaveRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.constraints.NotNull;
 
 @RestController
 @RequestMapping("electrical")
@@ -17,9 +16,9 @@ public class ElectricalController {
     @Autowired
     private ElectricalService electricalService;
 
-    @PostMapping("table")
-    public ResponseModel purchaseTable(@RequestBody CommonTableRequest request){
-        return electricalService.purchaseTable(request);
+    @PostMapping("table/{prodectId}")
+    public ResponseModel purchaseTable(@RequestBody CommonTableRequest request,@PathVariable @NotNull Long prodectId){
+        return electricalService.purchaseTable(request,prodectId);
     }
 
     @PostMapping("save")

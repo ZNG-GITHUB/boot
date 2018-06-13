@@ -45,11 +45,12 @@ public class ElectricalServiceImpl implements ElectricalService {
     /**
      * 获得电气外购件采购单列表
      * @param request
+     * @param prodectId
      * @return
      */
     @Override
     @Transactional(readOnly = true)
-    public ResponseModel purchaseTable(CommonTableRequest request) {
+    public ResponseModel purchaseTable(CommonTableRequest request, Long prodectId) {
         PageRequest pageRequest = PageRequest.of(request.getPage().getToPage()-1,request.getPage().getPageSize());
 
         Page<ElectricalPartPurchase> list = electricalPartPurchaseRepository.findAll(new Specification<ElectricalPartPurchase>() {
@@ -58,6 +59,9 @@ public class ElectricalServiceImpl implements ElectricalService {
 
                 List<TableCondition> conditions = request.getConditions();
                 List<Predicate> predicateList = TableService.buildPredicate(conditions,root,criteriaBuilder);
+
+//                predicateList.add(criteriaBuilder.)
+
                 predicateList.add(criteriaBuilder.isFalse(root.get("isDeleted")));
                 List<TableSort> sorts = request.getSorts();
                 List<Order> sortList = TableService.buildSort(sorts,root,criteriaBuilder);
