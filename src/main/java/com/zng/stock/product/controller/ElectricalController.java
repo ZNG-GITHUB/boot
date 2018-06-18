@@ -16,9 +16,9 @@ public class ElectricalController {
     @Autowired
     private ElectricalService electricalService;
 
-    @PostMapping("table/{prodectId}")
-    public ResponseModel purchaseTable(@RequestBody CommonTableRequest request,@PathVariable @NotNull Long prodectId){
-        return electricalService.purchaseTable(request,prodectId);
+    @PostMapping("table/{productId}")
+    public ResponseModel purchaseTable(@RequestBody CommonTableRequest request,@PathVariable @NotNull Long productId){
+        return electricalService.purchaseTable(request,productId);
     }
 
     @PostMapping("save")

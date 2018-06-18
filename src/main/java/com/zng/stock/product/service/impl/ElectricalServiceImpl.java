@@ -4,14 +4,8 @@ import com.zng.common.entity.*;
 import com.zng.common.service.TableService;
 import com.zng.common.util.DateUtil;
 import com.zng.stock.product.dto.ElectricalPartPurchaseTableDto;
-import com.zng.stock.product.entity.ElectricalPart;
-import com.zng.stock.product.entity.ElectricalPartDetail;
-import com.zng.stock.product.entity.ElectricalPartPurchase;
-import com.zng.stock.product.entity.ElectricalPartUse;
-import com.zng.stock.product.repository.ElectricalPartDetailRepository;
-import com.zng.stock.product.repository.ElectricalPartPurchaseRepository;
-import com.zng.stock.product.repository.ElectricalPartRepository;
-import com.zng.stock.product.repository.ElectricalPartUseRepository;
+import com.zng.stock.product.entity.*;
+import com.zng.stock.product.repository.*;
 import com.zng.stock.product.service.ElectricalService;
 import com.zng.stock.product.view.ElectricalSaveRequest;
 import com.zng.stock.product.view.PartUseView;
@@ -42,15 +36,18 @@ public class ElectricalServiceImpl implements ElectricalService {
     @Autowired
     private ElectricalPartUseRepository electricalPartUseRepository;
 
+    @Autowired
+    private ProductRepository productRepository;
+
     /**
      * 获得电气外购件采购单列表
      * @param request
-     * @param prodectId
+     * @param productId
      * @return
      */
     @Override
     @Transactional(readOnly = true)
-    public ResponseModel purchaseTable(CommonTableRequest request, Long prodectId) {
+    public ResponseModel purchaseTable(CommonTableRequest request, Long productId) {
         PageRequest pageRequest = PageRequest.of(request.getPage().getToPage()-1,request.getPage().getPageSize());
 
         Page<ElectricalPartPurchase> list = electricalPartPurchaseRepository.findAll(new Specification<ElectricalPartPurchase>() {
@@ -60,7 +57,7 @@ public class ElectricalServiceImpl implements ElectricalService {
                 List<TableCondition> conditions = request.getConditions();
                 List<Predicate> predicateList = TableService.buildPredicate(conditions,root,criteriaBuilder);
 
-//                predicateList.add(criteriaBuilder.)
+                predicateList.add(criteriaBuilder.equal(root.get("product").get("id"),productId));
 
                 predicateList.add(criteriaBuilder.isFalse(root.get("isDeleted")));
                 List<TableSort> sorts = request.getSorts();
@@ -93,10 +90,18 @@ public class ElectricalServiceImpl implements ElectricalService {
         //找到对应的电器外购件信息
         ElectricalPart electricalPart = electricalPartRepository.findByNameAndMaterialAndSpecSoftly(partMaterial,partName,partSpecification);
         if(electricalPart == null){
-            return new ResponseModel(ResponseCode.Error,"未找到对应的电器外购件信息");
+            electricalPart = new ElectricalPart();
+            electricalPart.setPartName(partName);
+            electricalPart.setPartMaterial(partMaterial);
+            electricalPart.setPartSpecification(partMaterial);
+            electricalPart = electricalPartRepository.save(electricalPart);
         }
 
         ElectricalPartPurchase purchase = new ElectricalPartPurchase();
+
+        Long productId = request.getProductId();
+        Product product = productRepository.findByIdSoftly(productId);
+        purchase.setProduct(product);
         purchase.setElectricalPart(electricalPart);
         purchase.setTotalPrice(request.getTotalPrice());
         purchase.setTotalCount(request.getTotalCount());

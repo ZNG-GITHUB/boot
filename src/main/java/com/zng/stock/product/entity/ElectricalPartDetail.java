@@ -39,7 +39,7 @@ public class ElectricalPartDetail extends CommonEntity {
      * 数量
      */
     @Column(name="count")
-    private Integer count;
+    private Integer count = 0;
 
     /**
      * 总值

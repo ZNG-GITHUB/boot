@@ -367,7 +367,7 @@
                                     <el-row :gutter="20">
                                         <el-col :span="14" :offset="1">
                                             <el-form-item label="名称">
-                                                <el-input v-model="electrical.searchData.value" placeholder="电气外购件名称"></el-input>
+                                                <el-input v-model="electrical.searchData[0].value" placeholder="电气外购件名称"></el-input>
                                             </el-form-item>
                                             <el-form-item>
                                                 <el-button type="primary" @click="loadElectricalPartTable">查询</el-button>
@@ -509,12 +509,12 @@
                                         <el-row :gutter="20">
                                             <el-col :span="12">
                                                 <el-form-item label="采购数量" prop="purchaseCount">
-                                                    <el-input v-model="electrical.partInfo.purchaseCount" placeholder="采购数量"></el-input>
+                                                    <el-input v-model="electrical.partInfo.purchaseCount" placeholder="采购数量" @change="getElectricalPartTotalPrice"></el-input>
                                                 </el-form-item>
                                             </el-col>
                                             <el-col :span="12">
-                                                <el-form-item label="单价" prop="purchasePrice">
-                                                    <el-input v-model="electrical.partInfo.purchasePrice" placeholder="单价"></el-input>
+                                                <el-form-item label="单价" prop="price">
+                                                    <el-input v-model="electrical.partInfo.price" placeholder="单价" @change="getElectricalPartTotalPrice"></el-input>
                                                 </el-form-item>
                                             </el-col>
                                         </el-row>
@@ -664,7 +664,8 @@
                 click:{
                     shipyardId:"",
                     projectId:"",
-                    shipId:""
+                    shipId:"",
+                    productId:""
                 },
                 productInfo:{
                     shipId:"",
@@ -706,13 +707,15 @@
                     },
                     addDialogVisible:false,
                     partInfo:{
+                        "productId":"",
                         "partMaterial":"",
                         "partName":"",
                         "partSpecification":"",
-                        "totalCount":"",
-                        "purchaseCount":"",
-                        "purchasePrice":"",
-                        "totalPrice":0
+                        "totalCount":0,
+                        "purchaseCount":0,
+                        "price":0,
+                        "totalPrice":0,
+                        "useList":[]
                     },
                     stockPartTableData:[],
                     partInfoRules:{
@@ -836,6 +839,7 @@
                 this.detailShow = true;
                 this.productVisible = false;
                 this.activeName = "second";
+                this.click.productId = id;
                 var me = this;
                 SysApi.commenSubmitNoParm("/product/info/"+id,function (response) {
                     if(response.data){
@@ -971,7 +975,8 @@
                 var conditions = {};
                 conditions.page = this.electrical.pageInfo;
                 conditions.conditions = this.electrical.searchData;
-                SysApi.commenSubmit("/electrical/table",conditions,function (response) {
+                var productId = this.click.productId;
+                SysApi.commenSubmit("/electrical/table/"+productId,conditions,function (response) {
                     if(response.data){
                         me.electrical.tableData = response.data;
                         if(response.otherMap.pageInfo){
@@ -992,8 +997,13 @@
                 if(!valid){
                     return;
                 }
-                SysApi.commenSubmit("/electrical/save",this.productInfo,function (response) {
-                    if(response.code == 200){
+                if(!this.click.productId){
+                    me.$message.error("请先选择指定产品");
+                    return;
+                }
+                this.electrical.partInfo.productId = this.click.productId;
+                SysApi.commenSubmit("/electrical/save",this.electrical.partInfo,function (response) {
+                    if(response.code && response.code === 200){
                         me.electrical.addDialogVisible = false;
                         me.$message.success('保存成功');
                         me.loadElectricalPartTable();
@@ -1001,6 +1011,18 @@
                         me.$message.error(response.message);
                     }
                 });
+            },
+            getElectricalPartTotalPrice:function () {
+                var purchaseCount = this.electrical.partInfo.purchaseCount;
+                var price = this.electrical.partInfo.price;
+                var useList =  this.electrical.partInfo.useList;
+                var usePrice = 0;
+                if(useList && useList.length > 0){
+                    useList.forEach(function (t) {
+                        usePrice += t.price*t.useCount;
+                    });
+                }
+                this.electrical.partInfo.totalPrice = purchaseCount*price + usePrice;
             }
         }
     });

@@ -37,7 +37,7 @@ function checkInput(formId) {
 
 function formFadeOut() {
     $('form').fadeOut(500);
-    $('.wrapper').addClass('form-success');
+    // $('.wrapper').addClass('form-success');
     setTimeout(function () {
         location.href = "/";
     },500);

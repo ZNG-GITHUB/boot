@@ -9,6 +9,8 @@ import java.util.List;
  */
 public class ElectricalSaveRequest {
 
+    private Long productId;
+
     private String partMaterial;
 
     private String partName;
@@ -26,6 +28,14 @@ public class ElectricalSaveRequest {
     private String remarks;
 
     private List<PartUseView> useList;
+
+    public Long getProductId() {
+        return productId;
+    }
+
+    public void setProductId(Long productId) {
+        this.productId = productId;
+    }
 
     public String getPartMaterial() {
         return partMaterial;
