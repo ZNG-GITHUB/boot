@@ -142,6 +142,15 @@
 <script src="asert/element-ui/vue.js"></script>
 <!-- import JavaScript -->
 <script src="asert/element-ui/index.js"></script>
+<script type="text/javascript">
+    document.onkeydown = function(e) {
+        //捕捉回车事件
+        var ev = (typeof event!= 'undefined') ? window.event : e;
+        if(ev.keyCode == 13) {
+            return false;//禁用回车事件
+        }
+    }
+</script>
 <script>
     new Vue({
         el: '#index',
