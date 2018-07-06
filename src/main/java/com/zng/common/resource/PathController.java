@@ -26,11 +26,7 @@ public class PathController {
     @GetMapping(value = "noAuth")
     @ResponseBody
     public ResponseModel noAuth(HttpServletResponse response){
-        try {
-            response.sendRedirect("http://127.0.0.1:8020/web/noAuth.html");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        response.setStatus(ResponseCode.NoAuth.getCode());
         return new ResponseModel(ResponseCode.NoAuth,"未认证");
     }
 

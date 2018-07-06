@@ -233,7 +233,7 @@ public class SysUser extends CommonEntity implements Serializable{
     }
 
     public static enum IsLocked{
-        LOCKED("锁定"),UNLOCKED("正常");
+        UNLOCKED("正常"),LOCKED("锁定");
 
         IsLocked(String type){
             this.type = type;
@@ -252,9 +252,9 @@ public class SysUser extends CommonEntity implements Serializable{
         public static IsLocked getValue(Integer i){
             switch (i){
                 case 0:
-                    return LOCKED;
-                case 1:
                     return UNLOCKED;
+                case 1:
+                    return LOCKED;
                 default:
                     return null;
             }

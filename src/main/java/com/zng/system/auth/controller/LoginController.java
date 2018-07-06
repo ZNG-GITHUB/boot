@@ -32,4 +32,9 @@ public class LoginController {
         return authService.getLoginUser();
     }
 
+    @GetMapping(value = "token")
+    public ResponseModel getToken(){
+        return new ResponseModel(SecurityUtils.getSubject().getSession().getId());
+    }
+
 }

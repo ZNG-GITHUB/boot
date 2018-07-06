@@ -12,12 +12,12 @@ import java.io.Serializable;
 /**
  * Created by John.Zhang on 2018/3/7.
  */
-public class SessionManager extends DefaultWebSessionManager {
+public class SSOSessionManager extends DefaultWebSessionManager {
     private static final String AUTHORIZATION = "Authorization";
 
     private static final String REFERENCED_SESSION_ID_SOURCE = "Stateless request";
 
-    public SessionManager() {
+    public SSOSessionManager() {
         super();
     }
 
