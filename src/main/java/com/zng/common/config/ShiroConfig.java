@@ -1,5 +1,6 @@
 package com.zng.common.config;
 
+import com.zng.common.properties.RedisProperties;
 import com.zng.system.auth.shiro.SSOSessionManager;
 import com.zng.system.auth.shiro.ShiroRealm;
 import org.apache.shiro.authc.credential.CredentialsMatcher;
@@ -14,6 +15,7 @@ import org.apache.shiro.web.session.mgt.WebSessionManager;
 import org.crazycake.shiro.RedisCacheManager;
 import org.crazycake.shiro.RedisManager;
 import org.crazycake.shiro.RedisSessionDAO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -34,6 +36,10 @@ public class ShiroConfig {
      * 3、部分过滤器可指定参数，如perms，roles
      *
      */
+
+    @Autowired
+    private RedisProperties redisProperties;
+
     @Bean
     public ShiroFilterFactoryBean shirFilter(SecurityManager securityManager) {
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
@@ -96,11 +102,24 @@ public class ShiroConfig {
     @Bean
     public RedisManager redisManager() {
         RedisManager redisManager = new RedisManager();
-        redisManager.setHost("localhost");
-        redisManager.setPort(6379);
-        redisManager.setPassword("111111");
+        RedisProperties redisProperties = redisProperties();
+        redisManager.setHost(redisProperties.getHost());
+        redisManager.setPort(redisProperties.getPort());
+        redisManager.setPassword(redisProperties.getPassword());
         redisManager.setExpire(1800);// 配置过期时间
         return redisManager;
+    }
+
+    @Bean
+    public RedisProperties redisProperties() {
+
+        RedisProperties rp = new RedisProperties();
+
+        if(redisProperties != null){
+            rp = redisProperties;
+        }
+
+        return rp;
     }
 
     /**
