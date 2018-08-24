@@ -65,4 +65,12 @@ public class AuthServiceImpl implements AuthService {
         return new ResponseModel();
     }
 
+    @Override
+    public Boolean isAdmin(SysUser user) {
+        if(user.getId().equals(1L)){
+            return true;
+        }
+        return false;
+    }
+
 }

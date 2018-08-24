@@ -21,4 +21,6 @@ public interface AuthService {
     ResponseModel getLoginUser();
 
     ResponseModel logout();
+
+    Boolean isAdmin(SysUser user);
 }
