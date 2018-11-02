@@ -26,13 +26,17 @@
 </head>
 <body>
 <div class="htmleaf-container">
-	<div class="wrapper">
+	<div class="wrapper" style="height: 600px">
 		<div class="container">
 			<h1>Welcome</h1>
 			<form id="login-form" class="form">
 				<input name="username" class="required" type="text" value="admin" placeholder="Username"/>
 				<input name="password" class="required" type="password" value="123" placeholder="Password"/>
 				<button type="button" id="login-button" onclick="login()">Login</button>
+				<div style="margin-top: 20px;">
+					<input id="qrCode" type="text" placeholder="二维码"/>
+					<button type="button" onclick="buildQrCode()">生成二维码</button>
+				</div>
 			</form>
 			<h3 id="login-tip" hidden="hidden"></h3>
 		</div>

@@ -23,6 +23,11 @@ public class PathController {
         return SysPagePath_.LOGIN;
     }
 
+    @GetMapping({"index"})
+    public String getIndexPath(){
+        return SysPagePath_.INDEX;
+    }
+
     @GetMapping(value = "noAuth")
     @ResponseBody
     public ResponseModel noAuth(HttpServletResponse response){

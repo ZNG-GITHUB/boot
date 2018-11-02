@@ -2,6 +2,7 @@ package com.zng.system.auth.service.impl;
 
 import com.zng.common.entity.ResponseCode;
 import com.zng.common.entity.ResponseModel;
+import com.zng.system.auth.dto.QRLoginModel;
 import com.zng.system.auth.entity.UserToken;
 import com.zng.system.auth.service.AuthService;
 import com.zng.system.user.dto.SysUserDTO;
@@ -14,12 +15,19 @@ import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * Created by John.Zhang on 2018/2/27.
  */
 @Service(value = "authService")
 public class AuthServiceImpl implements AuthService {
+
+    private static HashMap<String,QRLoginModel> qrCodeMap = new HashMap<>();
 
     @Autowired
     private SysUserRepository userRepository;
@@ -71,6 +79,38 @@ public class AuthServiceImpl implements AuthService {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public String buildLoginQRCode() {
+        String uuid = UUID.randomUUID().toString();
+        qrCodeMap.put(uuid,new QRLoginModel(1,"等待中",null));
+        return uuid;
+    }
+
+    @Override
+    public QRLoginModel queryQRCodeStatus(String key) {
+        if(!StringUtils.isEmpty(key) && qrCodeMap.containsKey(key)){
+            QRLoginModel model = qrCodeMap.get(key);
+            if(model.getCode() == 2){
+                qrCodeMap.remove(key);
+            }
+            return model;
+        }
+        return new QRLoginModel(4,"二维码无效",null);
+    }
+
+    @Override
+    public QRLoginModel QRLogin(String key) {
+
+        SysUser user = (SysUser)SecurityUtils.getSubject().getPrincipal();
+        String sessionId = SecurityUtils.getSubject().getSession().getId().toString();
+        if(user != null){
+            QRLoginModel res = new QRLoginModel(2,"登录成功",sessionId);
+            qrCodeMap.put(key,res);
+            return res;
+        }
+        return new QRLoginModel(3,"登录失败",null);
     }
 
 }
