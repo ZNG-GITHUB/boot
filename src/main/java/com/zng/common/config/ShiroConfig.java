@@ -1,11 +1,17 @@
 package com.zng.common.config;
 
 import com.zng.common.properties.RedisProperties;
+import com.zng.system.auth.shiro.MyRealmAuthenticator;
+import com.zng.system.auth.shiro.NoSaltShiroRealm;
 import com.zng.system.auth.shiro.SSOSessionManager;
 import com.zng.system.auth.shiro.ShiroRealm;
+import org.apache.shiro.authc.Authenticator;
 import org.apache.shiro.authc.credential.CredentialsMatcher;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
+import org.apache.shiro.authc.pam.AtLeastOneSuccessfulStrategy;
+import org.apache.shiro.authc.pam.ModularRealmAuthenticator;
 import org.apache.shiro.mgt.SecurityManager;
+import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.session.mgt.eis.SessionDAO;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
@@ -19,6 +25,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -67,7 +75,9 @@ public class ShiroConfig {
     public SecurityManager securityManager() {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
         // 设置realm.
-        securityManager.setRealm(myShiroRealm());
+        securityManager.setRealms(Arrays.asList(myShiroRealm(),myNoSaltShiroRealm()));
+        securityManager.setAuthenticator(authenticator());
+//        securityManager.setRealm(myShiroRealm());
         // 注入缓存管理器;
         securityManager.setCacheManager(cacheManager());// 这个如果执行多次，也是同样的一个对象;
         // session管理器
@@ -75,6 +85,18 @@ public class ShiroConfig {
         //注入记住我管理器;
 //        securityManager.setRememberMeManager(rememberMeManager());
         return securityManager;
+    }
+
+    @Bean
+    public Authenticator authenticator(){
+        MyRealmAuthenticator authenticator = new MyRealmAuthenticator();
+//        authenticator.setAuthenticationStrategy(new AtLeastOneSuccessfulStrategy());
+        Map<String,AuthorizingRealm> map = new HashMap<>();
+        map.put("shiroRealm",myShiroRealm());
+        map.put("noSaltShiroRealm",myNoSaltShiroRealm());
+        authenticator.setDefinedRealms(map);
+        authenticator.setRealms(Arrays.asList(myShiroRealm(),myNoSaltShiroRealm()));
+        return authenticator;
     }
 
     @Bean
@@ -133,6 +155,11 @@ public class ShiroConfig {
         ShiroRealm myShiroRealm = new ShiroRealm();
         myShiroRealm.setCredentialsMatcher(credentialsMatcher());
         return myShiroRealm;
+    }
+
+    @Bean
+    public NoSaltShiroRealm myNoSaltShiroRealm() {
+        return new NoSaltShiroRealm();
     }
 
     @Bean("lifecycleBeanPostProcessor")

@@ -2,23 +2,18 @@ package com.zng.system.auth.shiro;
 
 import com.zng.system.auth.service.AuthService;
 import com.zng.system.user.entity.SysUser;
-import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
-import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.PrincipalCollection;
-import org.apache.shiro.util.ByteSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-/**
- * Created by John.Zhang on 2017/10/10.
- */
-public class ShiroRealm extends AuthorizingRealm {
-    private Logger logger = LoggerFactory.getLogger(ShiroRealm.class);
+public class NoSaltShiroRealm extends AuthorizingRealm {
+
+    private Logger logger = LoggerFactory.getLogger(NoSaltShiroRealm.class);
 
     @Autowired
     private AuthService authService;
@@ -41,11 +36,10 @@ public class ShiroRealm extends AuthorizingRealm {
             if(hasUser.getIsLocked() != null && hasUser.getIsLocked().equals(SysUser.IsLocked.LOCKED)){
                 throw new LockedAccountException("用户已被锁定，无法登录");
             }
-            Session session = SecurityUtils.getSubject().getSession();
-            session.setAttribute("token", token);//成功则放入session
+//            session.setAttribute("user", hasUser);//成功则放入session
 
             // 若存在，将此用户存放到登录认证info中，无需自己做密码对比，Shiro会为我们进行密码对比校验
-            return new SimpleAuthenticationInfo(hasUser, hasUser.getPassword(),ByteSource.Util.bytes(hasUser.getSalt()), getName());
+            return new SimpleAuthenticationInfo(hasUser, hasUser.getPassword(), getName());
         }else {
             throw new UnknownAccountException("用户不存在");
         }
@@ -68,4 +62,5 @@ public class ShiroRealm extends AuthorizingRealm {
         // 返回null的话，就会导致任何用户访问被拦截的请求时，都会自动跳转到unauthorizedUrl指定的地址
         return null;
     }
+
 }

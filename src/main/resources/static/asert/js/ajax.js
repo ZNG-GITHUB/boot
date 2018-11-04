@@ -49,6 +49,30 @@ $(document).ready(function(){
             }
         });
     };
+    var getPage = function(baseurl) {
+        var sysurl = baseurl;
+        $.ajax({
+            url: sysurl,
+            type: "GET",
+            dataType:"html",
+            contentType: 'application/json;charset=UTF-8',
+            success: function (data) {
+                $("body").html(data);
+            },
+            beforeSend: function (request) {
+                var sessionId = localStorage.getItem("session-id");
+                if (sessionId) {
+                    request.setRequestHeader("Authorization", sessionId);
+                }
+            },
+            error: function (xhr, type, errorThrown) {
+                console.log(sysurl);
+                console.log(type);
+                console.log(xhr.status);
+                console.log(errorThrown);
+            }
+        });
+    }
     window.SysApi = {
         commenSubmit: function (url,parm, success, error) {
             SysAjax(url,"post",parm,true,success, error)
@@ -61,6 +85,9 @@ $(document).ready(function(){
         },
         getSubmitNoParm:function (url,success, error) {
             SysAjaxNoParm(url,"get",true,success, error)
+        },
+        getPage:function (url) {
+            getPage(url)
         }
     }
 });

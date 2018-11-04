@@ -35,7 +35,7 @@ function buildQrCode() {
                             console.log("登录成功:"+loginData.value);
                             localStorage.setItem("session-id",loginData.value);
                             formFadeOut();
-                            return false;
+                            window.clearInterval(interval)
                         }
                         if(loginData.code == 3){
                             console.log("二维码已失效")
@@ -44,7 +44,7 @@ function buildQrCode() {
                 });
             };
 
-            setInterval(query,2000);
+            var interval = setInterval(query,2000);
         }
     });
 }

@@ -5,18 +5,19 @@ import com.zng.common.entity.ResponseModel;
 import com.zng.system.auth.dto.QRLoginModel;
 import com.zng.system.auth.entity.UserToken;
 import com.zng.system.auth.service.AuthService;
+import com.zng.system.auth.shiro.MyAuthToken;
+import com.zng.system.auth.shiro.ShiroRealm;
 import com.zng.system.user.dto.SysUserDTO;
 import com.zng.system.user.entity.SysUser;
 import com.zng.system.user.repository.SysUserRepository;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.IncorrectCredentialsException;
-import org.apache.shiro.authc.LockedAccountException;
-import org.apache.shiro.authc.UnknownAccountException;
-import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.authc.*;
+import org.apache.shiro.session.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -35,7 +36,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public ResponseModel login(UserToken userToken) {
-        UsernamePasswordToken token = new UsernamePasswordToken(userToken.getUsername(), userToken.getPassword());
+        MyAuthToken token = new MyAuthToken(userToken.getUsername(), userToken.getPassword());
         try {
             SecurityUtils.getSubject().login(token);
         }catch (UnknownAccountException e){
@@ -93,7 +94,17 @@ public class AuthServiceImpl implements AuthService {
         if(!StringUtils.isEmpty(key) && qrCodeMap.containsKey(key)){
             QRLoginModel model = qrCodeMap.get(key);
             if(model.getCode() == 2){
-                qrCodeMap.remove(key);
+                try {
+                    SysUser user = (SysUser)model.getValue();
+                    MyAuthToken token = new MyAuthToken(user.getUserCode(), user.getPassword(),false);
+                    SecurityUtils.getSubject().login(token);
+                    String sessionId = SecurityUtils.getSubject().getSession().getId().toString();
+                    model.setValue(sessionId);
+                }catch (Exception e){
+                    return new QRLoginModel(3,"登录失败",null);
+                }finally {
+                    qrCodeMap.remove(key);
+                }
             }
             return model;
         }
@@ -104,9 +115,8 @@ public class AuthServiceImpl implements AuthService {
     public QRLoginModel QRLogin(String key) {
 
         SysUser user = (SysUser)SecurityUtils.getSubject().getPrincipal();
-        String sessionId = SecurityUtils.getSubject().getSession().getId().toString();
         if(user != null){
-            QRLoginModel res = new QRLoginModel(2,"登录成功",sessionId);
+            QRLoginModel res = new QRLoginModel(2,"登录成功",user);
             qrCodeMap.put(key,res);
             return res;
         }
