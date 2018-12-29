@@ -1,5 +1,7 @@
 package com.zng.system.auth.dto;
 
+import java.util.Date;
+
 /**
  * @author John.Zhang
  * @version 1.0
@@ -13,6 +15,10 @@ public class QRLoginModel {
 
     private Object value;
 
+    private Date buildTime = new Date();
+
+    private Integer active = 10;
+
     public QRLoginModel(){
 
     }
@@ -21,6 +27,13 @@ public class QRLoginModel {
         this.code = code;
         this.msg = msg;
         this.value = value;
+    }
+
+    public QRLoginModel(Integer code,String msg,Object value,Integer active){
+        this.code = code;
+        this.msg = msg;
+        this.value = value;
+        this.active = active;
     }
 
     public Integer getCode() {
@@ -45,5 +58,21 @@ public class QRLoginModel {
 
     public void setValue(Object value) {
         this.value = value;
+    }
+
+    public Date getBuildTime() {
+        return buildTime;
+    }
+
+    public void setBuildTime(Date buildTime) {
+        this.buildTime = buildTime;
+    }
+
+    public Integer getActive() {
+        return active;
+    }
+
+    public void setActive(Integer active) {
+        this.active = active;
     }
 }

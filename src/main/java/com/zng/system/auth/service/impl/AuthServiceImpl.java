@@ -2,6 +2,7 @@ package com.zng.system.auth.service.impl;
 
 import com.zng.common.entity.ResponseCode;
 import com.zng.common.entity.ResponseModel;
+import com.zng.common.util.DateUtil;
 import com.zng.system.auth.dto.QRLoginModel;
 import com.zng.system.auth.entity.UserToken;
 import com.zng.system.auth.service.AuthService;
@@ -17,10 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Created by John.Zhang on 2018/2/27.
@@ -104,6 +102,12 @@ public class AuthServiceImpl implements AuthService {
                     return new QRLoginModel(3,"登录失败",null);
                 }finally {
                     qrCodeMap.remove(key);
+                }
+            } else {
+                Date create = model.getBuildTime();
+                Date now = new Date();
+                if(DateUtil.timeBetween(create,now) > 10){
+
                 }
             }
             return model;

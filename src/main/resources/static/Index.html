@@ -30,7 +30,6 @@
     })
 
     function getLoginUser() {
-        debugger;
         SysApi.commenSubmitNoParm("getLoginUser",function (data) {
             $('#loginUser').html(data.data.userName);
             $('#sessionId').html(data.data.descrbe);
