@@ -15,7 +15,7 @@ import java.io.IOException;
 /**
  * Created by John.Zhang on 2017/12/18.
  */
-@Controller
+//@Controller
 public class PathController {
 
     @GetMapping({"","login"})

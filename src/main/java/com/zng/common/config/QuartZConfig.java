@@ -1,6 +1,5 @@
 package com.zng.common.config;
 
-import org.quartz.Scheduler;
 import org.springframework.beans.factory.config.PropertiesFactoryBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
